@@ -12,6 +12,8 @@ interface OpenWeatherApiInterface {
     suspend fun getOneCall(@Query("lat") lat: Double,
                    @Query("lon") lon: Double,
                    @Query("lang") lang: String = "ja",
+                   @Query("exclude") exclude: String = "minutely",
+                   @Query("units") units: String = "metric",
                    @Query("appid") appId: String = Consts.OpenWeatherAPIKey
     ): OneCallResponse
 }

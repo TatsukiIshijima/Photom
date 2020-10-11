@@ -9,13 +9,21 @@ data class OneCallResponse(
     @Json(name = "lat")
     val latitude: Double,
 
-    @Json(name="lon")
+    @Json(name = "lon")
     val longitude: Double,
 
-    @Json(name="timezone")
+    @Json(name = "timezone")
     val timezone: String,
 
     @Json(name = "timezone_offset")
-    val timezoneOffset: Double
+    val timezoneOffset: Double,
 
+    @Json(name = "current")
+    val current: CurrentResponse,
+
+    @Json(name = "hourly")
+    val hourly: List<HourlyResponse>,
+
+    @Json(name = "daily")
+    val daily: List<DailyResponse>
 )
