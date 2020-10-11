@@ -2,7 +2,6 @@ package com.tatsuki.photom
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.tatsuki.core.api.Client
 
 /**
  * Skeleton of an Android Things activity.
@@ -23,7 +22,5 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        Client.sample()
     }
 }
