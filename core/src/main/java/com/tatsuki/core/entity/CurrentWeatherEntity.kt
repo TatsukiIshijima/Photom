@@ -1,6 +1,6 @@
 package com.tatsuki.core.entity
 
-class CurrentWeatherEntity(
+data class CurrentWeatherEntity(
     val temp: Double,
     val state: String?,
     val icon: String?
