@@ -2,6 +2,7 @@ package com.tatsuki.core.api.response
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import com.tatsuki.core.entity.CurrentWeatherEntity
 
 @JsonClass(generateAdapter = true)
 data class CurrentResponse(
@@ -21,3 +22,7 @@ data class CurrentResponse(
     @Json(name = "weather")
     val weather: List<WeatherResponse>
 )
+
+fun CurrentResponse.toCurrentWeatherEntity(): CurrentWeatherEntity {
+    return CurrentWeatherEntity(temp, weather.firstOrNull()?.main, weather.firstOrNull()?.icon)
+}
