@@ -13,19 +13,20 @@ import kotlinx.android.synthetic.main.fragment_slide_show.*
 class SlideShowFragment : Fragment() {
 
     private lateinit var viewPager: ViewPager2
+    private lateinit var adapter: ScreenSlidePagerAdapter
 
-    private var jumpPosition = -1
+//    private var jumpPosition = -1
 
     private val sliderHandler = Handler()
 
     private val sliderRunnable = Runnable {
         viewPager.currentItem += 1
 
-        if (viewPager.currentItem == 0) {
-            jumpPosition = 3
-        } else if (viewPager.currentItem == 4) {
-            jumpPosition = 1
-        }
+//        if (viewPager.currentItem == 0) {
+//            jumpPosition = 3
+//        } else if (viewPager.currentItem == 4) {
+//            jumpPosition = 1
+//        }
     }
 
     private val onPageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
@@ -38,16 +39,24 @@ class SlideShowFragment : Fragment() {
             sliderHandler.postDelayed(sliderRunnable, 3000)
         }
 
-        override fun onPageScrollStateChanged(state: Int) {
-            super.onPageScrollStateChanged(state)
-            Log.d("SlideShowFragment", "onPageScrollStateChanged $state")
-
-            if (state == ViewPager2.SCROLL_STATE_IDLE && jumpPosition >= 0) {
-                viewPager.setCurrentItem(jumpPosition, false)
-                jumpPosition = -1
-            }
-        }
+//        override fun onPageScrollStateChanged(state: Int) {
+//            super.onPageScrollStateChanged(state)
+//            Log.d("SlideShowFragment", "onPageScrollStateChanged $state")
+//
+//            if (state == ViewPager2.SCROLL_STATE_IDLE && jumpPosition >= 0) {
+//                viewPager.setCurrentItem(jumpPosition, false)
+//                jumpPosition = -1
+//            }
+//        }
     }
+
+    private val photoItems: MutableList<PhotoItem> = mutableListOf(
+        PhotoItem(android.R.mipmap.sym_def_app_icon),
+        PhotoItem(android.R.drawable.ic_dialog_alert),
+        PhotoItem(android.R.drawable.ic_dialog_email),
+        PhotoItem(android.R.drawable.ic_dialog_info),
+        PhotoItem(android.R.drawable.ic_dialog_map),
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,8 +67,8 @@ class SlideShowFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewPager = view_pager2
-        val pagerAdapter = ScreenSlidePagerAdapter(viewPager, requireActivity())
-        viewPager.adapter = pagerAdapter
+        adapter = ScreenSlidePagerAdapter(viewPager, photoItems)
+        viewPager.adapter = adapter
 
         // ここを追加すると自動スライドしない
         // viewPager.currentItem = 1
@@ -70,6 +79,16 @@ class SlideShowFragment : Fragment() {
         // 上の動画の10分あたり
         // RecyclerViewとViewPager2の併用
         viewPager.registerOnPageChangeCallback(onPageChangeCallback)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        sliderHandler.postDelayed(sliderRunnable, 3000)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        sliderHandler.removeCallbacks(sliderRunnable)
     }
 
     override fun onDestroyView() {
