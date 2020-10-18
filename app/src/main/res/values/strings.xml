@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Photom</string>
+    <string name="photo_image_content_description">写真</string>
 </resources>
