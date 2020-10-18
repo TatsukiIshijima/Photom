@@ -7,10 +7,13 @@
     android:layout_height="match_parent"
     tools:context=".SlideShowFragment">
 
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/view_pager2"
+    <com.asksira.loopingviewpager.LoopingViewPager
+        android:id="@+id/loopingViewPager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        app:autoScroll="true"
+        app:isInfinite="true"
+        app:scrollInterval="3000"/>
 
     <TextView
         android:layout_width="wrap_content"

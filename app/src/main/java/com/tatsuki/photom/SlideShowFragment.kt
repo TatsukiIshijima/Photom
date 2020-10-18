@@ -1,56 +1,19 @@
 package com.tatsuki.photom
 
 import android.os.Bundle
-import android.os.Handler
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.viewpager2.widget.ViewPager2
 import kotlinx.android.synthetic.main.fragment_slide_show.*
 
 class SlideShowFragment : Fragment() {
 
-    private lateinit var viewPager: ViewPager2
-    private lateinit var adapter: ScreenSlidePagerAdapter
-
-//    private var jumpPosition = -1
-
-    private val sliderHandler = Handler()
-
-    private val sliderRunnable = Runnable {
-        viewPager.currentItem += 1
-
-//        if (viewPager.currentItem == 0) {
-//            jumpPosition = 3
-//        } else if (viewPager.currentItem == 4) {
-//            jumpPosition = 1
-//        }
+    companion object {
+        private val TAG = SlideShowFragment::class.java.simpleName
     }
 
-    private val onPageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
-        override fun onPageSelected(position: Int) {
-            super.onPageSelected(position)
-            Log.d("SlideShowFragment", "onPageSelected $position")
-
-            sliderHandler.removeCallbacks(sliderRunnable)
-            // スライドしている時間
-            sliderHandler.postDelayed(sliderRunnable, 3000)
-        }
-
-//        override fun onPageScrollStateChanged(state: Int) {
-//            super.onPageScrollStateChanged(state)
-//            Log.d("SlideShowFragment", "onPageScrollStateChanged $state")
-//
-//            if (state == ViewPager2.SCROLL_STATE_IDLE && jumpPosition >= 0) {
-//                viewPager.setCurrentItem(jumpPosition, false)
-//                jumpPosition = -1
-//            }
-//        }
-    }
-
-    private val photoItems: MutableList<PhotoItem> = mutableListOf(
+    private val photoItems: ArrayList<PhotoItem> = arrayListOf(
         PhotoItem(android.R.mipmap.sym_def_app_icon),
         PhotoItem(android.R.drawable.ic_dialog_alert),
         PhotoItem(android.R.drawable.ic_dialog_email),
@@ -66,34 +29,20 @@ class SlideShowFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewPager = view_pager2
-        adapter = ScreenSlidePagerAdapter(viewPager, photoItems)
-        viewPager.adapter = adapter
-
-        // ここを追加すると自動スライドしない
-        // viewPager.currentItem = 1
-
-        // https://qiita.com/yfujiki/items/93ba588313ee0edbd8e9
-        // https://stackoverflow.com/questions/58735388/how-to-add-endless-infinite-scroll-to-viewpager2
-        // https://www.youtube.com/watch?v=iA9iqygq11Q
-        // 上の動画の10分あたり
-        // RecyclerViewとViewPager2の併用
-        viewPager.registerOnPageChangeCallback(onPageChangeCallback)
+        context?.let {
+            val adapter = ScreenSlidePagerAdapter(it, photoItems)
+            loopingViewPager.adapter = adapter
+        }
     }
 
     override fun onResume() {
+        loopingViewPager.resumeAutoScroll()
         super.onResume()
-        sliderHandler.postDelayed(sliderRunnable, 3000)
     }
 
     override fun onPause() {
+        loopingViewPager.pauseAutoScroll()
         super.onPause()
-        sliderHandler.removeCallbacks(sliderRunnable)
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        viewPager.unregisterOnPageChangeCallback(onPageChangeCallback)
     }
 }
 
