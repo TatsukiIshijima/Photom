@@ -7,6 +7,6 @@ sealed class State<T> {
 
     companion object {
         fun <T> success(data: T) = Success(data)
-        fun <T> failed(exception: java.lang.Exception) = Failed<T>(exception)
+        fun <T> failed(exception: Exception) = Failed<T>(exception)
     }
 }
