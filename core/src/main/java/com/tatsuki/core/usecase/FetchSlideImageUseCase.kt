@@ -4,13 +4,13 @@ import com.google.firebase.storage.StorageReference
 import com.tatsuki.core.IErrorView
 import com.tatsuki.core.ILoadingView
 import com.tatsuki.core.State
-import com.tatsuki.core.repository.SlideImageRepository
+import com.tatsuki.core.repository.ISlideImageRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 
 class FetchSlideImageUseCase(
     private val slideShowView: ISlideShowView,
-    private val slideImageRepository: SlideImageRepository
+    private val slideImageRepository: ISlideImageRepository
 ) {
 
     companion object {
