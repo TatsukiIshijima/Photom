@@ -1,5 +1,6 @@
 package com.tatsuki.core.repository
 
+import com.tatsuki.core.State
 import com.tatsuki.core.api.OpenWeatherApiClient
 import com.tatsuki.core.api.response.OneCallResponse
 import kotlinx.coroutines.CoroutineDispatcher
@@ -16,17 +17,17 @@ class WeatherRepository(
         private val TAG = WeatherRepository::class.java.simpleName
     }
 
-    suspend fun getWeather(
+    fun getWeather(
         dispatcher: CoroutineDispatcher = Dispatchers.IO,
         lat: Double,
         lon: Double
-    ) : Flow<OneCallResponse> {
+    ) : Flow<State<OneCallResponse>> {
         return flow {
             try {
                 val response = apiClient.getOneCall(lat, lon)
-                emit(response)
+                emit(State.success(response))
             } catch (e: Exception) {
-                throw Exception(e)
+                emit(State.failed<OneCallResponse>(e))
             }
         }.flowOn(dispatcher)
     }
