@@ -11,14 +11,18 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.tasks.await
 
-interface ISlideImageRepository {
-    suspend fun fetchMorningRef(): Flow<State<List<StorageReference>>>
-    suspend fun fetchNoonRef(): Flow<State<List<StorageReference>>>
-    suspend fun fetchEveningRef(): Flow<State<List<StorageReference>>>
-}
-
 // Firebase-ing with Kotlin Coroutines + Flow
 // https://medium.com/firebase-developers/firebase-ing-with-kotlin-coroutines-flow-dab1bc364816
+// How to use Kotlin Flows with Firestore
+// https://medium.com/firebase-tips-tricks/how-to-use-kotlin-flows-with-firestore-6c7ee9ae12f3
+
+// Firebaseに依存してテストがしづらいため、RepositoryをInterfaceとしておく
+
+interface ISlideImageRepository {
+    fun fetchMorningRef(): Flow<State<List<StorageReference>>>
+    fun fetchNoonRef(): Flow<State<List<StorageReference>>>
+    fun fetchEveningRef(): Flow<State<List<StorageReference>>>
+}
 
 class SlideImageRepository(
     private val storage: FirebaseStorage
@@ -28,7 +32,7 @@ class SlideImageRepository(
     }
 
     @ExperimentalCoroutinesApi
-    private suspend fun fetchImageReferences(
+    private fun fetchImageReferences(
         path: String,
         dispatcher: CoroutineDispatcher = Dispatchers.IO
     ): Flow<State<List<StorageReference>>> {
@@ -48,14 +52,14 @@ class SlideImageRepository(
     }
 
     @ExperimentalCoroutinesApi
-    override suspend fun fetchMorningRef(): Flow<State<List<StorageReference>>> =
+    override fun fetchMorningRef(): Flow<State<List<StorageReference>>> =
         fetchImageReferences("photom/morning")
 
     @ExperimentalCoroutinesApi
-    override suspend fun fetchNoonRef(): Flow<State<List<StorageReference>>> =
+    override fun fetchNoonRef(): Flow<State<List<StorageReference>>> =
         fetchImageReferences("photom/noon")
 
     @ExperimentalCoroutinesApi
-    override suspend fun fetchEveningRef(): Flow<State<List<StorageReference>>> =
+    override fun fetchEveningRef(): Flow<State<List<StorageReference>>> =
         fetchImageReferences("photom/evening")
 }
