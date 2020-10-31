@@ -1,8 +1,8 @@
 package com.tatsuki.core.usecase
 
-import android.util.Log
 import com.tatsuki.core.IErrorView
 import com.tatsuki.core.ILoadingView
+import com.tatsuki.core.State
 import com.tatsuki.core.api.response.toCurrentWeatherEntity
 import com.tatsuki.core.entity.CurrentWeatherEntity
 import com.tatsuki.core.repository.WeatherRepository
@@ -21,14 +21,18 @@ class FetchCurrentWeatherUseCase(
 
         currentWeatherView.showLoading()
 
-        try {
-            weatherRepository.getWeather(lat = lat, lon = lon).collect {
-                currentWeatherView.showCurrentWeather(it.current.toCurrentWeatherEntity())
+        weatherRepository.getWeather(lat = lat, lon = lon)
+            .collect { state ->
+                when (state) {
+                    is State.Success -> {
+                        currentWeatherView
+                            .showCurrentWeather(state.data.current.toCurrentWeatherEntity())
+                    }
+                    is State.Failed -> {
+                        currentWeatherView.showError(state.exception)
+                    }
+                }
             }
-        } catch (e: Exception) {
-            Log.e(TAG, "$e")
-            currentWeatherView.showError(e)
-        }
 
         currentWeatherView.hideLoading()
     }

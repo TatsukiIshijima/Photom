@@ -1,5 +1,6 @@
 package com.tatsuki.core.repository
 
+import com.tatsuki.core.State
 import com.tatsuki.core.api.OpenWeatherApiClient
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.runBlocking
@@ -19,11 +20,18 @@ class WeatherRepositoryTest {
     }
 
     @Test
-    fun OneCallAPIの実行しFlowでデータ取得できること() {
+    fun OneCallAPIの実行しデータ取得できること() {
         runBlocking {
             repository.getWeather(lat = 35.68, lon = 139.77)
-                .collect {
-                    assertThat(it).isNotNull
+                .collect { state ->
+                    when (state) {
+                        is State.Success -> {
+                            assertThat(state.data).isNotNull
+                        }
+                        is State.Failed -> {
+                            assertThat(state.exception).isNull()
+                        }
+                    }
                 }
         }
     }
