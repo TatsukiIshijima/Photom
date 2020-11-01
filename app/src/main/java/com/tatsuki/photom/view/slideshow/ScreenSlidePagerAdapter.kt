@@ -6,14 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import com.asksira.loopingviewpager.LoopingPagerAdapter
+import com.bumptech.glide.Glide
+import com.google.firebase.storage.StorageReference
 import com.tatsuki.photom.R
-import com.tatsuki.photom.model.PhotoItem
 
 class ScreenSlidePagerAdapter(
     context: Context,
-    photoItems: ArrayList<PhotoItem>,
+    private var refList: List<StorageReference>,
     isInfinite: Boolean = true,
-): LoopingPagerAdapter<PhotoItem>(context, photoItems, isInfinite) {
+): LoopingPagerAdapter<StorageReference>(context, refList, isInfinite) {
 
     companion object {
         private val TAG = ScreenSlidePagerAdapter::class.java.simpleName
@@ -26,8 +27,13 @@ class ScreenSlidePagerAdapter(
 
     override fun bindView(convertView: View, listPosition: Int, viewType: Int) {
         val photoImage = convertView.findViewById<ImageView>(R.id.photoImage)
-        itemList?.let {
-            photoImage.setImageResource(it[listPosition].imageResource)
+        itemList?.map {
+            Glide.with(convertView).load(it).into(photoImage)
         }
+    }
+
+    fun update(newRefList: List<StorageReference>) {
+        refList = newRefList
+        notifyDataSetChanged()
     }
 }

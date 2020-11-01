@@ -19,6 +19,7 @@ class SlideShowFragment : Fragment() {
 
     private lateinit var photomContainer: PhotomContainer
     private lateinit var slideShowViewModel: SlideShowViewModel
+    private lateinit var adapter: ScreenSlidePagerAdapter
 
     private val photoItems: ArrayList<PhotoItem> = arrayListOf(
         PhotoItem(R.mipmap.sym_def_app_icon),
@@ -42,9 +43,19 @@ class SlideShowFragment : Fragment() {
         }
 
         context?.let {
-            val adapter = ScreenSlidePagerAdapter(it, photoItems)
+            adapter = ScreenSlidePagerAdapter(it, mutableListOf())
             loopingViewPager.adapter = adapter
         }
+
+        slideShowViewModel.slideImageUrlLiveData.observe(viewLifecycleOwner, {
+            it?.let {
+                adapter.update(it)
+            }
+        })
+
+        slideShowViewModel.loadingLiveData.observe(viewLifecycleOwner, {
+
+        })
     }
 
     override fun onResume() {
