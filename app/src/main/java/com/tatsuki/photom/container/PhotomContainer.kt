@@ -12,6 +12,17 @@ class PhotomContainer {
 
     private val openWeatherApiClient = OpenWeatherApiClient()
 
-    val weatherRepository = WeatherRepository(openWeatherApiClient)
-    val slideImageRepository = SlideImageRepository(firebaseStorage)
+    private val weatherRepository = WeatherRepository(openWeatherApiClient)
+    private val slideImageRepository = SlideImageRepository(firebaseStorage)
+
+    private var slideShowContainer: SlideShowContainer? = null
+
+    fun buildSlideShowContainer(): SlideShowContainer? {
+        slideShowContainer = SlideShowContainer(weatherRepository, slideImageRepository)
+        return slideShowContainer
+    }
+
+    fun disposeSlideShowContainer() {
+        slideShowContainer = null
+    }
 }
