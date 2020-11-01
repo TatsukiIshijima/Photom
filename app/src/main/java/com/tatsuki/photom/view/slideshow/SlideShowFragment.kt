@@ -2,6 +2,7 @@ package com.tatsuki.photom.view.slideshow
 
 import android.R
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import com.tatsuki.photom.PhotomApplication
 import com.tatsuki.photom.container.PhotomContainer
 import com.tatsuki.photom.model.PhotoItem
 import kotlinx.android.synthetic.main.fragment_slide_show.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 class SlideShowFragment : Fragment() {
 
@@ -34,6 +36,7 @@ class SlideShowFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? = inflater.inflate(com.tatsuki.photom.R.layout.fragment_slide_show, container, false)
 
+    @ExperimentalCoroutinesApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -49,6 +52,7 @@ class SlideShowFragment : Fragment() {
 
         slideShowViewModel.slideImageUrlLiveData.observe(viewLifecycleOwner, {
             it?.let {
+                Log.d(TAG, "slideImageUrlLiveData")
                 adapter.update(it)
             }
         })
@@ -56,6 +60,8 @@ class SlideShowFragment : Fragment() {
         slideShowViewModel.loadingLiveData.observe(viewLifecycleOwner, {
 
         })
+
+        slideShowViewModel.fetchSlideImage()
     }
 
     override fun onResume() {

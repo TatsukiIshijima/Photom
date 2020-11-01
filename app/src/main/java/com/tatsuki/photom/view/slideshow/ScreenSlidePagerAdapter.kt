@@ -1,6 +1,7 @@
 package com.tatsuki.photom.view.slideshow
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +13,7 @@ import com.tatsuki.photom.R
 
 class ScreenSlidePagerAdapter(
     context: Context,
-    private var refList: List<StorageReference>,
+    refList: List<StorageReference>,
     isInfinite: Boolean = true,
 ): LoopingPagerAdapter<StorageReference>(context, refList, isInfinite) {
 
@@ -28,12 +29,14 @@ class ScreenSlidePagerAdapter(
     override fun bindView(convertView: View, listPosition: Int, viewType: Int) {
         val photoImage = convertView.findViewById<ImageView>(R.id.photoImage)
         itemList?.map {
+            Log.d(TAG, it.path)
+            // FIXME:Glideで失敗している？？
             Glide.with(convertView).load(it).into(photoImage)
         }
     }
 
     fun update(newRefList: List<StorageReference>) {
-        refList = newRefList
+        itemList = newRefList
         notifyDataSetChanged()
     }
 }
