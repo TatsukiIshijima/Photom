@@ -1,10 +1,14 @@
-package com.tatsuki.photom
+package com.tatsuki.photom.view.slideshow
 
+import android.R
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.tatsuki.photom.PhotomApplication
+import com.tatsuki.photom.container.PhotomContainer
+import com.tatsuki.photom.model.PhotoItem
 import kotlinx.android.synthetic.main.fragment_slide_show.*
 
 class SlideShowFragment : Fragment() {
@@ -13,21 +17,29 @@ class SlideShowFragment : Fragment() {
         private val TAG = SlideShowFragment::class.java.simpleName
     }
 
+    private lateinit var photomContainer: PhotomContainer
+    private lateinit var slideShowViewModel: SlideShowViewModel
+
     private val photoItems: ArrayList<PhotoItem> = arrayListOf(
-        PhotoItem(android.R.mipmap.sym_def_app_icon),
-        PhotoItem(android.R.drawable.ic_dialog_alert),
-        PhotoItem(android.R.drawable.ic_dialog_email),
-        PhotoItem(android.R.drawable.ic_dialog_info),
-        PhotoItem(android.R.drawable.ic_dialog_map),
+        PhotoItem(R.mipmap.sym_def_app_icon),
+        PhotoItem(R.drawable.ic_dialog_alert),
+        PhotoItem(R.drawable.ic_dialog_email),
+        PhotoItem(R.drawable.ic_dialog_info),
+        PhotoItem(R.drawable.ic_dialog_map),
     )
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_slide_show, container, false)
+    ): View? = inflater.inflate(com.tatsuki.photom.R.layout.fragment_slide_show, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        photomContainer = (requireActivity().application as PhotomApplication).photomContainer
+        photomContainer.buildSlideShowContainer()?.let {
+            slideShowViewModel = it.create()
+        }
 
         context?.let {
             val adapter = ScreenSlidePagerAdapter(it, photoItems)
@@ -43,6 +55,11 @@ class SlideShowFragment : Fragment() {
     override fun onPause() {
         loopingViewPager.pauseAutoScroll()
         super.onPause()
+    }
+
+    override fun onDestroy() {
+        photomContainer.disposeSlideShowContainer()
+        super.onDestroy()
     }
 }
 

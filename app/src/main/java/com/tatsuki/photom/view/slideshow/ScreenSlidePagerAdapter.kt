@@ -1,4 +1,4 @@
-package com.tatsuki.photom
+package com.tatsuki.photom.view.slideshow
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import com.asksira.loopingviewpager.LoopingPagerAdapter
+import com.tatsuki.photom.R
+import com.tatsuki.photom.model.PhotoItem
 
 class ScreenSlidePagerAdapter(
     context: Context,

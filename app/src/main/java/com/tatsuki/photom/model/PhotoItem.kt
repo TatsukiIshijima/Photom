@@ -1,4 +1,4 @@
-package com.tatsuki.photom
+package com.tatsuki.photom.model
 
 class PhotoItem(val imageResource: Int) {
 }
