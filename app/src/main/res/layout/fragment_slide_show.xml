@@ -15,15 +15,16 @@
         app:isInfinite="true"
         app:scrollInterval="5000"/>
 
-    <TextView
+    <TextClock
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="12/31"
-        android:textSize="48sp"
-        android:textStyle="bold"
-        android:textColor="@android:color/white"
         android:layout_marginStart="16dp"
         android:layout_marginBottom="16dp"
+        android:format12Hour="HH:mm"
+        android:timeZone="Asia/Tokyo"
+        android:textColor="@android:color/white"
+        android:textSize="48sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
