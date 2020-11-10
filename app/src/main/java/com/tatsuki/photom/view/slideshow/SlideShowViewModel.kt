@@ -22,9 +22,13 @@ class SlideShowViewModel(
 
     private val loadingMutableLiveData = MutableLiveData<Boolean>()
     private val slideImageUrlMutableLiveData = MutableLiveData<List<StorageReference>>()
+    private val currentWeatherIconUrlMutableLiveData = MutableLiveData<String>()
+    private val currentTemperatureMutableLiveData = MutableLiveData<String>()
 
     val loadingLiveData: LiveData<Boolean> = loadingMutableLiveData
     val slideImageUrlLiveData: LiveData<List<StorageReference>> = slideImageUrlMutableLiveData
+    val currentWeatherIconUrlLiveData: LiveData<String> = currentWeatherIconUrlMutableLiveData
+    val currentTemperatureLiveData: LiveData<String> = currentTemperatureMutableLiveData
 
     fun fetchCurrentWeather() {
         viewModelScope.launch {
@@ -40,7 +44,8 @@ class SlideShowViewModel(
     }
 
     override fun showCurrentWeather(entity: CurrentWeatherEntity) {
-
+        currentWeatherIconUrlMutableLiveData.value = "http://openweathermap.org/img/wn/${entity.icon}@2x.png"
+        currentTemperatureMutableLiveData.value = "${entity.temp}"
     }
 
     override fun showSlide(refList: List<StorageReference>) {

@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.tatsuki.photom.GlideApp
 import com.tatsuki.photom.PhotomApplication
+import com.tatsuki.photom.R
 import com.tatsuki.photom.container.PhotomContainer
 import kotlinx.android.synthetic.main.fragment_slide_show.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -40,6 +42,13 @@ class SlideShowFragment : Fragment() {
             loopingViewPager.adapter = adapter
         }
 
+        bind()
+
+        slideShowViewModel.fetchSlideImage()
+        slideShowViewModel.fetchCurrentWeather()
+    }
+
+    private fun bind() {
         slideShowViewModel.slideImageUrlLiveData.observe(viewLifecycleOwner, {
             it?.let {
                 Log.d(TAG, "slideImageUrlLiveData")
@@ -54,7 +63,18 @@ class SlideShowFragment : Fragment() {
             }
         })
 
-        slideShowViewModel.fetchSlideImage()
+        slideShowViewModel.currentWeatherIconUrlLiveData.observe(viewLifecycleOwner, {
+            it?.let {
+                GlideApp.with(this).load(it).into(weatherIcon)
+            }
+        })
+
+        slideShowViewModel.currentTemperatureLiveData.observe(viewLifecycleOwner, {
+            it?.let {
+                val temperatureText = "$it${resources.getString(R.string.temperature_unit)}"
+                temperature.text = temperatureText
+            }
+        })
     }
 
     override fun onResume() {
