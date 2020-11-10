@@ -1,6 +1,5 @@
 package com.tatsuki.photom.view.slideshow
 
-import android.R
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,7 +8,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.tatsuki.photom.PhotomApplication
 import com.tatsuki.photom.container.PhotomContainer
-import com.tatsuki.photom.model.PhotoItem
 import kotlinx.android.synthetic.main.fragment_slide_show.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
@@ -22,14 +20,6 @@ class SlideShowFragment : Fragment() {
     private lateinit var photomContainer: PhotomContainer
     private lateinit var slideShowViewModel: SlideShowViewModel
     private lateinit var adapter: ScreenSlidePagerAdapter
-
-    private val photoItems: ArrayList<PhotoItem> = arrayListOf(
-        PhotoItem(R.mipmap.sym_def_app_icon),
-        PhotoItem(R.drawable.ic_dialog_alert),
-        PhotoItem(R.drawable.ic_dialog_email),
-        PhotoItem(R.drawable.ic_dialog_info),
-        PhotoItem(R.drawable.ic_dialog_map),
-    )
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
