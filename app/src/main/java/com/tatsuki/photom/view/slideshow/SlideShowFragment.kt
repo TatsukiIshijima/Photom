@@ -57,8 +57,11 @@ class SlideShowFragment : Fragment() {
             }
         })
 
-        slideShowViewModel.loadingLiveData.observe(viewLifecycleOwner, {
-
+        slideShowViewModel.loadingLiveData.observe(viewLifecycleOwner, { isLoading ->
+            isLoading?.let {
+                if (it) loopingViewPager.pauseAutoScroll()
+                else loopingViewPager.resumeAutoScroll()
+            }
         })
 
         slideShowViewModel.fetchSlideImage()

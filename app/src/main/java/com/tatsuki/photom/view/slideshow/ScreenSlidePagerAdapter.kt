@@ -7,8 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import com.asksira.loopingviewpager.LoopingPagerAdapter
-import com.bumptech.glide.Glide
 import com.google.firebase.storage.StorageReference
+import com.tatsuki.photom.GlideApp
 import com.tatsuki.photom.R
 
 class ScreenSlidePagerAdapter(
@@ -28,10 +28,10 @@ class ScreenSlidePagerAdapter(
 
     override fun bindView(convertView: View, listPosition: Int, viewType: Int) {
         val photoImage = convertView.findViewById<ImageView>(R.id.photoImage)
-        itemList?.map {
+        val reference = itemList?.get(listPosition)
+        reference?.let {
             Log.d(TAG, it.path)
-            // FIXME:Glideで失敗している？？
-            Glide.with(convertView).load(it).into(photoImage)
+            GlideApp.with(convertView.context).load(it).into(photoImage)
         }
     }
 
