@@ -45,7 +45,6 @@ class SlideShowFragment : Fragment() {
         bind()
 
         slideShowViewModel.fetchSlideImage()
-        slideShowViewModel.fetchCurrentWeather()
     }
 
     private fun bind() {
@@ -79,11 +78,13 @@ class SlideShowFragment : Fragment() {
 
     override fun onResume() {
         loopingViewPager.resumeAutoScroll()
+        slideShowViewModel.executeUpdateWeatherWork()
         super.onResume()
     }
 
     override fun onPause() {
         loopingViewPager.pauseAutoScroll()
+        slideShowViewModel.cancelUpdateWeatherWork()
         super.onPause()
     }
 

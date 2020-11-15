@@ -12,6 +12,6 @@ class PhotomApplication: Application() {
 
         // Container内にFirebase依存があり、初期化前に読んでしまうと Initialize Error となるので
         // ライフサイクルに合わせて Container を生成する
-        photomContainer = PhotomContainer()
+        photomContainer = PhotomContainer(applicationContext)
     }
 }
