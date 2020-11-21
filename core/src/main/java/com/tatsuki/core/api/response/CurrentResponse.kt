@@ -24,5 +24,5 @@ data class CurrentResponse(
 )
 
 fun CurrentResponse.toCurrentWeatherEntity(): CurrentWeatherEntity {
-    return CurrentWeatherEntity(temp, weather.firstOrNull()?.main, weather.firstOrNull()?.icon)
+    return CurrentWeatherEntity(temp.toInt(), weather.firstOrNull()?.main, weather.firstOrNull()?.icon)
 }
