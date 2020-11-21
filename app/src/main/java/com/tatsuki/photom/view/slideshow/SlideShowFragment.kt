@@ -1,17 +1,18 @@
 package com.tatsuki.photom.view.slideshow
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.work.WorkInfo
 import com.tatsuki.photom.GlideApp
 import com.tatsuki.photom.PhotomApplication
 import com.tatsuki.photom.R
 import com.tatsuki.photom.container.PhotomContainer
 import kotlinx.android.synthetic.main.fragment_slide_show.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import timber.log.Timber
 
 class SlideShowFragment : Fragment() {
 
@@ -50,7 +51,7 @@ class SlideShowFragment : Fragment() {
     private fun bind() {
         slideShowViewModel.slideImageUrlLiveData.observe(viewLifecycleOwner, {
             it?.let {
-                Log.d(TAG, "slideImageUrlLiveData")
+                Timber.d("slideImageUrlLiveData.observe called.")
                 adapter.update(it)
             }
         })
@@ -74,22 +75,31 @@ class SlideShowFragment : Fragment() {
                 temperature.text = temperatureText
             }
         })
+
+        slideShowViewModel.executeUpdateWeatherWork().observe(viewLifecycleOwner, {
+            it?.let {
+                Timber.d("Work(${it.tags.first()}) state ${it.state}")
+                // Periodic なので State は Enqueued と Running を繰り返す、終了時は Cancel
+                if (it.state == WorkInfo.State.ENQUEUED) {
+                    slideShowViewModel.fetchCurrentWeather()
+                }
+            }
+        })
     }
 
     override fun onResume() {
         loopingViewPager.resumeAutoScroll()
-        slideShowViewModel.executeUpdateWeatherWork()
         super.onResume()
     }
 
     override fun onPause() {
         loopingViewPager.pauseAutoScroll()
-        slideShowViewModel.cancelUpdateWeatherWork()
         super.onPause()
     }
 
     override fun onDestroy() {
         photomContainer.disposeSlideShowContainer()
+        slideShowViewModel.cancelUpdateWeatherWork()
         super.onDestroy()
     }
 }

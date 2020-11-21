@@ -1,7 +1,6 @@
 package com.tatsuki.photom.view.slideshow
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,10 +11,9 @@ import com.tatsuki.core.entity.CurrentWeatherEntity
 import com.tatsuki.core.repository.SlideImageRepository
 import com.tatsuki.core.repository.WeatherRepository
 import com.tatsuki.core.usecase.*
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 class SlideShowViewModel(
@@ -25,7 +23,8 @@ class SlideShowViewModel(
 ): ViewModel(), ICurrentWeatherView, ISlideShowView {
 
     companion object {
-        private const val UPDATE_WEATHER_TAG = "UPDATE_WEATHER_TAG"
+        const val UPDATE_WEATHER_WORK = "UPDATE_WEATHER_WORK"
+        const val UPDATE_WEATHER_TAG = "UPDATE_WEATHER_TAG"
     }
 
     private val fetchCurrentWeatherUseCase = FetchCurrentWeatherUseCase(this, weatherRepository)
@@ -41,23 +40,30 @@ class SlideShowViewModel(
     val currentWeatherIconUrlLiveData: LiveData<String> = currentWeatherIconUrlMutableLiveData
     val currentTemperatureLiveData: LiveData<String> = currentTemperatureMutableLiveData
 
-    private fun fetchCurrentWeather() {
+    fun fetchCurrentWeather() {
         viewModelScope.launch {
             fetchCurrentWeatherUseCase.execute(lat = 35.68, lon = 139.77)
         }
     }
 
-    fun executeUpdateWeatherWork() {
-        Log.d("SlideShowViewModel", "executeUpdateWeatherWork")
+    // https://speakerdeck.com/nshiba/recommendation-of-workmanager?slide=15
+    // https://medium.com/androiddevelopers/workmanager-periodicity-ff35185ff006
+    fun executeUpdateWeatherWork(): LiveData<WorkInfo> {
+        Timber.d( "executeUpdateWeatherWork called.")
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
         val updateWorkRequest =
-            PeriodicWorkRequestBuilder<UpdateWorker>(15, TimeUnit.MINUTES)
+            PeriodicWorkRequestBuilder<UpdateWeatherWorker>(30, TimeUnit.MINUTES)
                 .setConstraints(constraints)
                 .addTag(UPDATE_WEATHER_TAG)
                 .build()
-        workManager.enqueue(updateWorkRequest)
+        workManager.enqueueUniquePeriodicWork(
+            UPDATE_WEATHER_WORK,
+            ExistingPeriodicWorkPolicy.REPLACE,
+            updateWorkRequest)
+
+        return workManager.getWorkInfoByIdLiveData(updateWorkRequest.id)
     }
 
     fun cancelUpdateWeatherWork() {
@@ -93,18 +99,15 @@ class SlideShowViewModel(
     }
 }
 
-// innerだとダメらしい
-class UpdateWorker(context: Context, workParams: WorkerParameters)
-    : CoroutineWorker(context, workParams) {
+// innerだとダメらしいので以下参考にカスタム使用としたが、Application Class で FetchCurrentWeatherUseCase
+// を作成しなくていけないことになるので困難。なので、進捗状態に応じて実行させる
+// https://medium.com/androiddevelopers/customizing-workmanager-fundamentals-fdaa17c46dd2
+class UpdateWeatherWorker(context: Context,
+                          workParams: WorkerParameters
+) : Worker(context, workParams) {
 
-    override suspend fun doWork(): Result {
-        return withContext(Dispatchers.IO) {
-            try {
-                // TODO:
-                Result.success()
-            } catch (error: Throwable) {
-                Result.failure()
-            }
-        }
+    override fun doWork(): Result {
+        Timber.d("doWork called.")
+        return Result.success()
     }
 }
