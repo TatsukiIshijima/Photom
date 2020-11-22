@@ -1,15 +1,18 @@
 package com.tatsuki.photom.view.slideshow
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.work.WorkInfo
+import com.tatsuki.photom.GlideApp
 import com.tatsuki.photom.PhotomApplication
+import com.tatsuki.photom.R
 import com.tatsuki.photom.container.PhotomContainer
 import kotlinx.android.synthetic.main.fragment_slide_show.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import timber.log.Timber
 
 class SlideShowFragment : Fragment() {
 
@@ -40,9 +43,15 @@ class SlideShowFragment : Fragment() {
             loopingViewPager.adapter = adapter
         }
 
+        bind()
+
+        slideShowViewModel.fetchSlideImage()
+    }
+
+    private fun bind() {
         slideShowViewModel.slideImageUrlLiveData.observe(viewLifecycleOwner, {
             it?.let {
-                Log.d(TAG, "slideImageUrlLiveData")
+                Timber.d("slideImageUrlLiveData.observe called.")
                 adapter.update(it)
             }
         })
@@ -54,7 +63,28 @@ class SlideShowFragment : Fragment() {
             }
         })
 
-        slideShowViewModel.fetchSlideImage()
+        slideShowViewModel.currentWeatherIconUrlLiveData.observe(viewLifecycleOwner, {
+            it?.let {
+                GlideApp.with(this).load(it).into(weatherIcon)
+            }
+        })
+
+        slideShowViewModel.currentTemperatureLiveData.observe(viewLifecycleOwner, {
+            it?.let {
+                val temperatureText = "$it${resources.getString(R.string.temperature_unit)}"
+                temperature.text = temperatureText
+            }
+        })
+
+        slideShowViewModel.executeUpdateWeatherWork().observe(viewLifecycleOwner, {
+            it?.let {
+                Timber.d("Work(${it.tags.first()}) state ${it.state}")
+                // Periodic なので State は Enqueued と Running を繰り返す、終了時は Cancel
+                if (it.state == WorkInfo.State.ENQUEUED) {
+                    slideShowViewModel.fetchCurrentWeather()
+                }
+            }
+        })
     }
 
     override fun onResume() {
@@ -69,6 +99,7 @@ class SlideShowFragment : Fragment() {
 
     override fun onDestroy() {
         photomContainer.disposeSlideShowContainer()
+        slideShowViewModel.cancelUpdateWeatherWork()
         super.onDestroy()
     }
 }
