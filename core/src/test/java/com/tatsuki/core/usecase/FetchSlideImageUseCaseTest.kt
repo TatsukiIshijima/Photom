@@ -4,6 +4,7 @@ import com.google.firebase.storage.StorageReference
 import com.nhaarman.mockitokotlin2.*
 import com.tatsuki.core.State
 import com.tatsuki.core.repository.ISlideImageRepository
+import com.tatsuki.core.usecase.ui.ISlideShowView
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking

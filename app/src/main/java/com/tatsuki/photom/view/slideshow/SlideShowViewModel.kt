@@ -10,7 +10,11 @@ import com.google.firebase.storage.StorageReference
 import com.tatsuki.core.entity.CurrentWeatherEntity
 import com.tatsuki.core.repository.SlideImageRepository
 import com.tatsuki.core.repository.WeatherRepository
-import com.tatsuki.core.usecase.*
+import com.tatsuki.core.usecase.FetchCurrentWeatherUseCase
+import com.tatsuki.core.usecase.FetchSlideImageUseCase
+import com.tatsuki.core.usecase.TimeZone
+import com.tatsuki.core.usecase.ui.ICurrentWeatherView
+import com.tatsuki.core.usecase.ui.ISlideShowView
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import timber.log.Timber

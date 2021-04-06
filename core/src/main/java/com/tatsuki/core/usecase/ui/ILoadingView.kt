@@ -1,4 +1,4 @@
-package com.tatsuki.core
+package com.tatsuki.core.usecase.ui
 
 interface ILoadingView {
     fun showLoading()
