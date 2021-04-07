@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.work.WorkInfo
 import com.tatsuki.photom.GlideApp
 import com.tatsuki.photom.R
 import dagger.hilt.android.AndroidEntryPoint
@@ -71,15 +72,15 @@ class SlideShowFragment : Fragment() {
             }
         })
 
-//        slideShowViewModel.executeUpdateWeatherWork().observe(viewLifecycleOwner, {
-//            it?.let {
-//                Timber.d("Work(${it.tags.first()}) state ${it.state}")
-//                // Periodic なので State は Enqueued と Running を繰り返す、終了時は Cancel
-//                if (it.state == WorkInfo.State.ENQUEUED) {
-//                    slideShowViewModel.fetchCurrentWeather()
-//                }
-//            }
-//        })
+        slideShowViewModel.executeUpdateWeatherWork().observe(viewLifecycleOwner, {
+            it?.let {
+                Timber.d("Work(${it.tags.first()}) state ${it.state}")
+                // Periodic なので State は Enqueued と Running を繰り返す、終了時は Cancel
+                if (it.state == WorkInfo.State.ENQUEUED) {
+                    slideShowViewModel.fetchCurrentWeather()
+                }
+            }
+        })
     }
 
     override fun onResume() {
@@ -93,7 +94,7 @@ class SlideShowFragment : Fragment() {
     }
 
     override fun onDestroy() {
-//        slideShowViewModel.cancelUpdateWeatherWork()
+        slideShowViewModel.cancelUpdateWeatherWork()
         super.onDestroy()
     }
 }
