@@ -5,23 +5,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.work.WorkInfo
+import androidx.fragment.app.viewModels
 import com.tatsuki.photom.GlideApp
-import com.tatsuki.photom.PhotomApplication
 import com.tatsuki.photom.R
-import com.tatsuki.photom.container.PhotomContainer
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_slide_show.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import timber.log.Timber
 
+@AndroidEntryPoint
 class SlideShowFragment : Fragment() {
 
     companion object {
         private val TAG = SlideShowFragment::class.java.simpleName
     }
 
-    private lateinit var photomContainer: PhotomContainer
-    private lateinit var slideShowViewModel: SlideShowViewModel
+    private val slideShowViewModel: SlideShowViewModel by viewModels()
+
     private lateinit var adapter: ScreenSlidePagerAdapter
 
     override fun onCreateView(
@@ -32,11 +32,6 @@ class SlideShowFragment : Fragment() {
     @ExperimentalCoroutinesApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        photomContainer = (requireActivity().application as PhotomApplication).photomContainer
-        photomContainer.buildSlideShowContainer()?.let {
-            slideShowViewModel = it.create()
-        }
 
         context?.let {
             adapter = ScreenSlidePagerAdapter(it, mutableListOf())
@@ -76,15 +71,15 @@ class SlideShowFragment : Fragment() {
             }
         })
 
-        slideShowViewModel.executeUpdateWeatherWork().observe(viewLifecycleOwner, {
-            it?.let {
-                Timber.d("Work(${it.tags.first()}) state ${it.state}")
-                // Periodic なので State は Enqueued と Running を繰り返す、終了時は Cancel
-                if (it.state == WorkInfo.State.ENQUEUED) {
-                    slideShowViewModel.fetchCurrentWeather()
-                }
-            }
-        })
+//        slideShowViewModel.executeUpdateWeatherWork().observe(viewLifecycleOwner, {
+//            it?.let {
+//                Timber.d("Work(${it.tags.first()}) state ${it.state}")
+//                // Periodic なので State は Enqueued と Running を繰り返す、終了時は Cancel
+//                if (it.state == WorkInfo.State.ENQUEUED) {
+//                    slideShowViewModel.fetchCurrentWeather()
+//                }
+//            }
+//        })
     }
 
     override fun onResume() {
@@ -98,8 +93,7 @@ class SlideShowFragment : Fragment() {
     }
 
     override fun onDestroy() {
-        photomContainer.disposeSlideShowContainer()
-        slideShowViewModel.cancelUpdateWeatherWork()
+//        slideShowViewModel.cancelUpdateWeatherWork()
         super.onDestroy()
     }
 }
