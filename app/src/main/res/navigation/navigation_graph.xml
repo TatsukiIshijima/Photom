@@ -10,7 +10,17 @@
         android:name="com.tatsuki.photom.view.slideshow.SlideShowFragment"
         android:label="SlideShowFragment"
         tools:layout="@layout/fragment_slide_show">
+        <action
+            android:id="@+id/action_slideshow_to_weather"
+            app:destination="@+id/weatherFragment">
+        </action>
+    </fragment>
 
+    <fragment
+        android:id="@+id/weatherFragment"
+        android:name="com.tatsuki.photom.view.weather.WeatherFragment"
+        android:label="WeatherFragment"
+        tools:layout="@layout/weather_fragment">
     </fragment>
 
 </navigation>
