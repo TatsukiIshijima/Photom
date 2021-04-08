@@ -3,6 +3,7 @@ package com.tatsuki.core.usecase
 import com.nhaarman.mockitokotlin2.*
 import com.tatsuki.core.api.OpenWeatherApiClient
 import com.tatsuki.core.repository.WeatherRepository
+import com.tatsuki.core.usecase.ui.ICurrentWeatherView
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test

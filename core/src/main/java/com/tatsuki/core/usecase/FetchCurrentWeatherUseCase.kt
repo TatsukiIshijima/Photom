@@ -1,11 +1,9 @@
 package com.tatsuki.core.usecase
 
-import com.tatsuki.core.IErrorView
-import com.tatsuki.core.ILoadingView
 import com.tatsuki.core.State
 import com.tatsuki.core.api.response.toCurrentWeatherEntity
-import com.tatsuki.core.entity.CurrentWeatherEntity
 import com.tatsuki.core.repository.WeatherRepository
+import com.tatsuki.core.usecase.ui.ICurrentWeatherView
 import kotlinx.coroutines.flow.collect
 
 class FetchCurrentWeatherUseCase(
@@ -36,9 +34,4 @@ class FetchCurrentWeatherUseCase(
 
         currentWeatherView.hideLoading()
     }
-}
-
-interface ICurrentWeatherView: ILoadingView, IErrorView {
-    // 現在の天気、温度の表示
-    fun showCurrentWeather(entity: CurrentWeatherEntity)
 }

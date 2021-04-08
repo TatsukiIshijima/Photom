@@ -10,16 +10,24 @@ import com.google.firebase.storage.StorageReference
 import com.tatsuki.core.entity.CurrentWeatherEntity
 import com.tatsuki.core.repository.SlideImageRepository
 import com.tatsuki.core.repository.WeatherRepository
-import com.tatsuki.core.usecase.*
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import com.tatsuki.core.usecase.FetchCurrentWeatherUseCase
+import com.tatsuki.core.usecase.FetchSlideImageUseCase
+import com.tatsuki.core.usecase.TimeZone
+import com.tatsuki.core.usecase.ui.ICurrentWeatherView
+import com.tatsuki.core.usecase.ui.ISlideShowView
+import com.tatsuki.photom.UpdateWeatherWorker
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
-class SlideShowViewModel(
+@HiltViewModel
+class SlideShowViewModel @Inject constructor(
+    @ApplicationContext context: Context,
     weatherRepository: WeatherRepository,
     slideImageRepository: SlideImageRepository,
-    private val workManager: WorkManager
 ): ViewModel(), ICurrentWeatherView, ISlideShowView {
 
     companion object {
@@ -29,6 +37,7 @@ class SlideShowViewModel(
 
     private val fetchCurrentWeatherUseCase = FetchCurrentWeatherUseCase(this, weatherRepository)
     private val fetchSlideImageUseCase = FetchSlideImageUseCase(this, slideImageRepository)
+    private val workManager = WorkManager.getInstance(context)
 
     private val loadingMutableLiveData = MutableLiveData<Boolean>()
     private val slideImageUrlMutableLiveData = MutableLiveData<List<StorageReference>>()
@@ -44,6 +53,8 @@ class SlideShowViewModel(
         viewModelScope.launch {
             fetchCurrentWeatherUseCase.execute(lat = 35.68, lon = 139.77)
         }
+        Timber.d("fetchCurrentWeather")
+
     }
 
     // https://speakerdeck.com/nshiba/recommendation-of-workmanager?slide=15
@@ -70,11 +81,12 @@ class SlideShowViewModel(
         workManager.cancelAllWorkByTag(UPDATE_WEATHER_TAG)
     }
 
-    @ExperimentalCoroutinesApi
+
     fun fetchSlideImage() {
         viewModelScope.launch {
             fetchSlideImageUseCase.execute(TimeZone.Morning)
         }
+        Timber.d("fetchSlideImage")
     }
 
     override fun showCurrentWeather(entity: CurrentWeatherEntity) {
@@ -96,18 +108,5 @@ class SlideShowViewModel(
 
     override fun showError(e: Exception) {
 
-    }
-}
-
-// innerだとダメらしいので以下参考にカスタム使用としたが、Application Class で FetchCurrentWeatherUseCase
-// を作成しなくていけないことになるので困難。なので、進捗状態に応じて実行させる
-// https://medium.com/androiddevelopers/customizing-workmanager-fundamentals-fdaa17c46dd2
-class UpdateWeatherWorker(context: Context,
-                          workParams: WorkerParameters
-) : Worker(context, workParams) {
-
-    override fun doWork(): Result {
-        Timber.d("doWork called.")
-        return Result.success()
     }
 }

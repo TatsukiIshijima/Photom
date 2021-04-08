@@ -1,11 +1,9 @@
 package com.tatsuki.core.usecase
 
 import com.google.firebase.storage.StorageReference
-import com.tatsuki.core.IErrorView
-import com.tatsuki.core.ILoadingView
 import com.tatsuki.core.State
 import com.tatsuki.core.repository.ISlideImageRepository
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import com.tatsuki.core.usecase.ui.ISlideShowView
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 
@@ -24,7 +22,6 @@ class FetchSlideImageUseCase(
         private val TAG = FetchSlideImageUseCase::class.java.simpleName
     }
 
-    @ExperimentalCoroutinesApi
     suspend fun execute(timeZone: TimeZone) {
         val fetchFlow: Flow<State<List<StorageReference>>> = when(timeZone) {
             TimeZone.Morning -> {
@@ -52,8 +49,4 @@ class FetchSlideImageUseCase(
             slideShowView.hideLoading()
         }
     }
-}
-
-interface ISlideShowView: ILoadingView, IErrorView {
-    fun showSlide(refList: List<StorageReference>)
 }
