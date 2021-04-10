@@ -1,13 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/lightSkyBlue"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".view.weather.WeatherFragment">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Hello" />
+    <!-- 参考レイアウト：https://www.lifehacker.jp/2016/03/160321iphone_landscape.html -->
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/locationName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="東京"
+        android:textSize="54sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/currentState"
+        app:layout_constraintBottom_toBottomOf="@+id/currentState"
+        tools:text="東京"/>
+
+    <LinearLayout
+        android:id="@+id/currentState"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/currentTemp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="20℃"
+            android:textSize="64sp"
+            android:textColor="@android:color/white"
+            tools:text="20℃"/>
+
+        <TextView
+            android:id="@+id/currentWeather"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="晴れ"
+            android:textSize="36sp"
+            android:textColor="@android:color/white"
+            android:layout_gravity="center"
+            tools:text="晴れ"/>
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/dailyWeatherTopBorder"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/white"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintTop_toBottomOf="@+id/currentState">
+    </View>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/dailyWeather"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintTop_toBottomOf="@+id/dailyWeatherTopBorder"
+        tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:orientation="horizontal">
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <View
+        android:id="@+id/dailyWeatherBottomBorder"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/white"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintTop_toBottomOf="@+id/dailyWeather">
+    </View>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dailyWeatherBottomBorder"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideLine"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.6">
+        </androidx.constraintlayout.widget.Guideline>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/weeklyWeather"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guideLine">
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/currentWeatherDetail"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            app:layout_constraintStart_toStartOf="@+id/guideLine"
+            app:layout_constraintEnd_toEndOf="parent">
+        </androidx.recyclerview.widget.RecyclerView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
