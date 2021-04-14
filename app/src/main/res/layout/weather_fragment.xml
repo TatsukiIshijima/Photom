@@ -3,9 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/lightSkyBlue"
+    android:background="@drawable/bg_sunny"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".view.weather.WeatherFragment">
+    tools:context=".view.weather.WeatherFragment"
+    tools:background="@drawable/bg_sunny">
 
     <!-- 参考レイアウト：https://www.lifehacker.jp/2016/03/160321iphone_landscape.html -->
 
