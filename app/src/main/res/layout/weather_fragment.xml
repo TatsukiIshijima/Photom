@@ -75,7 +75,9 @@
         android:layout_marginEnd="24dp"
         app:layout_constraintTop_toBottomOf="@+id/timelyWeatherTopBorder"
         tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:orientation="horizontal">
+        tools:orientation="horizontal"
+        tools:listitem="@layout/timely_weather_item"
+        tools:itemCount="12">
     </androidx.recyclerview.widget.RecyclerView>
 
     <View
