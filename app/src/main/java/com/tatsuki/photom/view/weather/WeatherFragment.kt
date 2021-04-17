@@ -9,8 +9,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.tatsuki.photom.R
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.weather_fragment.*
 
 @AndroidEntryPoint
 class WeatherFragment : Fragment() {
@@ -27,6 +29,9 @@ class WeatherFragment : Fragment() {
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        timelyWeather.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        timelyWeather.adapter = TimelyWeatherAdapter()
 
         bind()
 
