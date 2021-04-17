@@ -31,7 +31,9 @@ class WeatherFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         timelyWeather.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        dailyWeather.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         timelyWeather.adapter = TimelyWeatherAdapter()
+        dailyWeather.adapter = DailyWeatherAdapter()
 
         bind()
 
