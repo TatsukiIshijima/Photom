@@ -15,11 +15,13 @@ class DailyWeatherAdapter(): RecyclerView.Adapter<DailyWeatherViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: DailyWeatherViewHolder, position: Int) {
-        holder.date.text = "4/1"
-        holder.day.text = "月曜日"
-        holder.weatherIcon.setImageResource(android.R.mipmap.sym_def_app_icon)
-        holder.minTemp.text = "10℃"
-        holder.maxTemp.text = "20℃"
+        holder.apply {
+            date.text = "4/1"
+            day.text = "月曜日"
+            weatherIcon.setImageResource(android.R.mipmap.sym_def_app_icon)
+            minTemp.text = "10℃"
+            maxTemp.text = "20℃"
+        }
     }
 
     override fun getItemCount(): Int {

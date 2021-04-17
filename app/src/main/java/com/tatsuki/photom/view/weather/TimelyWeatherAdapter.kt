@@ -15,9 +15,11 @@ class TimelyWeatherAdapter(): RecyclerView.Adapter<TimelyWeatherViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: TimelyWeatherViewHolder, position: Int) {
-        holder.time.text = "12AM"
-        holder.weatherIcon.setImageResource(android.R.mipmap.sym_def_app_icon)
-        holder.temperature.text = "22℃"
+        holder.apply {
+            time.text = "12AM"
+            weatherIcon.setImageResource(android.R.mipmap.sym_def_app_icon)
+            temperature.text = "22℃"
+        }
     }
 
     override fun getItemCount(): Int {
