@@ -1,17 +1,19 @@
 package com.tatsuki.photom.view.slideshow
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.work.WorkInfo
 import com.tatsuki.photom.GlideApp
 import com.tatsuki.photom.R
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_slide_show.*
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import timber.log.Timber
 
 @AndroidEntryPoint
@@ -28,9 +30,9 @@ class SlideShowFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = inflater.inflate(com.tatsuki.photom.R.layout.fragment_slide_show, container, false)
+    ): View? = inflater.inflate(R.layout.fragment_slide_show, container, false)
 
-    @ExperimentalCoroutinesApi
+    @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -42,6 +44,13 @@ class SlideShowFragment : Fragment() {
         bind()
 
         slideShowViewModel.fetchSlideImage()
+
+        loopingViewPager.setOnTouchListener { _, event ->
+            if (event.action == MotionEvent.ACTION_DOWN) {
+                findNavController().navigate(R.id.action_slideshow_to_weather)
+            }
+            true
+        }
     }
 
     private fun bind() {
