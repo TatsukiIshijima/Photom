@@ -11,6 +11,8 @@ class DateExtensionTest {
         val dt = 1618751123
         val date = dt.toDate()
         val dateString = date.format("M/dd")
+        val dayOfWeek = date.format("E曜日")
         assertEquals(dateString, "4/18")
+        assertEquals(dayOfWeek, "日曜日")
     }
 }
