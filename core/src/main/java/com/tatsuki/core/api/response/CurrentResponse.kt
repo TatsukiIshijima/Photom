@@ -21,7 +21,7 @@ data class CurrentResponse(
     val humidity: Int,
 
     @Json(name = "wind_speed")
-    val windSpeed: Int,
+    val windSpeed: Double,
 
     @Json(name = "weather")
     val weather: List<WeatherResponse>

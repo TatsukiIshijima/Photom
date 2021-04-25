@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.tatsuki.photom.R
@@ -59,23 +58,25 @@ class WeatherFragment : Fragment() {
     }
 
     private fun bind() {
-        viewModel.autoTransitionLiveData.observe(viewLifecycleOwner, Observer {
+        viewModel.autoTransitionLiveData.observe(viewLifecycleOwner, {
             findNavController().popBackStack()
         })
-        viewModel.showTimelyWeatherLiveData.observe(
-            viewLifecycleOwner,
-            Observer { timelyWeatherList ->
-                timelyWeatherList?.let {
-                    timelyWeatherAdapter?.submitList(it)
-                }
-            })
-        viewModel.showDailyWeatherLiveData.observe(
-            viewLifecycleOwner,
-            Observer { dailyWeatherList ->
-                dailyWeatherList?.let {
-                    dailyWeatherAdapter?.submitList(it)
-                }
-            })
+        viewModel.showCurrentTempLiveData.observe(viewLifecycleOwner, {
+            it?.let {
+                val tempText = "${it}${context?.resources?.getString(R.string.temperature_unit)}"
+                currentTemp.text = tempText
+            }
+        })
+        viewModel.showTimelyWeatherLiveData.observe(viewLifecycleOwner, { timelyWeatherList ->
+            timelyWeatherList?.let {
+                timelyWeatherAdapter?.submitList(it)
+            }
+        })
+        viewModel.showDailyWeatherLiveData.observe(viewLifecycleOwner, { dailyWeatherList ->
+            dailyWeatherList?.let {
+                dailyWeatherAdapter?.submitList(it)
+            }
+        })
     }
 
     override fun onResume() {
