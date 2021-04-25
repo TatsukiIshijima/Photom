@@ -48,6 +48,12 @@ class WeatherFragment : Fragment() {
         viewModel.autoTransitionLiveData.observe(viewLifecycleOwner, Observer {
             findNavController().popBackStack()
         })
+        viewModel.showTimelyWeatherLiveData.observe(viewLifecycleOwner, Observer {
+
+        })
+        viewModel.showDailyWeatherLiveData.observe(viewLifecycleOwner, Observer {
+
+        })
     }
 
     override fun onResume() {
