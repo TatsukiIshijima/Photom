@@ -30,7 +30,7 @@ data class HourlyResponse(
 
 fun HourlyResponse.toTimelyWeatherEntity(): TimelyWeatherEntity =
     TimelyWeatherEntity(
-        time.toDate().format("M/dd"),
+        time.toDate().format("kk:mm"),
         weather.firstOrNull()?.icon,
         temp.toInt()
     )

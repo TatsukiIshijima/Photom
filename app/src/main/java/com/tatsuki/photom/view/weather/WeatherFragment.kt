@@ -64,8 +64,8 @@ class WeatherFragment : Fragment() {
         })
         viewModel.showTimelyWeatherLiveData.observe(
             viewLifecycleOwner,
-            Observer { timelyWeaterList ->
-                timelyWeaterList?.let {
+            Observer { timelyWeatherList ->
+                timelyWeatherList?.let {
                     timelyWeatherAdapter?.submitList(it)
                 }
             })
