@@ -18,6 +18,11 @@ class WeatherRepository @Inject constructor(
         private val TAG = WeatherRepository::class.java.simpleName
     }
 
+    private var _cache: OneCallResponse? = null
+
+    val cache: OneCallResponse?
+        get() = _cache
+
     fun getWeather(
         dispatcher: CoroutineDispatcher = Dispatchers.IO,
         lat: Double,
@@ -26,6 +31,7 @@ class WeatherRepository @Inject constructor(
         return flow {
             try {
                 val response = apiClient.getOneCall(lat, lon)
+                _cache = response
                 emit(State.success(response))
             } catch (e: Exception) {
                 emit(State.failed<OneCallResponse>(e))

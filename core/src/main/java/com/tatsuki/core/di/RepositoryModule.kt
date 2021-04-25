@@ -1,6 +1,7 @@
 package com.tatsuki.core.di
 
 import com.tatsuki.core.api.OpenWeatherApiClient
+import com.tatsuki.core.repository.WeatherRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -9,11 +10,11 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object ApiModule {
+object RepositoryModule {
 
     @Singleton
     @Provides
-    fun provideOpenWeatherApiClient(): OpenWeatherApiClient {
-        return OpenWeatherApiClient()
+    fun provideWeatherRepository(client: OpenWeatherApiClient): WeatherRepository {
+        return WeatherRepository(client)
     }
 }
