@@ -19,6 +19,9 @@ class WeatherFragment : Fragment() {
 
     private val viewModel: WeatherViewModel by viewModels()
 
+    private var dailyWeatherAdapter: DailyWeatherAdapter? = null
+    private var timelyWeatherAdapter: TimelyWeatherAdapter? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -30,10 +33,19 @@ class WeatherFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        timelyWeather.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        dailyWeather.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        timelyWeather.adapter = TimelyWeatherAdapter()
-        dailyWeather.adapter = DailyWeatherAdapter()
+        context?.let {
+            dailyWeatherAdapter = DailyWeatherAdapter(it)
+            timelyWeatherAdapter = TimelyWeatherAdapter()
+        }
+
+        timelyWeather.apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = timelyWeatherAdapter
+        }
+        dailyWeather.apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            adapter = dailyWeatherAdapter
+        }
 
         bind()
 
@@ -42,6 +54,8 @@ class WeatherFragment : Fragment() {
             viewModel.startAutoTransitionTimer()
             true
         }
+
+        viewModel.showWeatherDetail()
     }
 
     private fun bind() {
@@ -51,9 +65,13 @@ class WeatherFragment : Fragment() {
         viewModel.showTimelyWeatherLiveData.observe(viewLifecycleOwner, Observer {
 
         })
-        viewModel.showDailyWeatherLiveData.observe(viewLifecycleOwner, Observer {
-
-        })
+        viewModel.showDailyWeatherLiveData.observe(
+            viewLifecycleOwner,
+            Observer { dailyWeatherList ->
+                dailyWeatherList?.let {
+                    dailyWeatherAdapter?.submitList(it)
+                }
+            })
     }
 
     override fun onResume() {
