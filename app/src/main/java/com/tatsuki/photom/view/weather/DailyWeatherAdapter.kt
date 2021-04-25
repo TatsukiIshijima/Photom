@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.tatsuki.core.entity.DailyWeatherEntity
+import com.tatsuki.photom.GlideApp
 import com.tatsuki.photom.R
 
 class DailyWeatherAdapter(
@@ -41,14 +42,16 @@ class DailyWeatherViewHolder(
     fun bind(dailyWeather: DailyWeatherEntity) {
         date.text = dailyWeather.date ?: ""
         day.text = dailyWeather.day ?: ""
-        // TODO:画像ダウンロード＆セット
-        weatherIcon.setImageResource(android.R.mipmap.sym_def_app_icon)
         val minTempText =
             "${dailyWeather.minTemperature}${context.resources.getString(R.string.temperature_unit)}"
         val maxTempText =
             "${dailyWeather.maxTemperature}${context.resources.getString(R.string.temperature_unit)}"
         minTemp.text = minTempText
         maxTemp.text = maxTempText
+        if (!dailyWeather.iconUrl.isNullOrEmpty()) {
+            val iconUrl = "http://openweathermap.org/img/wn/${dailyWeather.iconUrl}@2x.png"
+            GlideApp.with(context).load(iconUrl).into(weatherIcon)
+        }
     }
 }
 

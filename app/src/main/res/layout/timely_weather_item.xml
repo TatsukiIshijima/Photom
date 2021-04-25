@@ -21,11 +21,10 @@
 
     <ImageView
         android:id="@+id/weatherIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:contentDescription="WeatherIcon"
-        tools:src="@android:mipmap/sym_def_app_icon">
-    </ImageView>
+        tools:src="@android:mipmap/sym_def_app_icon"></ImageView>
 
     <TextView
         android:id="@+id/temperature"

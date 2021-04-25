@@ -40,7 +40,7 @@ class WeatherViewModel @Inject constructor(
         job = viewModelScope.launch {
             withContext(Dispatchers.Main) {
 
-                delay(5000)
+                delay(10000)
 
                 if (!isActive) {
                     return@withContext

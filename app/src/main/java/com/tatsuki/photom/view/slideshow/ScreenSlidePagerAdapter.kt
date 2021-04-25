@@ -1,7 +1,6 @@
 package com.tatsuki.photom.view.slideshow
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,7 +29,6 @@ class ScreenSlidePagerAdapter(
         val photoImage = convertView.findViewById<ImageView>(R.id.photoImage)
         val reference = itemList?.get(listPosition)
         reference?.let {
-            Log.d(TAG, it.path)
             GlideApp.with(convertView.context).load(it).into(photoImage)
         }
     }

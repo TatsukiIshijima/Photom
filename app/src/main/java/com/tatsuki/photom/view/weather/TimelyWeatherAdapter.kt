@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.tatsuki.core.entity.TimelyWeatherEntity
+import com.tatsuki.photom.GlideApp
 import com.tatsuki.photom.R
 
 class TimelyWeatherAdapter(
@@ -37,11 +38,13 @@ class TimelyWeatherViewHolder(
 
     fun bind(timelyWeather: TimelyWeatherEntity) {
         time.text = timelyWeather.time ?: ""
-        // TODO:画像ダウンロード&セット
-        weatherIcon.setImageResource(android.R.mipmap.sym_def_app_icon)
         val tempText =
             "${timelyWeather.temperature}${context.resources.getString(R.string.temperature_unit)}"
         temperature.text = tempText
+        if (!timelyWeather.iconUrl.isNullOrEmpty()) {
+            val iconUrl = "http://openweathermap.org/img/wn/${timelyWeather.iconUrl}@2x.png"
+            GlideApp.with(context).load(iconUrl).into(weatherIcon)
+        }
     }
 }
 
