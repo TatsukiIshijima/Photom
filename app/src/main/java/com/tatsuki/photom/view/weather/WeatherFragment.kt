@@ -35,7 +35,7 @@ class WeatherFragment : Fragment() {
 
         context?.let {
             dailyWeatherAdapter = DailyWeatherAdapter(it)
-            timelyWeatherAdapter = TimelyWeatherAdapter()
+            timelyWeatherAdapter = TimelyWeatherAdapter(it)
         }
 
         timelyWeather.apply {
@@ -62,9 +62,13 @@ class WeatherFragment : Fragment() {
         viewModel.autoTransitionLiveData.observe(viewLifecycleOwner, Observer {
             findNavController().popBackStack()
         })
-        viewModel.showTimelyWeatherLiveData.observe(viewLifecycleOwner, Observer {
-
-        })
+        viewModel.showTimelyWeatherLiveData.observe(
+            viewLifecycleOwner,
+            Observer { timelyWeaterList ->
+                timelyWeaterList?.let {
+                    timelyWeatherAdapter?.submitList(it)
+                }
+            })
         viewModel.showDailyWeatherLiveData.observe(
             viewLifecycleOwner,
             Observer { dailyWeatherList ->
