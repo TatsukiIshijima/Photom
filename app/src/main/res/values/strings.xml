@@ -3,4 +3,10 @@
     <string name="photo_image_content_description">写真</string>
     <string name="weather_icon_content_description">天気アイコン</string>
     <string name="temperature_unit">℃</string>
+    <string name="pressure">気圧</string>
+    <string name="pressure_unit">hPa</string>
+    <string name="humidity">湿度</string>
+    <string name="humidity_unit">%</string>
+    <string name="wind_speed">風速</string>
+    <string name="wind_speed_unit">m/s</string>
 </resources>
