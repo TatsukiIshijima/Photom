@@ -18,6 +18,7 @@ class WeatherFragment : Fragment() {
 
     private val viewModel: WeatherViewModel by viewModels()
 
+    private var currentWeatherDetailAdapter: CurrentWeatherDetailAdapter? = null
     private var dailyWeatherAdapter: DailyWeatherAdapter? = null
     private var timelyWeatherAdapter: TimelyWeatherAdapter? = null
 
@@ -32,9 +33,14 @@ class WeatherFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        currentWeatherDetailAdapter = CurrentWeatherDetailAdapter()
         dailyWeatherAdapter = DailyWeatherAdapter()
         timelyWeatherAdapter = TimelyWeatherAdapter()
 
+        currentWeatherDetail.apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            adapter = currentWeatherDetailAdapter
+        }
         timelyWeather.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = timelyWeatherAdapter
@@ -65,6 +71,13 @@ class WeatherFragment : Fragment() {
                 currentTemp.text = tempText
             }
         })
+        viewModel.showCurrentWeatherDetailLiveData.observe(
+            viewLifecycleOwner,
+            { currentWeatherDetail ->
+                currentWeatherDetail?.let {
+                    currentWeatherDetailAdapter?.submitList(it)
+                }
+            })
         viewModel.showTimelyWeatherLiveData.observe(viewLifecycleOwner, { timelyWeatherList ->
             timelyWeatherList?.let {
                 timelyWeatherAdapter?.submitList(it)

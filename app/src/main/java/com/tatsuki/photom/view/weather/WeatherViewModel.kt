@@ -29,11 +29,15 @@ class WeatherViewModel @Inject constructor(
 
     private val _autoTransitionMutableLiveData = MutableLiveData<Unit>()
     private val _showCurrentTempMutableLiveData = MutableLiveData<Int>()
+    private val _showCurrentWeatherDetailMutableLiveData =
+        MutableLiveData<List<CurrentWeatherInfoItem>>()
     private val _showTimelyWeatherMutableLiveData = MutableLiveData<List<TimelyWeatherEntity>>()
     private val _showDailyWeatherMutableLiveData = MutableLiveData<List<DailyWeatherEntity>>()
 
     val autoTransitionLiveData: LiveData<Unit> = _autoTransitionMutableLiveData
     val showCurrentTempLiveData: LiveData<Int> = _showCurrentTempMutableLiveData
+    val showCurrentWeatherDetailLiveData: LiveData<List<CurrentWeatherInfoItem>> =
+        _showCurrentWeatherDetailMutableLiveData
     val showTimelyWeatherLiveData: LiveData<List<TimelyWeatherEntity>> =
         _showTimelyWeatherMutableLiveData
     val showDailyWeatherLiveData: LiveData<List<DailyWeatherEntity>> =
@@ -70,7 +74,7 @@ class WeatherViewModel @Inject constructor(
     }
 
     override fun showCurrentWeatherDetail(list: List<CurrentWeatherInfoItem>) {
-
+        _showCurrentWeatherDetailMutableLiveData.value = list
     }
 
     override fun showTimelyWeather(list: List<TimelyWeatherEntity>) {
