@@ -32,10 +32,8 @@ class WeatherFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        context?.let {
-            dailyWeatherAdapter = DailyWeatherAdapter(it)
-            timelyWeatherAdapter = TimelyWeatherAdapter(it)
-        }
+        dailyWeatherAdapter = DailyWeatherAdapter()
+        timelyWeatherAdapter = TimelyWeatherAdapter()
 
         timelyWeather.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
