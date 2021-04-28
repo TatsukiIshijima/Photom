@@ -5,10 +5,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.tatsuki.core.entity.WeatherCondition
 import com.tatsuki.photom.R
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.weather_fragment.*
@@ -64,6 +66,48 @@ class WeatherFragment : Fragment() {
     private fun bind() {
         viewModel.autoTransitionLiveData.observe(viewLifecycleOwner, {
             findNavController().popBackStack()
+        })
+        viewModel.showCurrentWeatherConditionLiveData.observe(viewLifecycleOwner, {
+            it?.let {
+                weatherCondition.background =
+                    when (it) {
+                        is WeatherCondition.Atmosphere -> ResourcesCompat.getDrawable(
+                            resources,
+                            R.drawable.bg_cloudy,
+                            null
+                        )
+                        is WeatherCondition.Clear -> ResourcesCompat.getDrawable(
+                            resources,
+                            R.drawable.bg_sunny,
+                            null
+                        )
+                        is WeatherCondition.Cloud -> ResourcesCompat.getDrawable(
+                            resources,
+                            R.drawable.bg_cloudy,
+                            null
+                        )
+                        is WeatherCondition.Drizzle -> ResourcesCompat.getDrawable(
+                            resources,
+                            R.drawable.bg_rainy,
+                            null
+                        )
+                        is WeatherCondition.Rain -> ResourcesCompat.getDrawable(
+                            resources,
+                            R.drawable.bg_rainy,
+                            null
+                        )
+                        is WeatherCondition.Snow -> ResourcesCompat.getDrawable(
+                            resources,
+                            R.drawable.bg_snow,
+                            null
+                        )
+                        is WeatherCondition.Thunderstorm -> ResourcesCompat.getDrawable(
+                            resources,
+                            R.drawable.bg_rainy,
+                            null
+                        )
+                    }
+            }
         })
         viewModel.showCurrentTempLiveData.observe(viewLifecycleOwner, {
             it?.let {

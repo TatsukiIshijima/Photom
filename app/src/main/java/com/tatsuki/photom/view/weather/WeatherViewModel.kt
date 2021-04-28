@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.tatsuki.core.entity.CurrentWeatherInfoItem
 import com.tatsuki.core.entity.DailyWeatherEntity
 import com.tatsuki.core.entity.TimelyWeatherEntity
+import com.tatsuki.core.entity.WeatherCondition
 import com.tatsuki.core.repository.WeatherRepository
 import com.tatsuki.core.usecase.ShowWeatherDetailUseCase
 import com.tatsuki.core.usecase.ui.IWeatherDetailView
@@ -28,6 +29,7 @@ class WeatherViewModel @Inject constructor(
     private val showWeatherDetailUseCase = ShowWeatherDetailUseCase(this, weatherRepository)
 
     private val _autoTransitionMutableLiveData = MutableLiveData<Unit>()
+    private val _showCurrentWeatherConditionMutableLiveData = MutableLiveData<WeatherCondition>()
     private val _showCurrentTempMutableLiveData = MutableLiveData<Int>()
     private val _showCurrentWeatherDetailMutableLiveData =
         MutableLiveData<List<CurrentWeatherInfoItem>>()
@@ -35,6 +37,8 @@ class WeatherViewModel @Inject constructor(
     private val _showDailyWeatherMutableLiveData = MutableLiveData<List<DailyWeatherEntity>>()
 
     val autoTransitionLiveData: LiveData<Unit> = _autoTransitionMutableLiveData
+    val showCurrentWeatherConditionLiveData: LiveData<WeatherCondition> =
+        _showCurrentWeatherConditionMutableLiveData
     val showCurrentTempLiveData: LiveData<Int> = _showCurrentTempMutableLiveData
     val showCurrentWeatherDetailLiveData: LiveData<List<CurrentWeatherInfoItem>> =
         _showCurrentWeatherDetailMutableLiveData
@@ -69,7 +73,8 @@ class WeatherViewModel @Inject constructor(
         showWeatherDetailUseCase.execute()
     }
 
-    override fun showCurrentWeather(id: Int, temp: Int) {
+    override fun showCurrentWeather(condition: WeatherCondition, temp: Int) {
+        _showCurrentWeatherConditionMutableLiveData.value = condition
         _showCurrentTempMutableLiveData.value = temp
     }
 
