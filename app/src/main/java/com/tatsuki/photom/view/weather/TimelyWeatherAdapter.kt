@@ -14,12 +14,12 @@ import com.tatsuki.photom.GlideApp
 import com.tatsuki.photom.R
 
 class TimelyWeatherAdapter(
-    private val context: Context
+
 ) : ListAdapter<TimelyWeatherEntity, TimelyWeatherViewHolder>(TimelyWeatherDiffCallback) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TimelyWeatherViewHolder {
         val view =
             LayoutInflater.from(parent.context).inflate(R.layout.timely_weather_item, parent, false)
-        return TimelyWeatherViewHolder(view, context)
+        return TimelyWeatherViewHolder(view, parent.context)
     }
 
     override fun onBindViewHolder(holder: TimelyWeatherViewHolder, position: Int) {
