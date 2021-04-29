@@ -15,7 +15,6 @@
         android:id="@+id/locationName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="東京"
         android:textSize="54sp"
         android:textStyle="bold"
         android:textColor="@android:color/white"
@@ -40,7 +39,6 @@
             android:id="@+id/currentTemp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="20℃"
             android:textSize="64sp"
             android:textColor="@android:color/white"
             tools:text="20℃"/>
@@ -49,7 +47,6 @@
             android:id="@+id/currentWeather"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="晴れ"
             android:textSize="36sp"
             android:textColor="@android:color/white"
             android:layout_gravity="center"
@@ -130,7 +127,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            tools:listitem="@layout/current_weather_detail_item"></androidx.recyclerview.widget.RecyclerView>
+            tools:listitem="@layout/current_weather_detail_item" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
