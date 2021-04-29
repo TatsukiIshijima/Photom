@@ -43,6 +43,8 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:27.0.0')
     // Firebase Storage
     implementation 'com.google.firebase:firebase-storage-ktx'
+    // Cloud FireStore
+    implementation 'com.google.firebase:firebase-firestore-ktx'
 
     // Hilt
     implementation 'com.google.dagger:hilt-android:2.33-beta'
