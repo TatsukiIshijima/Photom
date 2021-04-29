@@ -44,7 +44,8 @@ dependencies {
     // Firebase Storage
     implementation 'com.google.firebase:firebase-storage-ktx'
     // Cloud FireStore
-    implementation 'com.google.firebase:firebase-firestore-ktx'
+    // Hilt で Firestore が見つからないエラーが発生するので api を指定しコンパイル時にも追加されるよう定義
+    api 'com.google.firebase:firebase-firestore-ktx'
 
     // Hilt
     implementation 'com.google.dagger:hilt-android:2.33-beta'
