@@ -67,46 +67,78 @@ class WeatherFragment : Fragment() {
         viewModel.autoTransitionLiveData.observe(viewLifecycleOwner, {
             findNavController().popBackStack()
         })
+        viewModel.showPlaceLiveData.observe(viewLifecycleOwner, {
+            it?.let {
+                locationName.text = it
+            }
+        })
         viewModel.showCurrentWeatherConditionLiveData.observe(viewLifecycleOwner, {
             it?.let {
-                weatherCondition.background =
-                    when (it) {
-                        is WeatherCondition.Atmosphere -> ResourcesCompat.getDrawable(
-                            resources,
-                            R.drawable.bg_cloudy,
-                            null
-                        )
-                        is WeatherCondition.Clear -> ResourcesCompat.getDrawable(
-                            resources,
-                            R.drawable.bg_sunny,
-                            null
-                        )
-                        is WeatherCondition.Cloud -> ResourcesCompat.getDrawable(
-                            resources,
-                            R.drawable.bg_cloudy,
-                            null
-                        )
-                        is WeatherCondition.Drizzle -> ResourcesCompat.getDrawable(
-                            resources,
-                            R.drawable.bg_rainy,
-                            null
-                        )
-                        is WeatherCondition.Rain -> ResourcesCompat.getDrawable(
-                            resources,
-                            R.drawable.bg_rainy,
-                            null
-                        )
-                        is WeatherCondition.Snow -> ResourcesCompat.getDrawable(
-                            resources,
-                            R.drawable.bg_snow,
-                            null
-                        )
-                        is WeatherCondition.Thunderstorm -> ResourcesCompat.getDrawable(
-                            resources,
-                            R.drawable.bg_rainy,
-                            null
-                        )
+                when (it) {
+                    is WeatherCondition.Atmosphere -> {
+                        currentWeather.text = resources.getText(R.string.cloudy)
+                        weatherCondition.background =
+                            ResourcesCompat.getDrawable(
+                                resources,
+                                R.drawable.bg_cloudy,
+                                null
+                            )
                     }
+                    is WeatherCondition.Clear -> {
+                        currentWeather.text = resources.getText(R.string.sunny)
+                        weatherCondition.background =
+                            ResourcesCompat.getDrawable(
+                                resources,
+                                R.drawable.bg_sunny,
+                                null
+                            )
+                    }
+                    is WeatherCondition.Cloud -> {
+                        currentWeather.text = resources.getText(R.string.cloudy)
+                        weatherCondition.background =
+                            ResourcesCompat.getDrawable(
+                                resources,
+                                R.drawable.bg_cloudy,
+                                null
+                            )
+                    }
+                    is WeatherCondition.Drizzle -> {
+                        currentWeather.text = resources.getText(R.string.rainy)
+                        weatherCondition.background =
+                            ResourcesCompat.getDrawable(
+                                resources,
+                                R.drawable.bg_rainy,
+                                null
+                            )
+                    }
+                    is WeatherCondition.Rain -> {
+                        currentWeather.text = resources.getText(R.string.rainy)
+                        weatherCondition.background =
+                            ResourcesCompat.getDrawable(
+                                resources,
+                                R.drawable.bg_rainy,
+                                null
+                            )
+                    }
+                    is WeatherCondition.Snow -> {
+                        currentWeather.text = resources.getText(R.string.snow)
+                        weatherCondition.background =
+                            ResourcesCompat.getDrawable(
+                                resources,
+                                R.drawable.bg_snow,
+                                null
+                            )
+                    }
+                    is WeatherCondition.Thunderstorm -> {
+                        currentWeather.text = resources.getText(R.string.rainy)
+                        weatherCondition.background =
+                            ResourcesCompat.getDrawable(
+                                resources,
+                                R.drawable.bg_rainy,
+                                null
+                            )
+                    }
+                }
             }
         })
         viewModel.showCurrentTempLiveData.observe(viewLifecycleOwner, {
