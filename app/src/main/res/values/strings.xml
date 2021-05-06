@@ -9,4 +9,8 @@
     <string name="humidity_unit">%</string>
     <string name="wind_speed">風速</string>
     <string name="wind_speed_unit">m/s</string>
+    <string name="sunny">晴れ</string>
+    <string name="cloudy">曇り</string>
+    <string name="rainy">雨</string>
+    <string name="snow">雪</string>
 </resources>

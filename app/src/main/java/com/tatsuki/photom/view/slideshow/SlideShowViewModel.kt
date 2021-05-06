@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.work.*
 import com.google.firebase.storage.StorageReference
 import com.tatsuki.core.entity.CurrentWeatherEntity
+import com.tatsuki.core.repository.PlaceRepository
 import com.tatsuki.core.repository.SlideImageRepository
 import com.tatsuki.core.repository.WeatherRepository
 import com.tatsuki.core.usecase.FetchCurrentWeatherUseCase
@@ -18,6 +19,7 @@ import com.tatsuki.core.usecase.ui.ISlideShowView
 import com.tatsuki.photom.UpdateWeatherWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
@@ -28,6 +30,7 @@ class SlideShowViewModel @Inject constructor(
     @ApplicationContext context: Context,
     weatherRepository: WeatherRepository,
     slideImageRepository: SlideImageRepository,
+    placeRepository: PlaceRepository
 ): ViewModel(), ICurrentWeatherView, ISlideShowView {
 
     companion object {
@@ -35,7 +38,8 @@ class SlideShowViewModel @Inject constructor(
         const val UPDATE_WEATHER_TAG = "UPDATE_WEATHER_TAG"
     }
 
-    private val fetchCurrentWeatherUseCase = FetchCurrentWeatherUseCase(this, weatherRepository)
+    private val fetchCurrentWeatherUseCase =
+        FetchCurrentWeatherUseCase(this, weatherRepository, placeRepository)
     private val fetchSlideImageUseCase = FetchSlideImageUseCase(this, slideImageRepository)
     private val workManager = WorkManager.getInstance(context)
 
@@ -49,9 +53,10 @@ class SlideShowViewModel @Inject constructor(
     val currentWeatherIconUrlLiveData: LiveData<String> = currentWeatherIconUrlMutableLiveData
     val currentTemperatureLiveData: LiveData<String> = currentTemperatureMutableLiveData
 
+    @FlowPreview
     fun fetchCurrentWeather() {
         viewModelScope.launch {
-            fetchCurrentWeatherUseCase.execute(lat = 35.68, lon = 139.77)
+            fetchCurrentWeatherUseCase.execute()
         }
         Timber.d("fetchCurrentWeather")
 

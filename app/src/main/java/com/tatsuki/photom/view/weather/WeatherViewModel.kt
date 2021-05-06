@@ -9,6 +9,7 @@ import com.tatsuki.core.entity.CurrentWeatherInfoItem
 import com.tatsuki.core.entity.DailyWeatherEntity
 import com.tatsuki.core.entity.TimelyWeatherEntity
 import com.tatsuki.core.entity.WeatherCondition
+import com.tatsuki.core.repository.PlaceRepository
 import com.tatsuki.core.repository.WeatherRepository
 import com.tatsuki.core.usecase.ShowWeatherDetailUseCase
 import com.tatsuki.core.usecase.ui.IWeatherDetailView
@@ -21,14 +22,17 @@ import javax.inject.Inject
 @HiltViewModel
 class WeatherViewModel @Inject constructor(
     @ApplicationContext context: Context,
-    weatherRepository: WeatherRepository
+    weatherRepository: WeatherRepository,
+    placeRepository: PlaceRepository
 ) : ViewModel(), IWeatherDetailView {
 
     private var job: Job? = null
 
-    private val showWeatherDetailUseCase = ShowWeatherDetailUseCase(this, weatherRepository)
+    private val showWeatherDetailUseCase =
+        ShowWeatherDetailUseCase(this, weatherRepository, placeRepository)
 
     private val _autoTransitionMutableLiveData = MutableLiveData<Unit>()
+    private val _showPlaceNameMutableLiveData = MutableLiveData<String>()
     private val _showCurrentWeatherConditionMutableLiveData = MutableLiveData<WeatherCondition>()
     private val _showCurrentTempMutableLiveData = MutableLiveData<Int>()
     private val _showCurrentWeatherDetailMutableLiveData =
@@ -37,6 +41,7 @@ class WeatherViewModel @Inject constructor(
     private val _showDailyWeatherMutableLiveData = MutableLiveData<List<DailyWeatherEntity>>()
 
     val autoTransitionLiveData: LiveData<Unit> = _autoTransitionMutableLiveData
+    val showPlaceLiveData: LiveData<String> = _showPlaceNameMutableLiveData
     val showCurrentWeatherConditionLiveData: LiveData<WeatherCondition> =
         _showCurrentWeatherConditionMutableLiveData
     val showCurrentTempLiveData: LiveData<Int> = _showCurrentTempMutableLiveData
@@ -70,7 +75,13 @@ class WeatherViewModel @Inject constructor(
     }
 
     fun showWeatherDetail() {
-        showWeatherDetailUseCase.execute()
+        viewModelScope.launch {
+            showWeatherDetailUseCase.execute()
+        }
+    }
+
+    override fun showPlace(name: String) {
+        _showPlaceNameMutableLiveData.value = name
     }
 
     override fun showCurrentWeather(condition: WeatherCondition, temp: Int) {

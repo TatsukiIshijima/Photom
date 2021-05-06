@@ -1,6 +1,8 @@
 package com.tatsuki.core.di
 
+import com.google.firebase.firestore.FirebaseFirestore
 import com.tatsuki.core.api.OpenWeatherApiClient
+import com.tatsuki.core.repository.PlaceRepository
 import com.tatsuki.core.repository.WeatherRepository
 import dagger.Module
 import dagger.Provides
@@ -14,7 +16,11 @@ object RepositoryModule {
 
     @Singleton
     @Provides
-    fun provideWeatherRepository(client: OpenWeatherApiClient): WeatherRepository {
-        return WeatherRepository(client)
-    }
+    fun provideWeatherRepository(client: OpenWeatherApiClient): WeatherRepository =
+        WeatherRepository(client)
+
+    @Singleton
+    @Provides
+    fun providePlaceRepository(db: FirebaseFirestore): PlaceRepository =
+        PlaceRepository(db)
 }

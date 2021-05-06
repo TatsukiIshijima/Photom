@@ -1,18 +1,31 @@
 package com.tatsuki.core.usecase
 
+import com.tatsuki.core.State
 import com.tatsuki.core.api.response.toDailyWeatherEntity
 import com.tatsuki.core.api.response.toDetailItems
 import com.tatsuki.core.api.response.toTimelyWeatherEntity
 import com.tatsuki.core.entity.WeatherCondition
+import com.tatsuki.core.repository.PlaceRepository
 import com.tatsuki.core.repository.WeatherRepository
 import com.tatsuki.core.usecase.ui.IWeatherDetailView
+import kotlinx.coroutines.flow.collect
 
 class ShowWeatherDetailUseCase(
     private val weatherDetailView: IWeatherDetailView,
-    private val weatherRepository: WeatherRepository
+    private val weatherRepository: WeatherRepository,
+    private val placeRepository: PlaceRepository
 ) {
 
-    fun execute() {
+    suspend fun execute() {
+        placeRepository.fetchPlace().collect {
+            when (it) {
+                is State.Failed -> {
+                }
+                is State.Success -> {
+                    weatherDetailView.showPlace(it.data?.name ?: "---")
+                }
+            }
+        }
         weatherRepository.cache?.let {
             it.current.weather.firstOrNull()?.let { weather ->
                 val condition =
