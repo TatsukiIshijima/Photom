@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.camera.core.CameraSelector
+import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
@@ -14,6 +16,9 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
+import timber.log.Timber
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
 /**
  * Skeleton of an Android Things activity.
@@ -34,11 +39,13 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
 
     companion object {
+        private val TAG = MainActivity::class.java.simpleName
         private const val REQUEST_CODE_PERMISSIONS = 10
         private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
     }
 
     private lateinit var navController: NavController
+    private lateinit var cameraExecutor: ExecutorService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,12 +53,14 @@ class MainActivity : AppCompatActivity() {
 
         // AndroidThings の場合は許可ダイアログが出ることはなく、既に許可状態になっている
         if (allPermissionsGranted()) {
-            // TODO:カメラ起動
+            startCamera()
         } else {
             ActivityCompat.requestPermissions(
                 this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS
             )
         }
+
+        cameraExecutor = Executors.newSingleThreadExecutor()
 
         // 左スワイプでメニューが表示するよう設定
         val navHostFragment =
@@ -82,7 +91,7 @@ class MainActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == REQUEST_CODE_PERMISSIONS) {
             if (allPermissionsGranted()) {
-                // TODO:カメラ起動
+                startCamera()
             } else {
                 Snackbar.make(
                     nav_host_fragment,
@@ -94,7 +103,30 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        cameraExecutor.shutdown()
+    }
+
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
         ContextCompat.checkSelfPermission(baseContext, it) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun startCamera() {
+        val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
+
+        cameraProviderFuture.addListener(Runnable {
+            val cameraProvider = cameraProviderFuture.get()
+
+            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+
+            try {
+                cameraProvider.unbindAll()
+
+                cameraProvider.bindToLifecycle(this, cameraSelector)
+            } catch (e: Exception) {
+                Timber.e(TAG, "Use case binding failed: ${e.localizedMessage}")
+            }
+        }, ContextCompat.getMainExecutor(this))
     }
 }
