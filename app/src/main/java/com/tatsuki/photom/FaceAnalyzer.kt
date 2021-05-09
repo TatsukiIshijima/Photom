@@ -11,7 +11,11 @@ import com.google.mlkit.vision.face.FaceDetection
 import com.google.mlkit.vision.face.FaceDetectorOptions
 import timber.log.Timber
 
-class FaceAnalyzer : ImageAnalysis.Analyzer {
+typealias DetectListener = (faces: MutableList<Face>) -> Unit
+
+class FaceAnalyzer(
+    private val listener: DetectListener
+) : ImageAnalysis.Analyzer {
 
     private fun detectFace(image: InputImage): Task<MutableList<Face>> {
         val options = FaceDetectorOptions.Builder()
@@ -34,9 +38,7 @@ class FaceAnalyzer : ImageAnalysis.Analyzer {
             val image = InputImage.fromMediaImage(mediaImage, imageProxy.imageInfo.rotationDegrees)
             detectFace(image)
                 .addOnSuccessListener { faces ->
-                    if (faces.count() > 0) {
-                        Timber.d("detect faces ${faces.count()}")
-                    }
+                    listener(faces)
                 }
                 .addOnFailureListener { e ->
                     Timber.e("detect faces failed: ${e.localizedMessage}")

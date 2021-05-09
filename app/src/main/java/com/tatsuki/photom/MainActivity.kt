@@ -123,10 +123,13 @@ class MainActivity : AppCompatActivity() {
             val imageAnalyzer = ImageAnalysis.Builder()
                 .build()
                 .also {
-//                    it.setAnalyzer(cameraExecutor, LuminosityAnalyzer { luma ->
-//                        Timber.d("Average luminosity: $luma")
+                    it.setAnalyzer(cameraExecutor, LuminosityAnalyzer { luma ->
+                        Timber.d("Luminosity: ${luma}")
+                    })
+                    // FIXME:顔検出でデバッグ実行＆停止するとなぜか完全に停止できないため、 再起動する必要がある！？
+//                    it.setAnalyzer(cameraExecutor, FaceAnalyzer { faces ->
+//                        Timber.d("Detect faces: ${faces.count()}")
 //                    })
-                    it.setAnalyzer(cameraExecutor, FaceAnalyzer())
                 }
 
             try {
