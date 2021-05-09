@@ -1,4 +1,4 @@
-package com.tatsuki.photom
+package com.tatsuki.photom.view.main
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -15,6 +15,8 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.snackbar.Snackbar
+import com.tatsuki.photom.LuminosityAnalyzer
+import com.tatsuki.photom.R
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber

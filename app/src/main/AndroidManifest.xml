@@ -13,7 +13,7 @@
         <uses-library android:name="com.google.android.things" />
 
         <activity
-            android:name=".MainActivity"
+            android:name=".view.main.MainActivity"
             android:theme="@style/AppTheme"
             android:screenOrientation="landscape">
             <intent-filter>
