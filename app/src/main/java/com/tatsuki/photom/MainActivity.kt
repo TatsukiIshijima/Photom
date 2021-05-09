@@ -123,9 +123,10 @@ class MainActivity : AppCompatActivity() {
             val imageAnalyzer = ImageAnalysis.Builder()
                 .build()
                 .also {
-                    it.setAnalyzer(cameraExecutor, LuminosityAnalyzer { luma ->
-                        Timber.d("Average luminosity: $luma")
-                    })
+//                    it.setAnalyzer(cameraExecutor, LuminosityAnalyzer { luma ->
+//                        Timber.d("Average luminosity: $luma")
+//                    })
+                    it.setAnalyzer(cameraExecutor, FaceAnalyzer())
                 }
 
             try {
