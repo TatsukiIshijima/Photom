@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
@@ -15,7 +16,6 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.snackbar.Snackbar
-import com.tatsuki.photom.LuminosityAnalyzer
 import com.tatsuki.photom.R
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
@@ -45,6 +45,8 @@ class MainActivity : AppCompatActivity() {
         private const val REQUEST_CODE_PERMISSIONS = 10
         private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
     }
+
+    private val mainViewModel: MainViewModel by viewModels()
 
     private lateinit var navController: NavController
     private lateinit var cameraExecutor: ExecutorService
@@ -125,13 +127,9 @@ class MainActivity : AppCompatActivity() {
             val imageAnalyzer = ImageAnalysis.Builder()
                 .build()
                 .also {
-                    it.setAnalyzer(cameraExecutor, LuminosityAnalyzer { luma ->
-                        Timber.d("Luminosity: ${luma}")
-                    })
+                    it.setAnalyzer(cameraExecutor, mainViewModel.luminosityAnalyzer)
                     // FIXME:顔検出でデバッグ実行＆停止するとなぜか完全に停止できないため、 再起動する必要がある！？
-//                    it.setAnalyzer(cameraExecutor, FaceAnalyzer { faces ->
-//                        Timber.d("Detect faces: ${faces.count()}")
-//                    })
+                    // it.setAnalyzer(cameraExecutor, mainViewModel.faceAnalyzer)
                 }
 
             try {

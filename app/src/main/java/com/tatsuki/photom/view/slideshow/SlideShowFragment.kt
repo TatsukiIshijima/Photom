@@ -7,11 +7,13 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.work.WorkInfo
 import com.tatsuki.photom.GlideApp
 import com.tatsuki.photom.R
+import com.tatsuki.photom.view.main.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_slide_show.*
 import timber.log.Timber
@@ -24,6 +26,7 @@ class SlideShowFragment : Fragment() {
     }
 
     private val slideShowViewModel: SlideShowViewModel by viewModels()
+    private val mainViewModel: MainViewModel by activityViewModels()
 
     private lateinit var adapter: ScreenSlidePagerAdapter
 
@@ -89,6 +92,10 @@ class SlideShowFragment : Fragment() {
                     slideShowViewModel.fetchCurrentWeather()
                 }
             }
+        })
+
+        mainViewModel.luminosityLiveData.observe(viewLifecycleOwner, {
+            Timber.d("Luminosity: $it")
         })
     }
 
