@@ -3,6 +3,7 @@ package com.tatsuki.photom.view.main
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Size
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
@@ -125,6 +126,7 @@ class MainActivity : AppCompatActivity() {
             val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
             val imageAnalyzer = ImageAnalysis.Builder()
+                .setTargetResolution(Size(320, 240))
                 .build()
                 .also {
                     it.setAnalyzer(cameraExecutor, mainViewModel.luminosityAnalyzer)
