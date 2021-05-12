@@ -108,9 +108,16 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        cameraExecutor.shutdown()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
-        cameraExecutor.shutdown()
+        if (!cameraExecutor.isShutdown) {
+            cameraExecutor.shutdownNow()
+        }
     }
 
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
