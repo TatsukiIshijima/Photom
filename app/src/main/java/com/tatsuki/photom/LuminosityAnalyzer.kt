@@ -10,8 +10,11 @@ typealias LuminosityListener = (Luminosity: Double) -> Unit
  * CameraX を用いた画像処理の動作確認用
  */
 class LuminosityAnalyzer(
+    private val skipFrame: Int = 30,
     private val listener: LuminosityListener
 ) : ImageAnalysis.Analyzer {
+
+    private var frame = 0
 
     private fun ByteBuffer.toByteArray(): ByteArray {
         rewind()
@@ -21,13 +24,16 @@ class LuminosityAnalyzer(
     }
 
     override fun analyze(image: ImageProxy) {
-        val buffer = image.planes[0].buffer
-        val data = buffer.toByteArray()
-        val pixels = data.map { it.toInt() and 0xFF }
-        val luminosity = pixels.average()
-
-        listener(luminosity)
-
+        if (frame != skipFrame) {
+            frame++
+        } else {
+            val buffer = image.planes[0].buffer
+            val data = buffer.toByteArray()
+            val pixels = data.map { it.toInt() and 0xFF }
+            val luminosity = pixels.average()
+            listener(luminosity)
+            frame = 0
+        }
         image.close()
     }
 }
