@@ -7,18 +7,23 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.tatsuki.core.entity.WeatherCondition
 import com.tatsuki.photom.R
+import com.tatsuki.photom.extension.observeNotNull
+import com.tatsuki.photom.view.main.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.weather_fragment.*
+import timber.log.Timber
 
 @AndroidEntryPoint
 class WeatherFragment : Fragment() {
 
-    private val viewModel: WeatherViewModel by viewModels()
+    private val weatherViewModel: WeatherViewModel by viewModels()
+    private val mainViewModel: MainViewModel by activityViewModels()
 
     private var currentWeatherDetailAdapter: CurrentWeatherDetailAdapter? = null
     private var dailyWeatherAdapter: DailyWeatherAdapter? = null
@@ -54,25 +59,19 @@ class WeatherFragment : Fragment() {
 
         bind()
 
-        view.setOnTouchListener { _, _ ->
-            viewModel.stopAutoTransitionTimer()
-            viewModel.startAutoTransitionTimer()
-            true
-        }
-
-        viewModel.showWeatherDetail()
+        weatherViewModel.showWeatherDetail()
     }
 
     private fun bind() {
-        viewModel.autoTransitionLiveData.observe(viewLifecycleOwner, {
+        weatherViewModel.autoTransitionLiveData.observe(viewLifecycleOwner, {
             findNavController().popBackStack()
         })
-        viewModel.showPlaceLiveData.observe(viewLifecycleOwner, {
+        weatherViewModel.showPlaceLiveData.observe(viewLifecycleOwner, {
             it?.let {
                 locationName.text = it
             }
         })
-        viewModel.showCurrentWeatherConditionLiveData.observe(viewLifecycleOwner, {
+        weatherViewModel.showCurrentWeatherConditionLiveData.observe(viewLifecycleOwner, {
             it?.let {
                 when (it) {
                     is WeatherCondition.Atmosphere -> {
@@ -141,38 +140,46 @@ class WeatherFragment : Fragment() {
                 }
             }
         })
-        viewModel.showCurrentTempLiveData.observe(viewLifecycleOwner, {
+        weatherViewModel.showCurrentTempLiveData.observe(viewLifecycleOwner, {
             it?.let {
                 val tempText = "${it}${context?.resources?.getString(R.string.temperature_unit)}"
                 currentTemp.text = tempText
             }
         })
-        viewModel.showCurrentWeatherDetailLiveData.observe(
+        weatherViewModel.showCurrentWeatherDetailLiveData.observe(
             viewLifecycleOwner,
             { currentWeatherDetail ->
                 currentWeatherDetail?.let {
                     currentWeatherDetailAdapter?.submitList(it)
                 }
             })
-        viewModel.showTimelyWeatherLiveData.observe(viewLifecycleOwner, { timelyWeatherList ->
-            timelyWeatherList?.let {
-                timelyWeatherAdapter?.submitList(it)
-            }
-        })
-        viewModel.showDailyWeatherLiveData.observe(viewLifecycleOwner, { dailyWeatherList ->
+        weatherViewModel.showTimelyWeatherLiveData.observe(
+            viewLifecycleOwner,
+            { timelyWeatherList ->
+                timelyWeatherList?.let {
+                    timelyWeatherAdapter?.submitList(it)
+                }
+            })
+        weatherViewModel.showDailyWeatherLiveData.observe(viewLifecycleOwner, { dailyWeatherList ->
             dailyWeatherList?.let {
                 dailyWeatherAdapter?.submitList(it)
             }
         })
+        mainViewModel.luminosityLiveData
+            .observeNotNull(viewLifecycleOwner, {
+                Timber.d("Luminosity: $it")
+                weatherViewModel.stopAutoTransitionTimer()
+                weatherViewModel.startAutoTransitionTimer()
+            })
     }
 
     override fun onResume() {
         super.onResume()
-        viewModel.startAutoTransitionTimer()
+        weatherViewModel.startAutoTransitionTimer()
     }
 
     override fun onPause() {
         super.onPause()
-        viewModel.stopAutoTransitionTimer()
+        weatherViewModel.stopAutoTransitionTimer()
     }
 }
