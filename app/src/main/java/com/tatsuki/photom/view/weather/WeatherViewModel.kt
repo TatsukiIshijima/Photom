@@ -16,7 +16,6 @@ import com.tatsuki.core.usecase.ui.IWeatherDetailView
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.*
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -53,17 +52,12 @@ class WeatherViewModel @Inject constructor(
         _showDailyWeatherMutableLiveData
 
     fun startAutoTransitionTimer() {
+        if (job?.isActive == true) {
+            job?.cancel()
+        }
         job = viewModelScope.launch {
             withContext(Dispatchers.Main) {
-
                 delay(10000)
-
-                if (!isActive) {
-                    return@withContext
-                }
-
-                Timber.d("observeTouchEvent!!")
-
                 _autoTransitionMutableLiveData.value = Unit
             }
         }

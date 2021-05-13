@@ -50,13 +50,6 @@ class SlideShowFragment : Fragment() {
         bind()
 
         slideShowViewModel.fetchSlideImage()
-
-//        loopingViewPager.setOnTouchListener { _, event ->
-//            if (event.action == MotionEvent.ACTION_DOWN) {
-//                findNavController().navigate(R.id.action_slideshow_to_weather)
-//            }
-//            true
-//        }
     }
 
     private fun bind() {

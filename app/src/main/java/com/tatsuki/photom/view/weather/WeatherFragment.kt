@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.tatsuki.core.entity.WeatherCondition
 import com.tatsuki.photom.R
+import com.tatsuki.photom.extension.observeNotNull
 import com.tatsuki.photom.view.main.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.weather_fragment.*
@@ -57,12 +58,6 @@ class WeatherFragment : Fragment() {
         }
 
         bind()
-
-        view.setOnTouchListener { _, _ ->
-            weatherViewModel.stopAutoTransitionTimer()
-            weatherViewModel.startAutoTransitionTimer()
-            true
-        }
 
         weatherViewModel.showWeatherDetail()
     }
@@ -170,9 +165,12 @@ class WeatherFragment : Fragment() {
                 dailyWeatherAdapter?.submitList(it)
             }
         })
-        mainViewModel.luminosityLiveData.observe(viewLifecycleOwner, {
-            Timber.d("Luminosity: $it")
-        })
+        mainViewModel.luminosityLiveData
+            .observeNotNull(viewLifecycleOwner, {
+                Timber.d("Luminosity: $it")
+                weatherViewModel.stopAutoTransitionTimer()
+                weatherViewModel.startAutoTransitionTimer()
+            })
     }
 
     override fun onResume() {
