@@ -3,19 +3,22 @@ package com.tatsuki.photom.view.slideshow
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.work.WorkInfo
 import com.tatsuki.photom.GlideApp
 import com.tatsuki.photom.R
+import com.tatsuki.photom.extension.observeNotNull
 import com.tatsuki.photom.view.main.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_slide_show.*
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @AndroidEntryPoint
@@ -48,12 +51,12 @@ class SlideShowFragment : Fragment() {
 
         slideShowViewModel.fetchSlideImage()
 
-        loopingViewPager.setOnTouchListener { _, event ->
-            if (event.action == MotionEvent.ACTION_DOWN) {
-                findNavController().navigate(R.id.action_slideshow_to_weather)
-            }
-            true
-        }
+//        loopingViewPager.setOnTouchListener { _, event ->
+//            if (event.action == MotionEvent.ACTION_DOWN) {
+//                findNavController().navigate(R.id.action_slideshow_to_weather)
+//            }
+//            true
+//        }
     }
 
     private fun bind() {
@@ -94,9 +97,15 @@ class SlideShowFragment : Fragment() {
             }
         })
 
-        mainViewModel.luminosityLiveData.observe(viewLifecycleOwner, {
-            Timber.d("Luminosity: $it")
-        })
+        mainViewModel.luminosityLiveData
+            .observeNotNull(viewLifecycleOwner, { luminosity ->
+                Timber.d("Luminosity: $luminosity")
+                lifecycleScope.launch {
+                    // FIXME: delay を入れないと画面遷移しても同じ値がずっと流れてくるため画面遷移のループが発生する
+                    delay(500)
+                    findNavController().navigate(R.id.action_slideshow_to_weather)
+                }
+            })
     }
 
     override fun onResume() {

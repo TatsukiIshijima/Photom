@@ -4,13 +4,14 @@ import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import java.nio.ByteBuffer
 
-typealias LuminosityListener = (Luminosity: Double) -> Unit
+typealias LuminosityListener = (luminosity: Double?) -> Unit
 
 /**
  * CameraX を用いた画像処理の動作確認用
  */
 class LuminosityAnalyzer(
     private val skipFrame: Int = 30,
+    private val luminosityThreshold: Int = 50,
     private val listener: LuminosityListener
 ) : ImageAnalysis.Analyzer {
 
@@ -31,7 +32,7 @@ class LuminosityAnalyzer(
             val data = buffer.toByteArray()
             val pixels = data.map { it.toInt() and 0xFF }
             val luminosity = pixels.average()
-            listener(luminosity)
+            listener(if (luminosity < luminosityThreshold) luminosity else null)
             frame = 0
         }
         image.close()
