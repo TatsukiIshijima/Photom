@@ -16,22 +16,14 @@ import javax.inject.Inject
 // How to use Kotlin Flows with Firestore
 // https://medium.com/firebase-tips-tricks/how-to-use-kotlin-flows-with-firestore-6c7ee9ae12f3
 
-// Firebaseに依存してテストがしづらいため、RepositoryをInterfaceとしておく
-
-interface ISlideImageRepository {
-    fun fetchMorningRef(): Flow<State<List<StorageReference>>>
-    fun fetchNoonRef(): Flow<State<List<StorageReference>>>
-    fun fetchEveningRef(): Flow<State<List<StorageReference>>>
-}
-
 class SlideImageRepository @Inject constructor(
     private val storage: FirebaseStorage
-): ISlideImageRepository {
+) {
     companion object {
         private val TAG = SlideImageRepository::class.java.simpleName
     }
 
-    private fun fetchImageReferences(
+    fun fetchImageReferences(
         path: String,
         dispatcher: CoroutineDispatcher = Dispatchers.IO
     ): Flow<State<List<StorageReference>>> {
@@ -49,13 +41,4 @@ class SlideImageRepository @Inject constructor(
             }
         }.flowOn(dispatcher)
     }
-
-    override fun fetchMorningRef(): Flow<State<List<StorageReference>>> =
-        fetchImageReferences("photom/morning")
-
-    override fun fetchNoonRef(): Flow<State<List<StorageReference>>> =
-        fetchImageReferences("photom/noon")
-
-    override fun fetchEveningRef(): Flow<State<List<StorageReference>>> =
-        fetchImageReferences("photom/evening")
 }

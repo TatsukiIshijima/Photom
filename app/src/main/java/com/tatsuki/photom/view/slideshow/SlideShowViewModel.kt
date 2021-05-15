@@ -13,7 +13,6 @@ import com.tatsuki.core.repository.SlideImageRepository
 import com.tatsuki.core.repository.WeatherRepository
 import com.tatsuki.core.usecase.FetchCurrentWeatherUseCase
 import com.tatsuki.core.usecase.FetchSlideImageUseCase
-import com.tatsuki.core.usecase.TimeZone
 import com.tatsuki.core.usecase.ui.ICurrentWeatherView
 import com.tatsuki.core.usecase.ui.ISlideShowView
 import com.tatsuki.photom.UpdateWeatherWorker
@@ -89,7 +88,7 @@ class SlideShowViewModel @Inject constructor(
 
     fun fetchSlideImage() {
         viewModelScope.launch {
-            fetchSlideImageUseCase.execute(TimeZone.Morning)
+            fetchSlideImageUseCase.execute()
         }
         Timber.d("fetchSlideImage")
     }

@@ -1,43 +1,31 @@
 package com.tatsuki.core.usecase
 
-import com.google.firebase.storage.StorageReference
 import com.tatsuki.core.State
-import com.tatsuki.core.repository.ISlideImageRepository
+import com.tatsuki.core.repository.SlideImageRepository
 import com.tatsuki.core.usecase.ui.ISlideShowView
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
-
-enum class TimeZone {
-    Morning,
-    Noon,
-    Evening
-}
+import java.time.LocalTime
 
 class FetchSlideImageUseCase(
     private val slideShowView: ISlideShowView,
-    private val slideImageRepository: ISlideImageRepository
+    private val slideImageRepository: SlideImageRepository
 ) {
 
     companion object {
         private val TAG = FetchSlideImageUseCase::class.java.simpleName
     }
 
-    suspend fun execute(timeZone: TimeZone) {
-        val fetchFlow: Flow<State<List<StorageReference>>> = when(timeZone) {
-            TimeZone.Morning -> {
-                slideImageRepository.fetchMorningRef()
-            }
-            TimeZone.Noon -> {
-                slideImageRepository.fetchNoonRef()
-            }
-            TimeZone.Evening -> {
-                slideImageRepository.fetchEveningRef()
-            }
+    suspend fun execute() {
+        val path: String = when (LocalTime.now().hour) {
+            in 1..8 -> "photom/morning"
+            in 9..16 -> "photom/noon"
+            else -> "photom/evening"
         }
 
         slideShowView.showLoading()
 
-        fetchFlow.collect { state ->
+        // TODO:pathの動的変更
+        slideImageRepository.fetchImageReferences("photom/morning").collect { state ->
             when (state) {
                 is State.Success -> {
                     slideShowView.showSlide(state.data)
