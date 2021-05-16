@@ -1,37 +1,58 @@
 package com.tatsuki.core.usecase
 
-import com.nhaarman.mockitokotlin2.*
-import com.tatsuki.core.api.OpenWeatherApiClient
+import com.google.firebase.firestore.GeoPoint
+import com.tatsuki.core.State
+import com.tatsuki.core.api.response.CurrentResponse
+import com.tatsuki.core.api.response.OneCallResponse
+import com.tatsuki.core.api.response.PlaceResponse
+import com.tatsuki.core.repository.PlaceRepository
 import com.tatsuki.core.repository.WeatherRepository
 import com.tatsuki.core.usecase.ui.ICurrentWeatherView
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
-import org.junit.Before
 import org.junit.Test
+import org.mockito.kotlin.*
 
 class FetchCurrentWeatherUseCaseTest {
 
-    private lateinit var client: OpenWeatherApiClient
-    private lateinit var repository: WeatherRepository
-    private lateinit var view: ICurrentWeatherView
-    private lateinit var usecase: FetchCurrentWeatherUseCase
-
-    @Before
-    fun initialize() {
-        client = OpenWeatherApiClient()
-        repository = WeatherRepository(client)
-        view = mock()
-        usecase = FetchCurrentWeatherUseCase(view, repository)
-    }
-
     @Test
     fun 現在の天気情報が取得できた場合に現在の天気と温度が表示されること() {
-        runBlocking {
-            usecase.execute(lat = 35.68, lon = 139.77)
-
-            verify(view, times(1)).showLoading()
-            verify(view).showCurrentWeather(any())
-            verify(view, never()).showError(any())
-            verify(view, times(1)).hideLoading()
+        val weatherRepository = mock<WeatherRepository> {
+            on { getWeather(lat = 38.79, lon = 137.79) } doReturn flow<State<OneCallResponse>> {
+                emit(
+                    State.success(
+                        OneCallResponse(
+                            latitude = 38.79,
+                            longitude = 137.79,
+                            timezone = "",
+                            timezoneOffset = 0.0,
+                            current = CurrentResponse(0, 0.0, 0, 0, 0.0, listOf()),
+                            hourly = listOf(),
+                            daily = listOf()
+                        )
+                    )
+                )
+            }
         }
+        val placeRepository = mock<PlaceRepository> {
+            on { fetchPlace() } doReturn flow<State<PlaceResponse?>> {
+                emit(State.success(PlaceResponse(name = "東京", location = GeoPoint(38.79, 137.79))))
+            }
+        }
+        val view = mock<ICurrentWeatherView> {
+            on { showLoading() } doAnswer { }
+            on { hideLoading() } doAnswer { }
+            on { showCurrentWeather(any()) } doAnswer { }
+        }
+
+        val usecase = FetchCurrentWeatherUseCase(view, weatherRepository, placeRepository)
+        runBlocking {
+            usecase.execute()
+        }
+
+        verify(view, times(1)).showLoading()
+        verify(view, times(1)).showCurrentWeather(any())
+        verify(view, never()).showError(any())
+        verify(view, times(1)).hideLoading()
     }
 }
