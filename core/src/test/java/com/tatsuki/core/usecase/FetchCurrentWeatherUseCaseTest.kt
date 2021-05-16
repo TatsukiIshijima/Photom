@@ -51,6 +51,8 @@ class FetchCurrentWeatherUseCaseTest {
         }
 
         verify(view, times(1)).showLoading()
+        verify(placeRepository, times(1)).fetchPlace()
+        verify(weatherRepository, times(1)).getWeather(lat = 38.79, lon = 137.79)
         verify(view, times(1)).showCurrentWeather(any())
         verify(view, never()).showError(any())
         verify(view, times(1)).hideLoading()
