@@ -88,7 +88,8 @@ class SlideShowViewModel @Inject constructor(
 
     fun fetchSlideImage() {
         viewModelScope.launch {
-            fetchSlideImageUseCase.execute()
+//            fetchSlideImageUseCase.execute(LocalTime.now().hour)
+            fetchSlideImageUseCase.execute(7)
         }
         Timber.d("fetchSlideImage")
     }
