@@ -16,6 +16,9 @@ class MainViewModel @Inject constructor(
     @ApplicationContext context: Context
 ) : ViewModel() {
 
+    var currentPage: Int = 0
+        private set
+
     private val faceMutableLiveData = MutableLiveData<MutableList<Face>>()
     private val luminosityMutableLiveData = MutableLiveData<Double>()
 
@@ -30,5 +33,9 @@ class MainViewModel @Inject constructor(
     val faceAnalyzer = FaceAnalyzer { faces ->
         // メインスレッドで値を入れるため postValue
         faceMutableLiveData.postValue(faces)
+    }
+
+    fun saveCurrentPage(value: Int) {
+        currentPage = value
     }
 }
