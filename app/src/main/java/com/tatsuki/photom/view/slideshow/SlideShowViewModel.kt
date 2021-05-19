@@ -88,6 +88,7 @@ class SlideShowViewModel @Inject constructor(
 
     fun fetchSlideImage() {
         viewModelScope.launch {
+            // TODO:引数設定
 //            fetchSlideImageUseCase.execute(LocalTime.now().hour)
             fetchSlideImageUseCase.execute(7)
         }

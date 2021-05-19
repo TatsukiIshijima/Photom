@@ -3,6 +3,7 @@ package com.tatsuki.photom.view.slideshow
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
@@ -11,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.work.WorkInfo
+import com.google.android.material.snackbar.Snackbar
 import com.tatsuki.photom.GlideApp
 import com.tatsuki.photom.R
 import com.tatsuki.photom.extension.observeNotNull
@@ -50,12 +52,32 @@ class SlideShowFragment : Fragment() {
         bind()
 
         slideShowViewModel.fetchSlideImage()
+
+        loopingViewPager.setOnTouchListener { _, event ->
+            if (event.action == MotionEvent.ACTION_DOWN) {
+                mainViewModel.saveCurrentPage(loopingViewPager.currentItem)
+                findNavController().navigate(R.id.action_slideshow_to_weather)
+            }
+            true
+        }
     }
 
     private fun bind() {
         slideShowViewModel.slideImageUrlLiveData.observe(viewLifecycleOwner, {
+            if (it?.count() == 0) {
+                Snackbar.make(
+                    slideShowConstraintLayout,
+                    R.string.slide_show_image_is_empty,
+                    Snackbar.LENGTH_SHORT
+                ).show()
+                return@observe
+            }
             it?.let {
                 Timber.d("slideImageUrlLiveData.observe called.")
+                // 前に表示していたページを表示
+                loopingViewPager.currentItem =
+                    if (mainViewModel.currentPage < it.count()) mainViewModel.currentPage
+                    else 0
                 adapter.update(it)
             }
         })
@@ -96,6 +118,7 @@ class SlideShowFragment : Fragment() {
                 lifecycleScope.launch {
                     // FIXME: delay を入れないと画面遷移しても同じ値がずっと流れてくるため画面遷移のループが発生する
                     delay(500)
+                    mainViewModel.saveCurrentPage(loopingViewPager.currentItem)
                     findNavController().navigate(R.id.action_slideshow_to_weather)
                 }
             })
