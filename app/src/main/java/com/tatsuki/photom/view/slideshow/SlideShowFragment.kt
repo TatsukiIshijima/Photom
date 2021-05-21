@@ -3,7 +3,6 @@ package com.tatsuki.photom.view.slideshow
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
@@ -19,6 +18,7 @@ import com.tatsuki.photom.extension.observeNotNull
 import com.tatsuki.photom.view.main.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_slide_show.*
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -40,6 +40,7 @@ class SlideShowFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? = inflater.inflate(R.layout.fragment_slide_show, container, false)
 
+    @FlowPreview
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -53,15 +54,17 @@ class SlideShowFragment : Fragment() {
 
         slideShowViewModel.fetchSlideImage()
 
-        loopingViewPager.setOnTouchListener { _, event ->
-            if (event.action == MotionEvent.ACTION_DOWN) {
-                mainViewModel.saveCurrentPage(loopingViewPager.currentItem)
-                findNavController().navigate(R.id.action_slideshow_to_weather)
-            }
-            true
-        }
+        // カメラを使わずに画面遷移の動作確認をするためのデバッグコード
+//        loopingViewPager.setOnTouchListener { _, event ->
+//            if (event.action == MotionEvent.ACTION_DOWN) {
+//                mainViewModel.saveCurrentPage(loopingViewPager.currentItem)
+//                findNavController().navigate(R.id.action_slideshow_to_weather)
+//            }
+//            true
+//        }
     }
 
+    @FlowPreview
     private fun bind() {
         slideShowViewModel.slideImageUrlLiveData.observe(viewLifecycleOwner, {
             if (it?.count() == 0) {
