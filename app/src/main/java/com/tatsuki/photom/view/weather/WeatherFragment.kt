@@ -171,6 +171,12 @@ class WeatherFragment : Fragment() {
                 weatherViewModel.stopAutoTransitionTimer()
                 weatherViewModel.startAutoTransitionTimer()
             })
+        mainViewModel.faceLiveData
+            .observeNotNull(viewLifecycleOwner, {
+                Timber.d("faces: $it")
+                weatherViewModel.stopAutoTransitionTimer()
+                weatherViewModel.startAutoTransitionTimer()
+            })
     }
 
     override fun onResume() {

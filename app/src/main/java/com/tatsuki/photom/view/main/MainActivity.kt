@@ -136,9 +136,9 @@ class MainActivity : AppCompatActivity() {
                 .setTargetResolution(Size(320, 240))
                 .build()
                 .also {
-                    it.setAnalyzer(cameraExecutor, mainViewModel.luminosityAnalyzer)
+                    // it.setAnalyzer(cameraExecutor, mainViewModel.luminosityAnalyzer)
                     // FIXME:顔検出でデバッグ実行＆停止するとなぜか完全に停止できないため、 再起動する必要がある！？
-                    // it.setAnalyzer(cameraExecutor, mainViewModel.faceAnalyzer)
+                    it.setAnalyzer(cameraExecutor, mainViewModel.faceAnalyzer)
                 }
 
             try {

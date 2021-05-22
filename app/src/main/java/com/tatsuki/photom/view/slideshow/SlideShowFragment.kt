@@ -119,7 +119,18 @@ class SlideShowFragment : Fragment() {
             .observeNotNull(viewLifecycleOwner, { luminosity ->
                 Timber.d("Luminosity: $luminosity")
                 lifecycleScope.launch {
-                    // FIXME: delay を入れないと画面遷移しても同じ値がずっと流れてくるため画面遷移のループが発生する
+                    // FIXME: observeNotNull と delay を併用しないと画面遷移しても同じ値がずっと流れてくるため画面遷移のループが発生する
+                    delay(500)
+                    mainViewModel.saveCurrentPage(loopingViewPager.currentItem)
+                    findNavController().navigate(R.id.action_slideshow_to_weather)
+                }
+            })
+
+        mainViewModel.faceLiveData
+            .observeNotNull(viewLifecycleOwner, { faces ->
+                Timber.d("faces: ${faces}")
+                lifecycleScope.launch {
+                    // FIXME: observeNotNull と delay を併用しないと画面遷移しても同じ値がずっと流れてくるため画面遷移のループが発生する
                     delay(500)
                     mainViewModel.saveCurrentPage(loopingViewPager.currentItem)
                     findNavController().navigate(R.id.action_slideshow_to_weather)

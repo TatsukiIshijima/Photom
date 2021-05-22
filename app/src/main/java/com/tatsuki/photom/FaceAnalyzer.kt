@@ -11,11 +11,15 @@ import com.google.mlkit.vision.face.FaceDetection
 import com.google.mlkit.vision.face.FaceDetectorOptions
 import timber.log.Timber
 
-typealias DetectListener = (faces: MutableList<Face>) -> Unit
+typealias DetectListener = (faces: Int?) -> Unit
 
 class FaceAnalyzer(
+    private val skipFrame: Int = 30,
+    private val faceCountThreshold: Int = 1,
     private val listener: DetectListener
 ) : ImageAnalysis.Analyzer {
+
+    private var frame = 0
 
     private fun detectFace(image: InputImage): Task<MutableList<Face>> {
         val options = FaceDetectorOptions.Builder()
@@ -33,17 +37,23 @@ class FaceAnalyzer(
 
     @SuppressLint("UnsafeOptInUsageError")
     override fun analyze(imageProxy: ImageProxy) {
+        if (frame != skipFrame) {
+            frame++
+            imageProxy.close()
+            return
+        }
         val mediaImage = imageProxy.image
         mediaImage?.let {
             val image = InputImage.fromMediaImage(mediaImage, imageProxy.imageInfo.rotationDegrees)
             detectFace(image)
                 .addOnSuccessListener { faces ->
-                    listener(faces)
+                    listener(if (faces.count() >= faceCountThreshold) faces.count() else null)
                 }
                 .addOnFailureListener { e ->
                     Timber.e("detect faces failed: ${e.localizedMessage}")
                 }
                 .addOnCompleteListener {
+                    frame = 0
                     imageProxy.close()
                 }
         }

@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.mlkit.vision.face.Face
 import com.tatsuki.photom.FaceAnalyzer
 import com.tatsuki.photom.LuminosityAnalyzer
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,10 +18,10 @@ class MainViewModel @Inject constructor(
     var currentPage: Int = 0
         private set
 
-    private val faceMutableLiveData = MutableLiveData<MutableList<Face>>()
+    private val faceMutableLiveData = MutableLiveData<Int>()
     private val luminosityMutableLiveData = MutableLiveData<Double>()
 
-    val faceLiveData: LiveData<MutableList<Face>> = faceMutableLiveData
+    val faceLiveData: LiveData<Int> = faceMutableLiveData
     val luminosityLiveData: LiveData<Double> = luminosityMutableLiveData
 
     val luminosityAnalyzer = LuminosityAnalyzer { luminosity ->
