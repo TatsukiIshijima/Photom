@@ -21,6 +21,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.time.LocalTime
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -88,8 +89,7 @@ class SlideShowViewModel @Inject constructor(
 
     fun fetchSlideImage() {
         viewModelScope.launch {
-//            fetchSlideImageUseCase.execute(LocalTime.now().hour)
-            fetchSlideImageUseCase.execute(7)
+            fetchSlideImageUseCase.execute(LocalTime.now().hour)
         }
         Timber.d("fetchSlideImage")
     }
