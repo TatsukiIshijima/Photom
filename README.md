@@ -25,7 +25,7 @@ Android Things でのスライドショー＆お天気アプリ。
 | [mockito-kotlin](https://github.com/mockito/mockito-kotlin) | 3.2.0 | モック作成 |
 
 ### デモ
-Android Things のカバーはレゴブロックの互換品。カメラは左上部にセットした。カメラは常時自動しており、顔を検出すると１時間ごとや週間天気などを確認できる画面へ遷移する。遷移後は顔が検出されなければ、自動的にスライドショーに戻る。
+Android Things のカバーはレゴブロックの互換品。カメラは右上部にセットした。カメラは常時自動しており、顔を検出すると１時間ごとや週間天気などを確認できる画面へ遷移する。遷移後は顔が検出されなければ、自動的にスライドショーに戻る。
 
 #### Gif
 <img src="docs/screenshot/demo.gif">
@@ -34,5 +34,3 @@ Android Things のカバーはレゴブロックの互換品。カメラは左�
 #### スクリーンショット
 <img src="docs/screenshot/screenshot_1.png" width=320>
 <img src="docs/screenshot/screenshot_2.png" width=320>
-
-### 構成
