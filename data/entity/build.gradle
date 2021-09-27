@@ -32,16 +32,6 @@ android {
 }
 
 dependencies {
-    implementation deps.coroutines.core
-    implementation platform(deps.firebase_bom)
-    implementation deps.firebase_firestore
-    implementation deps.moshi.runtime
-    implementation deps.moshi.kotlin
-    implementation deps.okhttp.runtime
-    implementation deps.retrofit.runtime
-    implementation deps.retrofit.converter_moshi
-
-    debugImplementation deps.okhttp.logging
 
     testImplementation deps.assertj_core
     testImplementation deps.junit
