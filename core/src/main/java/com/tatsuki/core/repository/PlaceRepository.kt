@@ -2,7 +2,7 @@ package com.tatsuki.core.repository
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.tatsuki.core.State
-import com.tatsuki.core.api.response.PlaceResponse
+import com.tatsuki.data.api.response.PlaceResponse
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow

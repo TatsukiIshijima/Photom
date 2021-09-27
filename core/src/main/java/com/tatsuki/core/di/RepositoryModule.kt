@@ -2,10 +2,10 @@ package com.tatsuki.core.di
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
-import com.tatsuki.core.api.OpenWeatherApiClient
 import com.tatsuki.core.repository.PlaceRepository
 import com.tatsuki.core.repository.SlideImageRepository
 import com.tatsuki.core.repository.WeatherRepository
+import com.tatsuki.data.api.OpenWeatherApiClient
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

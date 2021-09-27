@@ -16,6 +16,7 @@
             <option value="$PROJECT_DIR$/data" />
             <option value="$PROJECT_DIR$/data/api" />
             <option value="$PROJECT_DIR$/data/entity" />
+            <option value="$PROJECT_DIR$/data/extension" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

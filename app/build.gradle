@@ -42,6 +42,8 @@ android {
 
 dependencies {
     implementation project(":core")
+    implementation project(":data:entity")
+    implementation project(":data:extension")
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation deps.app_compat

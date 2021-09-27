@@ -3,3 +3,4 @@ include ':app'
 rootProject.name = "Photom"
 include ':data:api'
 include ':data:entity'
+include ':data:extension'

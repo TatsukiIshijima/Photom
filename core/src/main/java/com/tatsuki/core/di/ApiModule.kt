@@ -1,6 +1,6 @@
 package com.tatsuki.core.di
 
-import com.tatsuki.core.api.OpenWeatherApiClient
+import com.tatsuki.data.api.OpenWeatherApiClient
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

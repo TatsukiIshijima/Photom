@@ -32,6 +32,8 @@ android {
 }
 
 dependencies {
+    implementation project(":data:entity")
+    implementation project(":data:extension")
     implementation deps.coroutines.core
     implementation platform(deps.firebase_bom)
     implementation deps.firebase_firestore

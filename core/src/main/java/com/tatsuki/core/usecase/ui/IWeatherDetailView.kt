@@ -1,9 +1,9 @@
 package com.tatsuki.core.usecase.ui
 
-import com.tatsuki.core.entity.CurrentWeatherInfoItem
-import com.tatsuki.core.entity.DailyWeatherEntity
-import com.tatsuki.core.entity.TimelyWeatherEntity
-import com.tatsuki.core.entity.WeatherCondition
+import com.tatsuki.data.entity.CurrentWeatherInfoItem
+import com.tatsuki.data.entity.DailyWeatherEntity
+import com.tatsuki.data.entity.TimelyWeatherEntity
+import com.tatsuki.data.entity.WeatherCondition
 
 interface IWeatherDetailView {
     fun showPlace(name: String)

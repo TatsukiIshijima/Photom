@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.work.*
 import com.google.firebase.storage.StorageReference
-import com.tatsuki.core.entity.CurrentWeatherEntity
 import com.tatsuki.core.repository.PlaceRepository
 import com.tatsuki.core.repository.SlideImageRepository
 import com.tatsuki.core.repository.WeatherRepository
@@ -15,6 +14,7 @@ import com.tatsuki.core.usecase.FetchCurrentWeatherUseCase
 import com.tatsuki.core.usecase.FetchSlideImageUseCase
 import com.tatsuki.core.usecase.ui.ICurrentWeatherView
 import com.tatsuki.core.usecase.ui.ISlideShowView
+import com.tatsuki.data.entity.CurrentWeatherEntity
 import com.tatsuki.photom.UpdateWeatherWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext

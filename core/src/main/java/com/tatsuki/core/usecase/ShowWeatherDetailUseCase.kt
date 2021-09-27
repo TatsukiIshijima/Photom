@@ -1,13 +1,13 @@
 package com.tatsuki.core.usecase
 
 import com.tatsuki.core.State
-import com.tatsuki.core.api.response.toDailyWeatherEntity
-import com.tatsuki.core.api.response.toDetailItems
-import com.tatsuki.core.api.response.toTimelyWeatherEntity
-import com.tatsuki.core.entity.WeatherCondition
 import com.tatsuki.core.repository.PlaceRepository
 import com.tatsuki.core.repository.WeatherRepository
 import com.tatsuki.core.usecase.ui.IWeatherDetailView
+import com.tatsuki.data.api.response.toDailyWeatherEntity
+import com.tatsuki.data.api.response.toDetailItems
+import com.tatsuki.data.api.response.toTimelyWeatherEntity
+import com.tatsuki.data.entity.WeatherCondition
 import kotlinx.coroutines.flow.collect
 
 class ShowWeatherDetailUseCase(

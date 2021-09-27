@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.tatsuki.core.entity.CurrentWeatherInfoItem
+import com.tatsuki.data.entity.CurrentWeatherInfoItem
 import com.tatsuki.photom.R
 
 class CurrentWeatherDetailAdapter(

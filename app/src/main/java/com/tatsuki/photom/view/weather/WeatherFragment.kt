@@ -11,7 +11,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.tatsuki.core.entity.WeatherCondition
+import com.tatsuki.data.entity.WeatherCondition
 import com.tatsuki.photom.R
 import com.tatsuki.photom.extension.observeNotNull
 import com.tatsuki.photom.view.main.MainViewModel
