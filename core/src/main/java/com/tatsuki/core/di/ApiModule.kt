@@ -3,7 +3,7 @@ package com.tatsuki.core.di
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.tatsuki.core.BuildConfig
-import com.tatsuki.data.api.OpenWeatherApi
+import com.tatsuki.data.api.openweather.OpenWeatherApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

@@ -1,6 +1,7 @@
-package com.tatsuki.data.api
+package com.tatsuki.data.api.openweather
 
-import com.tatsuki.data.api.response.OneCallResponse
+import com.tatsuki.data.api.Const
+import com.tatsuki.data.api.openweather.response.OneCallResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 

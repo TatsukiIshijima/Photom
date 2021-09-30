@@ -4,7 +4,7 @@ import com.tatsuki.core.State
 import com.tatsuki.core.repository.PlaceRepository
 import com.tatsuki.core.repository.WeatherRepository
 import com.tatsuki.core.usecase.ui.ICurrentWeatherView
-import com.tatsuki.data.api.response.toCurrentWeatherEntity
+import com.tatsuki.data.api.openweather.response.toCurrentWeatherEntity
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 

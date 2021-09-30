@@ -1,4 +1,4 @@
-package com.tatsuki.data.api.response
+package com.tatsuki.data.api.openweather.response
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass

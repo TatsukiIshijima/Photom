@@ -1,8 +1,8 @@
 package com.tatsuki.core.repository
 
 import com.tatsuki.core.State
-import com.tatsuki.data.api.OpenWeatherApi
-import com.tatsuki.data.api.response.OneCallResponse
+import com.tatsuki.data.api.openweather.OpenWeatherApi
+import com.tatsuki.data.api.openweather.response.OneCallResponse
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
