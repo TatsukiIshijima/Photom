@@ -3,7 +3,7 @@ package com.tatsuki.core.di
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.tatsuki.core.BuildConfig
-import com.tatsuki.data.api.OpenWeatherApiInterface
+import com.tatsuki.data.api.OpenWeatherApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,8 +16,8 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Qualifier
 import javax.inject.Singleton
 
-@Module
 @InstallIn(SingletonComponent::class)
+@Module
 object ApiModule {
 
     // https://developer.android.com/training/dependency-injection/hilt-android#inject-provides
@@ -28,8 +28,10 @@ object ApiModule {
 
     @Singleton
     @Provides
-    fun provideOpenWeatherApi(@OpenWeather retrofit: Retrofit): OpenWeatherApiInterface =
-        retrofit.create(OpenWeatherApiInterface::class.java)
+    fun provideOpenWeatherApi(
+        @OpenWeather retrofit: Retrofit
+    ): OpenWeatherApi =
+        retrofit.create(OpenWeatherApi::class.java)
 
     // https://developer.android.com/training/dependency-injection/hilt-android#multiple-bindings
     // baseUrl が異なる Retrofit のインスタンスを注入するため同じ Retrofit 型でも
@@ -64,24 +66,34 @@ object ApiModule {
         okHttpClient: OkHttpClient
     ): Retrofit =
         Retrofit.Builder()
-            .baseUrl("")
+            .baseUrl("http://localhost:5000/")
             .client(okHttpClient)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
 
     @Singleton
     @Provides
-    fun provideOkHttpClient(): OkHttpClient {
-        val okHttpClient = OkHttpClient.Builder()
-        if (BuildConfig.DEBUG) {
-            val loggingInterceptor = HttpLoggingInterceptor()
-            loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
-            okHttpClient.addInterceptor(loggingInterceptor)
+    fun provideOkHttpClient(
+        httpLoggingInterceptor: HttpLoggingInterceptor?
+    ): OkHttpClient =
+        OkHttpClient.Builder()
+            .apply {
+                if (httpLoggingInterceptor != null) {
+                    addInterceptor(httpLoggingInterceptor)
+                }
+                connectTimeout(10L, TimeUnit.SECONDS)
+                readTimeout(10L, TimeUnit.SECONDS)
+            }.build()
+
+    @Singleton
+    @Provides
+    fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor? {
+        if (!BuildConfig.DEBUG) {
+            return null
         }
-        return okHttpClient
-            .connectTimeout(10L, TimeUnit.SECONDS)
-            .readTimeout(10L, TimeUnit.SECONDS)
-            .build()
+        return HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
     }
 
     @Singleton

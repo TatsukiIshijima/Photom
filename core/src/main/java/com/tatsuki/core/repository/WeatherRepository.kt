@@ -1,7 +1,7 @@
 package com.tatsuki.core.repository
 
 import com.tatsuki.core.State
-import com.tatsuki.data.api.OpenWeatherApiInterface
+import com.tatsuki.data.api.OpenWeatherApi
 import com.tatsuki.data.api.response.OneCallResponse
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 class WeatherRepository @Inject constructor(
-    private val openWeatherApi: OpenWeatherApiInterface
+    private val openWeatherApi: OpenWeatherApi
 ) {
 
     companion object {

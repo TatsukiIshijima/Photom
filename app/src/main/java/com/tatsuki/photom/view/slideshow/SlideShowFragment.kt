@@ -14,10 +14,10 @@ import androidx.work.WorkInfo
 import com.google.android.material.snackbar.Snackbar
 import com.tatsuki.photom.GlideApp
 import com.tatsuki.photom.R
+import com.tatsuki.photom.databinding.FragmentSlideShowBinding
 import com.tatsuki.photom.extension.observeNotNull
 import com.tatsuki.photom.view.main.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_slide_show.*
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -33,6 +33,7 @@ class SlideShowFragment : Fragment() {
     private val slideShowViewModel: SlideShowViewModel by viewModels()
     private val mainViewModel: MainViewModel by activityViewModels()
 
+    private lateinit var binding: FragmentSlideShowBinding
     private lateinit var adapter: ScreenSlidePagerAdapter
 
     override fun onCreateView(
@@ -47,7 +48,7 @@ class SlideShowFragment : Fragment() {
 
         context?.let {
             adapter = ScreenSlidePagerAdapter(it, mutableListOf())
-            loopingViewPager.adapter = adapter
+            binding.loopingViewPager.adapter = adapter
         }
 
         bind()
@@ -69,7 +70,7 @@ class SlideShowFragment : Fragment() {
         slideShowViewModel.slideImageUrlLiveData.observe(viewLifecycleOwner, {
             if (it?.count() == 0) {
                 Snackbar.make(
-                    slideShowConstraintLayout,
+                    binding.slideShowConstraintLayout,
                     R.string.slide_show_image_is_empty,
                     Snackbar.LENGTH_SHORT
                 ).show()
@@ -78,7 +79,7 @@ class SlideShowFragment : Fragment() {
             it?.let {
                 Timber.d("slideImageUrlLiveData.observe called.")
                 // 前に表示していたページを表示
-                loopingViewPager.currentItem =
+                binding.loopingViewPager.currentItem =
                     if (mainViewModel.currentPage < it.count()) mainViewModel.currentPage
                     else 0
                 adapter.update(it)
@@ -87,21 +88,21 @@ class SlideShowFragment : Fragment() {
 
         slideShowViewModel.loadingLiveData.observe(viewLifecycleOwner, { isLoading ->
             isLoading?.let {
-                if (it) loopingViewPager.pauseAutoScroll()
-                else loopingViewPager.resumeAutoScroll()
+                if (it) binding.loopingViewPager.pauseAutoScroll()
+                else binding.loopingViewPager.resumeAutoScroll()
             }
         })
 
         slideShowViewModel.currentWeatherIconUrlLiveData.observe(viewLifecycleOwner, {
             it?.let {
-                GlideApp.with(this).load(it).into(weatherIcon)
+                GlideApp.with(this).load(it).into(binding.weatherIcon)
             }
         })
 
         slideShowViewModel.currentTemperatureLiveData.observe(viewLifecycleOwner, {
             it?.let {
                 val temperatureText = "$it${resources.getString(R.string.temperature_unit)}"
-                temperature.text = temperatureText
+                binding.temperature.text = temperatureText
             }
         })
 
@@ -121,7 +122,7 @@ class SlideShowFragment : Fragment() {
                 lifecycleScope.launch {
                     // FIXME: observeNotNull と delay を併用しないと画面遷移しても同じ値がずっと流れてくるため画面遷移のループが発生する
                     delay(500)
-                    mainViewModel.saveCurrentPage(loopingViewPager.currentItem)
+                    mainViewModel.saveCurrentPage(binding.loopingViewPager.currentItem)
                     findNavController().navigate(R.id.action_slideshow_to_weather)
                 }
             })
@@ -132,19 +133,19 @@ class SlideShowFragment : Fragment() {
                 lifecycleScope.launch {
                     // FIXME: observeNotNull と delay を併用しないと画面遷移しても同じ値がずっと流れてくるため画面遷移のループが発生する
                     delay(500)
-                    mainViewModel.saveCurrentPage(loopingViewPager.currentItem)
+                    mainViewModel.saveCurrentPage(binding.loopingViewPager.currentItem)
                     findNavController().navigate(R.id.action_slideshow_to_weather)
                 }
             })
     }
 
     override fun onResume() {
-        loopingViewPager.resumeAutoScroll()
+        binding.loopingViewPager.resumeAutoScroll()
         super.onResume()
     }
 
     override fun onPause() {
-        loopingViewPager.pauseAutoScroll()
+        binding.loopingViewPager.pauseAutoScroll()
         super.onPause()
     }
 

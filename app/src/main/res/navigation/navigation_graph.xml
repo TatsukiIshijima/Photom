@@ -20,7 +20,6 @@
         android:id="@+id/weatherFragment"
         android:name="com.tatsuki.photom.view.weather.WeatherFragment"
         android:label="WeatherFragment"
-        tools:layout="@layout/weather_fragment">
-    </fragment>
+        tools:layout="@layout/fragment_weather"></fragment>
 
 </navigation>

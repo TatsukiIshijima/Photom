@@ -18,8 +18,8 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.snackbar.Snackbar
 import com.tatsuki.photom.R
+import com.tatsuki.photom.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -49,6 +49,7 @@ class MainActivity : AppCompatActivity() {
 
     private val mainViewModel: MainViewModel by viewModels()
 
+    private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
     private lateinit var cameraExecutor: ExecutorService
 
@@ -71,7 +72,7 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
-        nav_view.setupWithNavController(navController)
+        binding.navView.setupWithNavController(navController)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -99,7 +100,7 @@ class MainActivity : AppCompatActivity() {
                 startCamera()
             } else {
                 Snackbar.make(
-                    nav_host_fragment,
+                    binding.navHostFragment,
                     R.string.camera_permission_denied,
                     Snackbar.LENGTH_SHORT
                 ).show()

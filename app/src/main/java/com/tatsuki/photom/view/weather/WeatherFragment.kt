@@ -13,10 +13,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.tatsuki.data.entity.WeatherCondition
 import com.tatsuki.photom.R
+import com.tatsuki.photom.databinding.FragmentWeatherBinding
 import com.tatsuki.photom.extension.observeNotNull
 import com.tatsuki.photom.view.main.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.weather_fragment.*
 import timber.log.Timber
 
 @AndroidEntryPoint
@@ -24,6 +24,8 @@ class WeatherFragment : Fragment() {
 
     private val weatherViewModel: WeatherViewModel by viewModels()
     private val mainViewModel: MainViewModel by activityViewModels()
+
+    private lateinit var binding: FragmentWeatherBinding
 
     private var currentWeatherDetailAdapter: CurrentWeatherDetailAdapter? = null
     private var dailyWeatherAdapter: DailyWeatherAdapter? = null
@@ -33,7 +35,7 @@ class WeatherFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.weather_fragment, container, false)
+        return inflater.inflate(R.layout.fragment_weather, container, false)
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -44,15 +46,15 @@ class WeatherFragment : Fragment() {
         dailyWeatherAdapter = DailyWeatherAdapter()
         timelyWeatherAdapter = TimelyWeatherAdapter()
 
-        currentWeatherDetail.apply {
+        binding.currentWeatherDetail.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             adapter = currentWeatherDetailAdapter
         }
-        timelyWeather.apply {
+        binding.timelyWeather.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = timelyWeatherAdapter
         }
-        dailyWeather.apply {
+        binding.dailyWeather.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             adapter = dailyWeatherAdapter
         }
@@ -68,15 +70,15 @@ class WeatherFragment : Fragment() {
         })
         weatherViewModel.showPlaceLiveData.observe(viewLifecycleOwner, {
             it?.let {
-                locationName.text = it
+                binding.locationName.text = it
             }
         })
         weatherViewModel.showCurrentWeatherConditionLiveData.observe(viewLifecycleOwner, {
             it?.let {
                 when (it) {
                     is WeatherCondition.Atmosphere -> {
-                        currentWeather.text = resources.getText(R.string.cloudy)
-                        weatherCondition.background =
+                        binding.currentWeather.text = resources.getText(R.string.cloudy)
+                        binding.weatherCondition.background =
                             ResourcesCompat.getDrawable(
                                 resources,
                                 R.drawable.bg_cloudy,
@@ -84,8 +86,8 @@ class WeatherFragment : Fragment() {
                             )
                     }
                     is WeatherCondition.Clear -> {
-                        currentWeather.text = resources.getText(R.string.sunny)
-                        weatherCondition.background =
+                        binding.currentWeather.text = resources.getText(R.string.sunny)
+                        binding.weatherCondition.background =
                             ResourcesCompat.getDrawable(
                                 resources,
                                 R.drawable.bg_sunny,
@@ -93,8 +95,8 @@ class WeatherFragment : Fragment() {
                             )
                     }
                     is WeatherCondition.Cloud -> {
-                        currentWeather.text = resources.getText(R.string.cloudy)
-                        weatherCondition.background =
+                        binding.currentWeather.text = resources.getText(R.string.cloudy)
+                        binding.weatherCondition.background =
                             ResourcesCompat.getDrawable(
                                 resources,
                                 R.drawable.bg_cloudy,
@@ -102,8 +104,8 @@ class WeatherFragment : Fragment() {
                             )
                     }
                     is WeatherCondition.Drizzle -> {
-                        currentWeather.text = resources.getText(R.string.rainy)
-                        weatherCondition.background =
+                        binding.currentWeather.text = resources.getText(R.string.rainy)
+                        binding.weatherCondition.background =
                             ResourcesCompat.getDrawable(
                                 resources,
                                 R.drawable.bg_rainy,
@@ -111,8 +113,8 @@ class WeatherFragment : Fragment() {
                             )
                     }
                     is WeatherCondition.Rain -> {
-                        currentWeather.text = resources.getText(R.string.rainy)
-                        weatherCondition.background =
+                        binding.currentWeather.text = resources.getText(R.string.rainy)
+                        binding.weatherCondition.background =
                             ResourcesCompat.getDrawable(
                                 resources,
                                 R.drawable.bg_rainy,
@@ -120,8 +122,8 @@ class WeatherFragment : Fragment() {
                             )
                     }
                     is WeatherCondition.Snow -> {
-                        currentWeather.text = resources.getText(R.string.snow)
-                        weatherCondition.background =
+                        binding.currentWeather.text = resources.getText(R.string.snow)
+                        binding.weatherCondition.background =
                             ResourcesCompat.getDrawable(
                                 resources,
                                 R.drawable.bg_snow,
@@ -129,8 +131,8 @@ class WeatherFragment : Fragment() {
                             )
                     }
                     is WeatherCondition.Thunderstorm -> {
-                        currentWeather.text = resources.getText(R.string.rainy)
-                        weatherCondition.background =
+                        binding.currentWeather.text = resources.getText(R.string.rainy)
+                        binding.weatherCondition.background =
                             ResourcesCompat.getDrawable(
                                 resources,
                                 R.drawable.bg_rainy,
@@ -143,7 +145,7 @@ class WeatherFragment : Fragment() {
         weatherViewModel.showCurrentTempLiveData.observe(viewLifecycleOwner, {
             it?.let {
                 val tempText = "${it}${context?.resources?.getString(R.string.temperature_unit)}"
-                currentTemp.text = tempText
+                binding.currentTemp.text = tempText
             }
         })
         weatherViewModel.showCurrentWeatherDetailLiveData.observe(

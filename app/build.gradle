@@ -1,8 +1,9 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-kapt'
-apply plugin: 'dagger.hilt.android.plugin'
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
+}
 
 android {
     compileSdkVersion build_versions.target_sdk
@@ -25,7 +26,9 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-
+    buildFeatures {
+        viewBinding true
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -42,6 +45,7 @@ android {
 
 dependencies {
     implementation project(":core")
+    implementation project(":data:api")
     implementation project(":data:entity")
     implementation project(":data:extension")
 
@@ -50,6 +54,14 @@ dependencies {
     implementation deps.constraint_layout
     implementation deps.core_ktx
     implementation deps.kotlin.stdlib
+
+    implementation deps.moshi.runtime
+    implementation deps.moshi.kotlin
+    implementation deps.okhttp.runtime
+    implementation deps.retrofit.runtime
+    implementation deps.retrofit.converter_moshi
+
+    debugImplementation deps.okhttp.logging
 
     // Coroutine
     implementation deps.coroutines.android
@@ -78,7 +90,6 @@ dependencies {
     // Hilt
     implementation deps.hilt.android
     implementation deps.hilt_work.runtime
-    implementation deps.hilt_viewmodel
     kapt deps.hilt.compiler
     kapt deps.hilt_work.compiler
 
