@@ -55,7 +55,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
         // AndroidThings の場合は許可ダイアログが出ることはなく、既に許可状態になっている
         if (allPermissionsGranted()) {

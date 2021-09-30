@@ -25,7 +25,8 @@ class WeatherFragment : Fragment() {
     private val weatherViewModel: WeatherViewModel by viewModels()
     private val mainViewModel: MainViewModel by activityViewModels()
 
-    private lateinit var binding: FragmentWeatherBinding
+    private var _binding: FragmentWeatherBinding? = null
+    private val binding get() = _binding!!
 
     private var currentWeatherDetailAdapter: CurrentWeatherDetailAdapter? = null
     private var dailyWeatherAdapter: DailyWeatherAdapter? = null
@@ -34,8 +35,9 @@ class WeatherFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_weather, container, false)
+    ): View {
+        _binding = FragmentWeatherBinding.inflate(layoutInflater, container, false)
+        return binding.root
     }
 
     @SuppressLint("ClickableViewAccessibility")

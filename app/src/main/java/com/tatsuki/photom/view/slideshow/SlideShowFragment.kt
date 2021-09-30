@@ -33,13 +33,18 @@ class SlideShowFragment : Fragment() {
     private val slideShowViewModel: SlideShowViewModel by viewModels()
     private val mainViewModel: MainViewModel by activityViewModels()
 
-    private lateinit var binding: FragmentSlideShowBinding
+    private var _binding: FragmentSlideShowBinding? = null
+    private val binding get() = _binding!!
+
     private lateinit var adapter: ScreenSlidePagerAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_slide_show, container, false)
+    ): View {
+        _binding = FragmentSlideShowBinding.inflate(layoutInflater, container, false)
+        return binding.root
+    }
 
     @FlowPreview
     @SuppressLint("ClickableViewAccessibility")
@@ -147,6 +152,11 @@ class SlideShowFragment : Fragment() {
     override fun onPause() {
         binding.loopingViewPager.pauseAutoScroll()
         super.onPause()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onDestroy() {

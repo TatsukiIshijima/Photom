@@ -2,7 +2,6 @@ package com.tatsuki.photom.view.weather
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
@@ -12,15 +11,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.tatsuki.data.entity.DailyWeatherEntity
 import com.tatsuki.photom.GlideApp
 import com.tatsuki.photom.R
+import com.tatsuki.photom.databinding.DailyWeatherItemBinding
 
 class DailyWeatherAdapter(
 
 ) : ListAdapter<DailyWeatherEntity, DailyWeatherViewHolder>(DailyWeatherDiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DailyWeatherViewHolder {
-        val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.daily_weather_item, parent, false)
-        return DailyWeatherViewHolder(view, parent.context)
+        val binding =
+            DailyWeatherItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return DailyWeatherViewHolder(binding, parent.context)
     }
 
     override fun onBindViewHolder(holder: DailyWeatherViewHolder, position: Int) {
@@ -30,14 +30,14 @@ class DailyWeatherAdapter(
 }
 
 class DailyWeatherViewHolder(
-    view: View,
+    binding: DailyWeatherItemBinding,
     private val context: Context
-): RecyclerView.ViewHolder(view) {
-    private val date: TextView = view.findViewById(R.id.date)
-    private val day: TextView = view.findViewById(R.id.day)
-    private val weatherIcon: ImageView = view.findViewById(R.id.weatherIcon)
-    private val maxTemp: TextView = view.findViewById(R.id.maxTemperature)
-    private val minTemp: TextView = view.findViewById(R.id.minTemperature)
+) : RecyclerView.ViewHolder(binding.root) {
+    private val date: TextView = binding.date
+    private val day: TextView = binding.day
+    private val weatherIcon: ImageView = binding.weatherIcon
+    private val maxTemp: TextView = binding.maxTemperature
+    private val minTemp: TextView = binding.minTemperature
 
     fun bind(dailyWeather: DailyWeatherEntity) {
         date.text = dailyWeather.date ?: ""

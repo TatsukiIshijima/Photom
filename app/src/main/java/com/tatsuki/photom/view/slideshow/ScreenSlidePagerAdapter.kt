@@ -11,18 +11,20 @@ import com.tatsuki.photom.GlideApp
 import com.tatsuki.photom.R
 
 class ScreenSlidePagerAdapter(
-    context: Context,
+    val context: Context,
     refList: List<StorageReference>,
     isInfinite: Boolean = true,
-): LoopingPagerAdapter<StorageReference>(context, refList, isInfinite) {
+) : LoopingPagerAdapter<StorageReference>(refList, isInfinite) {
 
     companion object {
         private val TAG = ScreenSlidePagerAdapter::class.java.simpleName
     }
 
-    override fun inflateView(viewType: Int,
-                             container: ViewGroup,
-                             listPosition: Int): View =
+    override fun inflateView(
+        viewType: Int,
+        container: ViewGroup,
+        listPosition: Int
+    ): View =
         LayoutInflater.from(context).inflate(R.layout.photo_item, container, false)
 
     override fun bindView(convertView: View, listPosition: Int, viewType: Int) {

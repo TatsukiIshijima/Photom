@@ -2,7 +2,6 @@ package com.tatsuki.photom.view.weather
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
@@ -10,6 +9,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.tatsuki.data.entity.CurrentWeatherInfoItem
 import com.tatsuki.photom.R
+import com.tatsuki.photom.databinding.CurrentWeatherDetailItemBinding
 
 class CurrentWeatherDetailAdapter(
 
@@ -18,10 +18,12 @@ class CurrentWeatherDetailAdapter(
         parent: ViewGroup,
         viewType: Int
     ): CurrentWeatherInfoViewHolder {
-        val view =
-            LayoutInflater.from(parent.context)
-                .inflate(R.layout.current_weather_detail_item, parent, false)
-        return CurrentWeatherInfoViewHolder(view, parent.context)
+        val binding = CurrentWeatherDetailItemBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
+        return CurrentWeatherInfoViewHolder(binding, parent.context)
     }
 
     override fun onBindViewHolder(holder: CurrentWeatherInfoViewHolder, position: Int) {
@@ -31,12 +33,12 @@ class CurrentWeatherDetailAdapter(
 }
 
 class CurrentWeatherInfoViewHolder(
-    view: View,
+    binding: CurrentWeatherDetailItemBinding,
     private val context: Context
-) : RecyclerView.ViewHolder(view) {
-    private val title: TextView = view.findViewById(R.id.detailTitle)
-    private val value: TextView = view.findViewById(R.id.detailValue)
-    private val unit: TextView = view.findViewById(R.id.detailUnit)
+) : RecyclerView.ViewHolder(binding.root) {
+    private val title: TextView = binding.detailTitle
+    private val value: TextView = binding.detailValue
+    private val unit: TextView = binding.detailUnit
 
     fun bind(currentWeatherInfoItem: CurrentWeatherInfoItem) {
         when (currentWeatherInfoItem) {

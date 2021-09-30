@@ -2,7 +2,6 @@ package com.tatsuki.photom.view.weather
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
@@ -12,14 +11,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.tatsuki.data.entity.TimelyWeatherEntity
 import com.tatsuki.photom.GlideApp
 import com.tatsuki.photom.R
+import com.tatsuki.photom.databinding.TimelyWeatherItemBinding
 
 class TimelyWeatherAdapter(
 
 ) : ListAdapter<TimelyWeatherEntity, TimelyWeatherViewHolder>(TimelyWeatherDiffCallback) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TimelyWeatherViewHolder {
-        val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.timely_weather_item, parent, false)
-        return TimelyWeatherViewHolder(view, parent.context)
+        val binding =
+            TimelyWeatherItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return TimelyWeatherViewHolder(binding, parent.context)
     }
 
     override fun onBindViewHolder(holder: TimelyWeatherViewHolder, position: Int) {
@@ -29,12 +29,12 @@ class TimelyWeatherAdapter(
 }
 
 class TimelyWeatherViewHolder(
-    view: View,
+    binding: TimelyWeatherItemBinding,
     private val context: Context
-) : RecyclerView.ViewHolder(view) {
-    private val time: TextView = view.findViewById(R.id.time)
-    private val weatherIcon: ImageView = view.findViewById(R.id.weatherIcon)
-    private val temperature: TextView = view.findViewById(R.id.temperature)
+) : RecyclerView.ViewHolder(binding.root) {
+    private val time: TextView = binding.time
+    private val weatherIcon: ImageView = binding.weatherIcon
+    private val temperature: TextView = binding.temperature
 
     fun bind(timelyWeather: TimelyWeatherEntity) {
         time.text = timelyWeather.time ?: ""
