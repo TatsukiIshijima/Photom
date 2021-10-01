@@ -4,6 +4,8 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.tatsuki.core.BuildConfig
 import com.tatsuki.data.api.openweather.OpenWeatherApi
+import com.tatsuki.data.api.photom.PhotomApi
+import com.tatsuki.data.api.switchbot.SwitchBotApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -33,6 +35,27 @@ object ApiModule {
     ): OpenWeatherApi =
         retrofit.create(OpenWeatherApi::class.java)
 
+    @Singleton
+    @Provides
+    fun providePhotomApi(
+        @Photom retrofit: Retrofit
+    ): PhotomApi =
+        retrofit.create(PhotomApi::class.java)
+
+    @Singleton
+    @Provides
+    fun providePhotomLocalApi(
+        @PhotomLocal retrofit: Retrofit
+    ): PhotomApi =
+        retrofit.create(PhotomApi::class.java)
+
+    @Singleton
+    @Provides
+    fun provideSwitchBotApi(
+        @SwitchBot retrofit: Retrofit
+    ): SwitchBotApi =
+        retrofit.create(SwitchBotApi::class.java)
+
     // https://developer.android.com/training/dependency-injection/hilt-android#multiple-bindings
     // baseUrl が異なる Retrofit のインスタンスを注入するため同じ Retrofit 型でも
     // 別のインスタンスを注入できるようにする
@@ -44,6 +67,14 @@ object ApiModule {
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
     annotation class Photom
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class PhotomLocal
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class SwitchBot
 
     @Singleton
     @OpenWeather
@@ -66,7 +97,33 @@ object ApiModule {
         okHttpClient: OkHttpClient
     ): Retrofit =
         Retrofit.Builder()
+            .baseUrl("http://respberrypi-zero:5000/")
+            .client(okHttpClient)
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .build()
+
+    @Singleton
+    @PhotomLocal
+    @Provides
+    fun providePhotomLocalRetrofit(
+        moshi: Moshi,
+        okHttpClient: OkHttpClient
+    ): Retrofit =
+        Retrofit.Builder()
             .baseUrl("http://localhost:5000/")
+            .client(okHttpClient)
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .build()
+
+    @Singleton
+    @SwitchBot
+    @Provides
+    fun provideSwitchBotRetrofit(
+        moshi: Moshi,
+        okHttpClient: OkHttpClient
+    ): Retrofit =
+        Retrofit.Builder()
+            .baseUrl("https://api.switch-bot.com/")
             .client(okHttpClient)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
