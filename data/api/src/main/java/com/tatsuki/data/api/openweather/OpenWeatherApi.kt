@@ -1,6 +1,6 @@
 package com.tatsuki.data.api.openweather
 
-import com.tatsuki.data.api.Const
+import com.tatsuki.data.api.BuildConfig
 import com.tatsuki.data.api.openweather.response.OneCallResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -15,6 +15,6 @@ interface OpenWeatherApi {
         @Query("lang") lang: String = "ja",
         @Query("exclude") exclude: String = "minutely",
         @Query("units") units: String = "metric",
-        @Query("appid") appId: String = Const.OpenWeatherAPIKey
+        @Query("appid") appId: String = BuildConfig.OPEN_WEATHER_API_KEY
     ): OneCallResponse
 }

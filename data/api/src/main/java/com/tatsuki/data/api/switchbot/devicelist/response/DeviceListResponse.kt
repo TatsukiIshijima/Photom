@@ -14,6 +14,6 @@ data class DeviceListResponse(
     override val message: String,
 
     @Json(name = "body")
-    override val body: DeviceListBodyResponse,
+    override val body: DeviceListBodyResponse?,
 
     ) : SwitchBotResponse<DeviceListBodyResponse>
