@@ -84,7 +84,7 @@ object ApiModule {
         okHttpClient: OkHttpClient
     ): Retrofit =
         Retrofit.Builder()
-            .baseUrl("https://api.openweathermap.org/data/2.5/")
+            .baseUrl(com.tatsuki.data.api.BuildConfig.OPEN_WEATHER_API_BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
@@ -97,7 +97,7 @@ object ApiModule {
         okHttpClient: OkHttpClient
     ): Retrofit =
         Retrofit.Builder()
-            .baseUrl("http://respberrypi-zero:5000/")
+            .baseUrl(com.tatsuki.data.api.BuildConfig.PHOTOM_API_BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
@@ -110,7 +110,7 @@ object ApiModule {
         okHttpClient: OkHttpClient
     ): Retrofit =
         Retrofit.Builder()
-            .baseUrl("http://localhost:5000/")
+            .baseUrl(com.tatsuki.data.api.BuildConfig.PHOTOM_LOCAL_API_BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
@@ -123,7 +123,7 @@ object ApiModule {
         okHttpClient: OkHttpClient
     ): Retrofit =
         Retrofit.Builder()
-            .baseUrl("https://api.switch-bot.com/")
+            .baseUrl(com.tatsuki.data.api.BuildConfig.SWITCH_BOT_API_BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
