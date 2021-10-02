@@ -1,8 +1,7 @@
-package com.tatsuki.core.di
+package com.tatsuki.data.api
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import com.tatsuki.core.BuildConfig
 import com.tatsuki.data.api.openweather.OpenWeatherApi
 import com.tatsuki.data.api.photom.PhotomApi
 import com.tatsuki.data.api.switchbot.SwitchBotApi
@@ -84,7 +83,7 @@ object ApiModule {
         okHttpClient: OkHttpClient
     ): Retrofit =
         Retrofit.Builder()
-            .baseUrl(com.tatsuki.data.api.BuildConfig.OPEN_WEATHER_API_BASE_URL)
+            .baseUrl(BuildConfig.OPEN_WEATHER_API_BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
@@ -97,7 +96,7 @@ object ApiModule {
         okHttpClient: OkHttpClient
     ): Retrofit =
         Retrofit.Builder()
-            .baseUrl(com.tatsuki.data.api.BuildConfig.PHOTOM_API_BASE_URL)
+            .baseUrl(BuildConfig.PHOTOM_API_BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
@@ -110,7 +109,7 @@ object ApiModule {
         okHttpClient: OkHttpClient
     ): Retrofit =
         Retrofit.Builder()
-            .baseUrl(com.tatsuki.data.api.BuildConfig.PHOTOM_LOCAL_API_BASE_URL)
+            .baseUrl(BuildConfig.PHOTOM_LOCAL_API_BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
@@ -123,7 +122,7 @@ object ApiModule {
         okHttpClient: OkHttpClient
     ): Retrofit =
         Retrofit.Builder()
-            .baseUrl(com.tatsuki.data.api.BuildConfig.SWITCH_BOT_API_BASE_URL)
+            .baseUrl(BuildConfig.SWITCH_BOT_API_BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
