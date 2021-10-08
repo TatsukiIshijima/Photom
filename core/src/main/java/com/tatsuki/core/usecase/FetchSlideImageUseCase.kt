@@ -6,35 +6,31 @@ import com.tatsuki.core.repository.SlideImageRepository
 import com.tatsuki.core.usecase.ui.ISlideShowView
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
+import javax.inject.Inject
 
-class FetchSlideImageUseCase(
-    private val slideShowView: ISlideShowView,
+class FetchSlideImageUseCase @Inject constructor(
     private val slideImageRepository: SlideImageRepository,
 ) {
-
-    companion object {
-        private val TAG = FetchSlideImageUseCase::class.java.simpleName
-    }
-
-    suspend fun execute(hour: Int) {
+    // https://github.com/OverLordAct/HiltCleanArchitecture
+    suspend fun execute(hour: Int, view: ISlideShowView) {
         val fetchImageRefFlow: Flow<State<out List<StorageReference>>> = when (hour) {
             in 1..8 -> slideImageRepository.fetchMorningImageReferences()
             in 9..16 -> slideImageRepository.fetchNoonImageReferences()
             else -> slideImageRepository.fetchEveningImageReferences()
         }
 
-        slideShowView.showLoading()
+        view.showLoading()
 
-        fetchImageRefFlow.collect { state ->
-            when (state) {
-                is State.Success -> {
-                    slideShowView.showSlide(state.data)
-                }
+        fetchImageRefFlow.collect {
+            when (it) {
                 is State.Failed -> {
-                    slideShowView.showError(state.exception)
+                    view.showError(it.exception)
+                }
+                is State.Success -> {
+                    view.showSlide(it.data)
                 }
             }
-            slideShowView.hideLoading()
+            view.hideLoading()
         }
     }
 }

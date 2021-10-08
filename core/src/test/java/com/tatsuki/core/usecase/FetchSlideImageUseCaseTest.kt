@@ -23,9 +23,9 @@ class FetchSlideImageUseCaseTest {
             on { hideLoading() } doAnswer { }
             on { showSlide(any()) } doAnswer { }
         }
-        val usecase = FetchSlideImageUseCase(view, slideImageRepository)
+        val usecase = FetchSlideImageUseCase(slideImageRepository)
         runBlocking {
-            usecase.execute(7)
+            usecase.execute(7, view)
         }
 
         verify(view, times(1)).showLoading()
@@ -49,9 +49,9 @@ class FetchSlideImageUseCaseTest {
             on { hideLoading() } doAnswer { }
             on { showSlide(any()) } doAnswer { }
         }
-        val usecase = FetchSlideImageUseCase(view, slideImageRepository)
+        val usecase = FetchSlideImageUseCase(slideImageRepository)
         runBlocking {
-            usecase.execute(9)
+            usecase.execute(9, view)
         }
 
         verify(view, times(1)).showLoading()
@@ -75,9 +75,9 @@ class FetchSlideImageUseCaseTest {
             on { hideLoading() } doAnswer { }
             on { showSlide(any()) } doAnswer { }
         }
-        val usecase = FetchSlideImageUseCase(view, slideImageRepository)
+        val usecase = FetchSlideImageUseCase(slideImageRepository)
         runBlocking {
-            usecase.execute(17)
+            usecase.execute(17, view)
         }
 
         verify(view, times(1)).showLoading()

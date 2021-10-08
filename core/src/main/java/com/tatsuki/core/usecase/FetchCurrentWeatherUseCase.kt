@@ -7,21 +7,17 @@ import com.tatsuki.core.usecase.ui.ICurrentWeatherView
 import com.tatsuki.data.api.openweather.response.toCurrentWeatherEntity
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
+import javax.inject.Inject
 
-class FetchCurrentWeatherUseCase(
-    private val currentWeatherView: ICurrentWeatherView,
+class FetchCurrentWeatherUseCase @Inject constructor(
     private val weatherRepository: WeatherRepository,
     private val placeRepository: PlaceRepository
 ) {
 
-    companion object {
-        private val TAG = FetchCurrentWeatherUseCase::class.java.simpleName
-    }
-
     @FlowPreview
-    suspend fun execute() {
+    suspend fun execute(view: ICurrentWeatherView) {
 
-        currentWeatherView.showLoading()
+        view.showLoading()
 
         // FIXME:もう少しきれいにつなげたい
         placeRepository.fetchPlace()
@@ -33,7 +29,7 @@ class FetchCurrentWeatherUseCase(
             }
             .filter {
                 if (it == null) {
-                    currentWeatherView.hideLoading()
+                    view.hideLoading()
                     return@filter false
                 }
                 return@filter true
@@ -48,14 +44,14 @@ class FetchCurrentWeatherUseCase(
             .collect {
                 when (it) {
                     is State.Success -> {
-                        currentWeatherView
+                        view
                             .showCurrentWeather(it.data.current.toCurrentWeatherEntity())
                     }
                     is State.Failed -> {
-                        currentWeatherView.showError(it.exception)
+                        view.showError(it.exception)
                     }
                 }
-                currentWeatherView.hideLoading()
+                view.hideLoading()
             }
     }
 }
