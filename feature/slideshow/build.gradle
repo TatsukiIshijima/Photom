@@ -29,6 +29,9 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 hilt {
@@ -37,6 +40,10 @@ hilt {
 
 dependencies {
     implementation project(":core")
+
+    implementation deps.android_lifecycle.livedata_ktx
+    implementation deps.android_lifecycle.viewmodel_ktx
+    implementation deps.constraint_layout
 
     // Hilt
     implementation deps.hilt.android

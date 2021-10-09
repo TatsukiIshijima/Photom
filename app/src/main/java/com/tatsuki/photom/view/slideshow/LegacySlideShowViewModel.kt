@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltViewModel
-class SlideShowViewModel @Inject constructor(
+class LegacySlideShowViewModel @Inject constructor(
     @ApplicationContext context: Context,
     private val fetchCurrentWeatherUseCase: FetchCurrentWeatherUseCase,
     private val fetchSlideImageUseCase: FetchSlideImageUseCase
