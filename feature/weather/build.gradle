@@ -31,18 +31,13 @@ android {
     }
 }
 
+hilt {
+    enableAggregatingTask = true
+}
+
+
 dependencies {
-    implementation project(":data:api")
-    implementation project(":data:entity")
-    implementation project(":data:extension")
-
-    implementation deps.moshi.runtime
-    implementation deps.moshi.kotlin
-    implementation deps.okhttp.runtime
-    implementation deps.retrofit.runtime
-    implementation deps.retrofit.converter_moshi
-
-    debugImplementation deps.okhttp.logging
+    implementation project(":core")
 
     // Hilt
     implementation deps.hilt.android
