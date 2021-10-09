@@ -48,6 +48,7 @@ dependencies {
     implementation project(":data:api")
     implementation project(":data:entity")
     implementation project(":data:extension")
+    implementation project(":feature:slideshow")
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation deps.app_compat
