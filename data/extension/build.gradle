@@ -30,6 +30,8 @@ android {
 }
 
 dependencies {
+    implementation deps.android_lifecycle.common
+    implementation deps.android_lifecycle.livedata_core_ktx
 
     testImplementation deps.assertj_core
     testImplementation deps.junit

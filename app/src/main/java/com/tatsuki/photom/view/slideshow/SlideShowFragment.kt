@@ -12,10 +12,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.work.WorkInfo
 import com.google.android.material.snackbar.Snackbar
+import com.tatsuki.data.extension.observeNotNull
 import com.tatsuki.photom.GlideApp
 import com.tatsuki.photom.R
 import com.tatsuki.photom.databinding.FragmentSlideShowBinding
-import com.tatsuki.photom.extension.observeNotNull
 import com.tatsuki.photom.view.main.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview

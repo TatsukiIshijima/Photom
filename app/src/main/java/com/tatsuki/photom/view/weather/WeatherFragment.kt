@@ -12,9 +12,9 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.tatsuki.data.entity.WeatherCondition
+import com.tatsuki.data.extension.observeNotNull
 import com.tatsuki.photom.R
 import com.tatsuki.photom.databinding.FragmentWeatherBinding
-import com.tatsuki.photom.extension.observeNotNull
 import com.tatsuki.photom.view.main.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
