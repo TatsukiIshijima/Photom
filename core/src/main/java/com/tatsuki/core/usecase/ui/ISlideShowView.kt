@@ -2,6 +2,6 @@ package com.tatsuki.core.usecase.ui
 
 import com.tatsuki.data.entity.PhotoListEntity
 
-interface ISlideShowView: ILoadingView, IErrorView {
+interface ISlideShowView {
     fun showSlide(photoListEntity: PhotoListEntity)
 }

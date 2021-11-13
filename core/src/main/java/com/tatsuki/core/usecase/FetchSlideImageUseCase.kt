@@ -3,7 +3,9 @@ package com.tatsuki.core.usecase
 import com.google.firebase.storage.StorageReference
 import com.tatsuki.core.State
 import com.tatsuki.core.repository.SlideImageRepository
+import com.tatsuki.core.usecase.ui.IErrorView
 import com.tatsuki.core.usecase.ui.ILegacySlideShowView
+import com.tatsuki.core.usecase.ui.ILoadingView
 import com.tatsuki.core.usecase.ui.ISlideShowView
 import com.tatsuki.data.api.Result
 import com.tatsuki.data.api.photom.photo.response.toPhotoListEntity
@@ -14,23 +16,31 @@ import javax.inject.Inject
 class FetchSlideImageUseCase @Inject constructor(
     private val slideImageRepository: SlideImageRepository,
 ) {
-    suspend fun execute(view: ISlideShowView) {
+    suspend fun execute(
+        errorView: IErrorView,
+        loadingView: ILoadingView,
+        slideShowView: ISlideShowView
+    ) {
 
-        view.showLoading()
+        loadingView.showLoading()
 
-        val result = slideImageRepository.fetchPhotoList()
+        val photoListResult = slideImageRepository.fetchPhotoList()
 
-        view.hideLoading()
+        loadingView.hideLoading()
 
-        when (result) {
-            is Result.ClientError -> view.showError(result.code, result.message)
-            is Result.Error -> view.showError(result.code, result.message)
-            is Result.NetworkError -> view.showNetworkError()
-            is Result.ServerError -> view.showInternalServerError()
-            is Result.Success -> view.showSlide(result.data.toPhotoListEntity())
+        when (photoListResult) {
+            is Result.ClientError -> errorView.showError(
+                photoListResult.code,
+                photoListResult.message
+            )
+            is Result.Error -> errorView.showError(photoListResult.code, photoListResult.message)
+            is Result.NetworkError -> errorView.showNetworkError()
+            is Result.ServerError -> errorView.showInternalServerError()
+            is Result.Success -> slideShowView.showSlide(photoListResult.data.toPhotoListEntity())
         }
     }
 
+    @Deprecated("Firebaseを使用しない方向へ修正中のため非推奨")
     // https://github.com/OverLordAct/HiltCleanArchitecture
     suspend fun execute(hour: Int, view: ILegacySlideShowView) {
         val fetchImageRefFlow: Flow<State<out List<StorageReference>>> = when (hour) {

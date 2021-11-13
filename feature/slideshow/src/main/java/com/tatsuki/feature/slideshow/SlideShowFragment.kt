@@ -7,12 +7,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
 import com.tatsuki.feature.slideshow.databinding.FragmentSlideShowBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import timber.log.Timber
 
 @AndroidEntryPoint
 class SlideShowFragment : Fragment() {
@@ -41,6 +42,7 @@ class SlideShowFragment : Fragment() {
         bind()
 
         slideShowViewModel.showSlide()
+        slideShowViewModel.showCurrentWeather(35.682146, 139.769653)
     }
 
     private fun bind() {
@@ -49,8 +51,21 @@ class SlideShowFragment : Fragment() {
             .onEach { adapter.update(it) }
             .launchIn(lifecycleScope)
 
+        slideShowViewModel.currentWeatherFlow
+            .filterNotNull()
+            .onEach {
+                binding.temperature.text = it.temp.toString()
+                it.icon?.let { url ->
+                    Glide.with(this).load(url).into(binding.weatherIcon)
+                }
+            }
+            .launchIn(lifecycleScope)
+
         slideShowViewModel.loadingFlow
-            .onEach { Timber.d("loading:${it}") }
+            .onEach {
+                if (it) binding.loopingViewPager.pauseAutoScroll()
+                else binding.loopingViewPager.resumeAutoScroll()
+            }
             .launchIn(lifecycleScope)
     }
 
