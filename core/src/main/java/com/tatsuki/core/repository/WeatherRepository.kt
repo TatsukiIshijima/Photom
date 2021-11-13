@@ -16,19 +16,34 @@ class WeatherRepository @Inject constructor(
     private val openWeatherApi: OpenWeatherApi
 ) {
 
-    suspend fun fetchCurrentWeather(lat: Double, lon: Double): Result<OneCallResponse> =
-        ApiClient.safeApiCall({ openWeatherApi.getOneCall(lat, lon) })
-
     private var _cache: OneCallResponse? = null
 
     val cache: OneCallResponse?
         get() = _cache
 
+    suspend fun fetchCurrentWeather(lat: Double, lon: Double): Result<OneCallResponse> {
+        if (_cache != null) {
+            return Result.Success(_cache!!)
+        }
+        val result = forcedUpdateCurrentWeather(lat, lon)
+        when (result) {
+            is Result.Success -> {
+                _cache = result.data
+            }
+            else -> {
+            }
+        }
+        return result
+    }
+
+    suspend fun forcedUpdateCurrentWeather(lat: Double, lon: Double): Result<OneCallResponse> =
+        ApiClient.safeApiCall({ openWeatherApi.getOneCall(lat, lon) })
+
     fun getWeather(
         dispatcher: CoroutineDispatcher = Dispatchers.IO,
         lat: Double,
         lon: Double
-    ) : Flow<State<OneCallResponse>> {
+    ): Flow<State<OneCallResponse>> {
         return flow {
             try {
                 val response = openWeatherApi.getOneCall(lat, lon)
