@@ -22,16 +22,18 @@ android {
 
         buildConfigField("String", "OPEN_WEATHER_API_KEY", "\"${openWeatherApiKey}\"")
         buildConfigField("String", "SWITCH_BOT_API_TOKEN", "\"${switchBotApiToken}\"")
-
         buildConfigField("String", "OPEN_WEATHER_API_BASE_URL", "\"https://api.openweathermap.org/data/2.5/\"")
-        buildConfigField("String", "PHOTOM_API_BASE_URL", "\"http://respberrypi-zero:5000/\"")
-        buildConfigField("String", "PHOTOM_LOCAL_API_BASE_URL", "\"http://localhost:5000/\"")
         buildConfigField("String", "SWITCH_BOT_API_BASE_URL", "\"https://api.switch-bot.com/v1.0/\"")
     }
 
     buildTypes {
+        debug {
+            buildConfigField("String", "PHOTOM_API_BASE_URL", "\"http://localhost:5000/\"")
+        }
 
         release {
+            buildConfigField("String", "PHOTOM_API_BASE_URL", "\"http://respberrypi-zero:5000/\"")
+
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
