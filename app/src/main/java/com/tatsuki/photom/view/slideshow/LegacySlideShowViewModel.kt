@@ -10,7 +10,7 @@ import com.google.firebase.storage.StorageReference
 import com.tatsuki.core.usecase.FetchCurrentWeatherUseCase
 import com.tatsuki.core.usecase.FetchSlideImageUseCase
 import com.tatsuki.core.usecase.ui.ICurrentWeatherView
-import com.tatsuki.core.usecase.ui.ISlideShowView
+import com.tatsuki.core.usecase.ui.ILegacySlideShowView
 import com.tatsuki.data.entity.CurrentWeatherEntity
 import com.tatsuki.photom.UpdateWeatherWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -34,7 +34,7 @@ class LegacySlideShowViewModel @Inject constructor(
         const val UPDATE_WEATHER_TAG = "UPDATE_WEATHER_TAG"
     }
 
-    private val view = object : ISlideShowView, ICurrentWeatherView {
+    private val view = object : ILegacySlideShowView, ICurrentWeatherView {
         override fun showSlide(refList: List<StorageReference>) {
             slideImageUrlMutableLiveData.value = refList
         }
@@ -54,6 +54,18 @@ class LegacySlideShowViewModel @Inject constructor(
         }
 
         override fun showError(e: Exception) {
+
+        }
+
+        override fun showError(code: Int?, message: String?) {
+
+        }
+
+        override fun showInternalServerError() {
+
+        }
+
+        override fun showNetworkError() {
 
         }
     }

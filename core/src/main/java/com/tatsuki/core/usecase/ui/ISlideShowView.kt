@@ -1,7 +1,7 @@
 package com.tatsuki.core.usecase.ui
 
-import com.google.firebase.storage.StorageReference
+import com.tatsuki.data.entity.PhotoListEntity
 
 interface ISlideShowView: ILoadingView, IErrorView {
-    fun showSlide(refList: List<StorageReference>)
+    fun showSlide(photoListEntity: PhotoListEntity)
 }

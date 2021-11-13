@@ -6,13 +6,54 @@
     android:layout_height="match_parent"
     tools:context=".SlideShowFragment">
 
+    <com.asksira.loopingviewpager.LoopingViewPager
+        android:id="@+id/loopingViewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:autoScroll="true"
+        app:isInfinite="true"
+        app:scrollInterval="300000" />
+
     <TextView
+        android:id="@+id/temperature"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello"
-        app:layout_constraintTop_toTopOf="parent"
+        android:textColor="@android:color/white"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/weatherIcon"
+        app:layout_constraintEnd_toStartOf="@+id/weatherIcon"
+        tools:text="10℃" />
+
+    <ImageView
+        android:id="@+id/weatherIcon"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:contentDescription="@string/weather_icon_content_description"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toStartOf="@+id/textClock"
+        app:layout_constraintBottom_toBottomOf="@id/textClock"
+        tools:src="@android:drawable/ic_btn_speak_now" />
+
+    <TextClock
+        android:id="@+id/textClock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:format12Hour="HH:mm"
+        android:timeZone="Asia/Tokyo"
+        android:textColor="@android:color/white"
+        android:textSize="64sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        tools:text="20:30" />
+
+    <FrameLayout
+        android:id="@+id/touch_layer_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
