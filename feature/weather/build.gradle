@@ -29,6 +29,9 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 hilt {
@@ -38,9 +41,19 @@ hilt {
 
 dependencies {
     implementation project(":core")
+    implementation project(":data:entity")
+    implementation project(":data:extension")
+
+    implementation deps.app_compat
+    implementation deps.constraint_layout
+    implementation deps.recyclerview
+
+    // Glide
+    implementation deps.glide.runtime
 
     // Hilt
     implementation deps.hilt.android
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     kapt deps.hilt.compiler
 
     // Hilt Test

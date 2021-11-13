@@ -40,10 +40,18 @@ hilt {
 
 dependencies {
     implementation project(":core")
+    implementation project(":data:entity")
 
+    implementation deps.android_fragment.fragment_ktx
     implementation deps.android_lifecycle.livedata_ktx
     implementation deps.android_lifecycle.viewmodel_ktx
     implementation deps.constraint_layout
+
+    // Glide
+    implementation deps.glide.runtime
+
+    // LoopingViewPager
+    implementation deps.looping_view_pager
 
     // Hilt
     implementation deps.hilt.android
@@ -52,6 +60,9 @@ dependencies {
     // Hilt Test
     testImplementation deps.hilt.android_testing
     kaptTest deps.hilt.compiler
+
+    // Timber
+    implementation deps.timber
 
     implementation deps.kotlin.stdlib
     implementation deps.coroutines.core
