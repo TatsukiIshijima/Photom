@@ -24,6 +24,7 @@ android {
         buildConfigField("String", "SWITCH_BOT_API_TOKEN", "\"${switchBotApiToken}\"")
         buildConfigField("String", "OPEN_WEATHER_API_BASE_URL", "\"https://api.openweathermap.org/data/2.5/\"")
         buildConfigField("String", "SWITCH_BOT_API_BASE_URL", "\"https://api.switch-bot.com/v1.0/\"")
+        buildConfigField("String", "ADDRESS_SEARCH_API_BASE_URL", "\"https://msearch.gsi.go.jp/address-search/\"")
     }
 
     buildTypes {
