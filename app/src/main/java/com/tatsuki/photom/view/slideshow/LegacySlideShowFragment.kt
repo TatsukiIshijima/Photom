@@ -12,10 +12,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.work.WorkInfo
 import com.google.android.material.snackbar.Snackbar
+import com.tatsuki.data.extension.observeNotNull
 import com.tatsuki.photom.GlideApp
 import com.tatsuki.photom.R
-import com.tatsuki.photom.databinding.FragmentSlideShowBinding
-import com.tatsuki.photom.extension.observeNotNull
+import com.tatsuki.photom.databinding.FragmentLegacySlideShowBinding
 import com.tatsuki.photom.view.main.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview
@@ -24,16 +24,16 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @AndroidEntryPoint
-class SlideShowFragment : Fragment() {
+class LegacySlideShowFragment : Fragment() {
 
     companion object {
-        private val TAG = SlideShowFragment::class.java.simpleName
+        private val TAG = LegacySlideShowFragment::class.java.simpleName
     }
 
-    private val slideShowViewModel: SlideShowViewModel by viewModels()
+    private val slideShowViewModel: LegacySlideShowViewModel by viewModels()
     private val mainViewModel: MainViewModel by activityViewModels()
 
-    private var _binding: FragmentSlideShowBinding? = null
+    private var _binding: FragmentLegacySlideShowBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var adapter: ScreenSlidePagerAdapter
@@ -42,7 +42,7 @@ class SlideShowFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentSlideShowBinding.inflate(layoutInflater, container, false)
+        _binding = FragmentLegacySlideShowBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 

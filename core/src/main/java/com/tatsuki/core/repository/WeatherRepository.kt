@@ -1,6 +1,8 @@
 package com.tatsuki.core.repository
 
 import com.tatsuki.core.State
+import com.tatsuki.data.api.ApiClient
+import com.tatsuki.data.api.Result
 import com.tatsuki.data.api.openweather.OpenWeatherApi
 import com.tatsuki.data.api.openweather.response.OneCallResponse
 import kotlinx.coroutines.CoroutineDispatcher
@@ -14,20 +16,34 @@ class WeatherRepository @Inject constructor(
     private val openWeatherApi: OpenWeatherApi
 ) {
 
-    companion object {
-        private val TAG = WeatherRepository::class.java.simpleName
-    }
-
     private var _cache: OneCallResponse? = null
 
     val cache: OneCallResponse?
         get() = _cache
 
+    suspend fun fetchCurrentWeather(lat: Double, lon: Double): Result<OneCallResponse> {
+        if (_cache != null) {
+            return Result.Success(_cache!!)
+        }
+        val result = forcedUpdateCurrentWeather(lat, lon)
+        when (result) {
+            is Result.Success -> {
+                _cache = result.data
+            }
+            else -> {
+            }
+        }
+        return result
+    }
+
+    suspend fun forcedUpdateCurrentWeather(lat: Double, lon: Double): Result<OneCallResponse> =
+        ApiClient.safeApiCall({ openWeatherApi.getOneCall(lat, lon) })
+
     fun getWeather(
         dispatcher: CoroutineDispatcher = Dispatchers.IO,
         lat: Double,
         lon: Double
-    ) : Flow<State<OneCallResponse>> {
+    ): Flow<State<OneCallResponse>> {
         return flow {
             try {
                 val response = openWeatherApi.getOneCall(lat, lon)

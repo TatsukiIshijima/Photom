@@ -9,20 +9,20 @@ import com.tatsuki.data.api.openweather.response.toDetailItems
 import com.tatsuki.data.api.openweather.response.toTimelyWeatherEntity
 import com.tatsuki.data.entity.WeatherCondition
 import kotlinx.coroutines.flow.collect
+import javax.inject.Inject
 
-class ShowWeatherDetailUseCase(
-    private val weatherDetailView: IWeatherDetailView,
+class ShowWeatherDetailUseCase @Inject constructor(
     private val weatherRepository: WeatherRepository,
     private val placeRepository: PlaceRepository
 ) {
 
-    suspend fun execute() {
+    suspend fun execute(view: IWeatherDetailView) {
         placeRepository.fetchPlace().collect {
             when (it) {
                 is State.Failed -> {
                 }
                 is State.Success -> {
-                    weatherDetailView.showPlace(it.data?.name ?: "---")
+                    view.showPlace(it.data?.name ?: "---")
                 }
             }
         }
@@ -48,18 +48,18 @@ class ShowWeatherDetailUseCase(
                         801, 802, 803, 804 -> WeatherCondition.Cloud(weather.id)
                         else -> WeatherCondition.Clear(weather.id)
                     }
-                weatherDetailView.showCurrentWeather(condition, it.current.temp.toInt())
+                view.showCurrentWeather(condition, it.current.temp.toInt())
             }
             val detailInfoList = it.current.toDetailItems()
-            weatherDetailView.showCurrentWeatherDetail(detailInfoList)
+            view.showCurrentWeatherDetail(detailInfoList)
             val timelyWeatherList = it.hourly.map { weather ->
                 weather.toTimelyWeatherEntity()
             }
-            weatherDetailView.showTimelyWeather(timelyWeatherList)
+            view.showTimelyWeather(timelyWeatherList)
             val dailyWeatherList = it.daily.map { weather ->
                 weather.toDailyWeatherEntity()
             }
-            weatherDetailView.showDailyWeather(dailyWeatherList)
+            view.showDailyWeather(dailyWeatherList)
         }
     }
 }

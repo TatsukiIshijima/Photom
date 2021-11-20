@@ -17,6 +17,9 @@
             <option value="$PROJECT_DIR$/data/api" />
             <option value="$PROJECT_DIR$/data/entity" />
             <option value="$PROJECT_DIR$/data/extension" />
+            <option value="$PROJECT_DIR$/feature" />
+            <option value="$PROJECT_DIR$/feature/slideshow" />
+            <option value="$PROJECT_DIR$/feature/weather" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

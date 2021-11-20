@@ -43,13 +43,6 @@ object ApiModule {
 
     @Singleton
     @Provides
-    fun providePhotomLocalApi(
-        @PhotomLocal retrofit: Retrofit
-    ): PhotomApi =
-        retrofit.create(PhotomApi::class.java)
-
-    @Singleton
-    @Provides
     fun provideSwitchBotApi(
         @SwitchBot retrofit: Retrofit
     ): SwitchBotApi =
@@ -97,19 +90,6 @@ object ApiModule {
     ): Retrofit =
         Retrofit.Builder()
             .baseUrl(BuildConfig.PHOTOM_API_BASE_URL)
-            .client(okHttpClient)
-            .addConverterFactory(MoshiConverterFactory.create(moshi))
-            .build()
-
-    @Singleton
-    @PhotomLocal
-    @Provides
-    fun providePhotomLocalRetrofit(
-        moshi: Moshi,
-        okHttpClient: OkHttpClient
-    ): Retrofit =
-        Retrofit.Builder()
-            .baseUrl(BuildConfig.PHOTOM_LOCAL_API_BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()

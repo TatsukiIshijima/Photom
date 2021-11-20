@@ -5,8 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.tatsuki.core.repository.PlaceRepository
-import com.tatsuki.core.repository.WeatherRepository
 import com.tatsuki.core.usecase.ShowWeatherDetailUseCase
 import com.tatsuki.core.usecase.ui.IWeatherDetailView
 import com.tatsuki.data.entity.CurrentWeatherInfoItem
@@ -21,14 +19,33 @@ import javax.inject.Inject
 @HiltViewModel
 class WeatherViewModel @Inject constructor(
     @ApplicationContext context: Context,
-    weatherRepository: WeatherRepository,
-    placeRepository: PlaceRepository
-) : ViewModel(), IWeatherDetailView {
+    private val showWeatherDetailUseCase: ShowWeatherDetailUseCase,
+) : ViewModel() {
 
     private var job: Job? = null
 
-    private val showWeatherDetailUseCase =
-        ShowWeatherDetailUseCase(this, weatherRepository, placeRepository)
+    private val view = object : IWeatherDetailView {
+        override fun showPlace(name: String) {
+            _showPlaceNameMutableLiveData.value = name
+        }
+
+        override fun showCurrentWeather(condition: WeatherCondition, temp: Int) {
+            _showCurrentWeatherConditionMutableLiveData.value = condition
+            _showCurrentTempMutableLiveData.value = temp
+        }
+
+        override fun showCurrentWeatherDetail(list: List<CurrentWeatherInfoItem>) {
+            _showCurrentWeatherDetailMutableLiveData.value = list
+        }
+
+        override fun showTimelyWeather(list: List<TimelyWeatherEntity>) {
+            _showTimelyWeatherMutableLiveData.value = list
+        }
+
+        override fun showDailyWeather(list: List<DailyWeatherEntity>) {
+            _showDailyWeatherMutableLiveData.value = list
+        }
+    }
 
     private val _autoTransitionMutableLiveData = MutableLiveData<Unit>()
     private val _showPlaceNameMutableLiveData = MutableLiveData<String>()
@@ -70,28 +87,7 @@ class WeatherViewModel @Inject constructor(
 
     fun showWeatherDetail() {
         viewModelScope.launch {
-            showWeatherDetailUseCase.execute()
+            showWeatherDetailUseCase.execute(view)
         }
-    }
-
-    override fun showPlace(name: String) {
-        _showPlaceNameMutableLiveData.value = name
-    }
-
-    override fun showCurrentWeather(condition: WeatherCondition, temp: Int) {
-        _showCurrentWeatherConditionMutableLiveData.value = condition
-        _showCurrentTempMutableLiveData.value = temp
-    }
-
-    override fun showCurrentWeatherDetail(list: List<CurrentWeatherInfoItem>) {
-        _showCurrentWeatherDetailMutableLiveData.value = list
-    }
-
-    override fun showTimelyWeather(list: List<TimelyWeatherEntity>) {
-        _showTimelyWeatherMutableLiveData.value = list
-    }
-
-    override fun showDailyWeather(list: List<DailyWeatherEntity>) {
-        _showDailyWeatherMutableLiveData.value = list
     }
 }

@@ -7,13 +7,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.work.*
 import com.google.firebase.storage.StorageReference
-import com.tatsuki.core.repository.PlaceRepository
-import com.tatsuki.core.repository.SlideImageRepository
-import com.tatsuki.core.repository.WeatherRepository
 import com.tatsuki.core.usecase.FetchCurrentWeatherUseCase
 import com.tatsuki.core.usecase.FetchSlideImageUseCase
 import com.tatsuki.core.usecase.ui.ICurrentWeatherView
-import com.tatsuki.core.usecase.ui.ISlideShowView
+import com.tatsuki.core.usecase.ui.ILegacySlideShowView
 import com.tatsuki.data.entity.CurrentWeatherEntity
 import com.tatsuki.photom.UpdateWeatherWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,21 +23,53 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltViewModel
-class SlideShowViewModel @Inject constructor(
+class LegacySlideShowViewModel @Inject constructor(
     @ApplicationContext context: Context,
-    weatherRepository: WeatherRepository,
-    slideImageRepository: SlideImageRepository,
-    placeRepository: PlaceRepository
-): ViewModel(), ICurrentWeatherView, ISlideShowView {
+    private val fetchCurrentWeatherUseCase: FetchCurrentWeatherUseCase,
+    private val fetchSlideImageUseCase: FetchSlideImageUseCase
+) : ViewModel() {
 
     companion object {
         const val UPDATE_WEATHER_WORK = "UPDATE_WEATHER_WORK"
         const val UPDATE_WEATHER_TAG = "UPDATE_WEATHER_TAG"
     }
 
-    private val fetchCurrentWeatherUseCase =
-        FetchCurrentWeatherUseCase(this, weatherRepository, placeRepository)
-    private val fetchSlideImageUseCase = FetchSlideImageUseCase(this, slideImageRepository)
+    private val view = object : ILegacySlideShowView, ICurrentWeatherView {
+        override fun showSlide(refList: List<StorageReference>) {
+            slideImageUrlMutableLiveData.value = refList
+        }
+
+        override fun showCurrentWeather(entity: CurrentWeatherEntity) {
+            currentWeatherIconUrlMutableLiveData.value =
+                "http://openweathermap.org/img/wn/${entity.icon}@2x.png"
+            currentTemperatureMutableLiveData.value = "${entity.temp}"
+        }
+
+        override fun showLoading() {
+            loadingMutableLiveData.value = true
+        }
+
+        override fun hideLoading() {
+            loadingMutableLiveData.value = false
+        }
+
+        override fun showError(e: Exception) {
+
+        }
+
+        override fun showError(code: Int?, message: String?) {
+
+        }
+
+        override fun showInternalServerError() {
+
+        }
+
+        override fun showNetworkError() {
+
+        }
+    }
+
     private val workManager = WorkManager.getInstance(context)
 
     private val loadingMutableLiveData = MutableLiveData<Boolean>()
@@ -56,10 +85,9 @@ class SlideShowViewModel @Inject constructor(
     @FlowPreview
     fun fetchCurrentWeather() {
         viewModelScope.launch {
-            fetchCurrentWeatherUseCase.execute()
+            fetchCurrentWeatherUseCase.execute(view)
         }
         Timber.d("fetchCurrentWeather")
-
     }
 
     // https://speakerdeck.com/nshiba/recommendation-of-workmanager?slide=15
@@ -86,32 +114,10 @@ class SlideShowViewModel @Inject constructor(
         workManager.cancelAllWorkByTag(UPDATE_WEATHER_TAG)
     }
 
-
     fun fetchSlideImage() {
         viewModelScope.launch {
-            fetchSlideImageUseCase.execute(LocalTime.now().hour)
+            fetchSlideImageUseCase.execute(LocalTime.now().hour, view)
         }
         Timber.d("fetchSlideImage")
-    }
-
-    override fun showCurrentWeather(entity: CurrentWeatherEntity) {
-        currentWeatherIconUrlMutableLiveData.value = "http://openweathermap.org/img/wn/${entity.icon}@2x.png"
-        currentTemperatureMutableLiveData.value = "${entity.temp}"
-    }
-
-    override fun showSlide(refList: List<StorageReference>) {
-        slideImageUrlMutableLiveData.value = refList
-    }
-
-    override fun showLoading() {
-        loadingMutableLiveData.value = true
-    }
-
-    override fun hideLoading() {
-        loadingMutableLiveData.value = false
-    }
-
-    override fun showError(e: Exception) {
-
     }
 }

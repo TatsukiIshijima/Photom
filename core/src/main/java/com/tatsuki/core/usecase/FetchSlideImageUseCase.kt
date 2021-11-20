@@ -3,38 +3,64 @@ package com.tatsuki.core.usecase
 import com.google.firebase.storage.StorageReference
 import com.tatsuki.core.State
 import com.tatsuki.core.repository.SlideImageRepository
+import com.tatsuki.core.usecase.ui.IErrorView
+import com.tatsuki.core.usecase.ui.ILegacySlideShowView
+import com.tatsuki.core.usecase.ui.ILoadingView
 import com.tatsuki.core.usecase.ui.ISlideShowView
+import com.tatsuki.data.api.Result
+import com.tatsuki.data.api.photom.photo.response.toPhotoListEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
+import javax.inject.Inject
 
-class FetchSlideImageUseCase(
-    private val slideShowView: ISlideShowView,
+class FetchSlideImageUseCase @Inject constructor(
     private val slideImageRepository: SlideImageRepository,
 ) {
+    suspend fun execute(
+        errorView: IErrorView,
+        loadingView: ILoadingView,
+        slideShowView: ISlideShowView
+    ) {
 
-    companion object {
-        private val TAG = FetchSlideImageUseCase::class.java.simpleName
+        loadingView.showLoading()
+
+        val photoListResult = slideImageRepository.fetchPhotoList()
+
+        loadingView.hideLoading()
+
+        when (photoListResult) {
+            is Result.ClientError -> errorView.showError(
+                photoListResult.code,
+                photoListResult.message
+            )
+            is Result.Error -> errorView.showError(photoListResult.code, photoListResult.message)
+            is Result.NetworkError -> errorView.showNetworkError()
+            is Result.ServerError -> errorView.showInternalServerError()
+            is Result.Success -> slideShowView.showSlide(photoListResult.data.toPhotoListEntity())
+        }
     }
 
-    suspend fun execute(hour: Int) {
+    @Deprecated("Firebaseを使用しない方向へ修正中のため非推奨")
+    // https://github.com/OverLordAct/HiltCleanArchitecture
+    suspend fun execute(hour: Int, view: ILegacySlideShowView) {
         val fetchImageRefFlow: Flow<State<out List<StorageReference>>> = when (hour) {
             in 1..8 -> slideImageRepository.fetchMorningImageReferences()
             in 9..16 -> slideImageRepository.fetchNoonImageReferences()
             else -> slideImageRepository.fetchEveningImageReferences()
         }
 
-        slideShowView.showLoading()
+        view.showLoading()
 
-        fetchImageRefFlow.collect { state ->
-            when (state) {
-                is State.Success -> {
-                    slideShowView.showSlide(state.data)
-                }
+        fetchImageRefFlow.collect {
+            when (it) {
                 is State.Failed -> {
-                    slideShowView.showError(state.exception)
+                    view.showError(it.exception)
+                }
+                is State.Success -> {
+                    view.showSlide(it.data)
                 }
             }
-            slideShowView.hideLoading()
+            view.hideLoading()
         }
     }
 }

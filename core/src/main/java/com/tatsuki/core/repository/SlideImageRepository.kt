@@ -3,6 +3,10 @@ package com.tatsuki.core.repository
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.tatsuki.core.State
+import com.tatsuki.data.api.ApiClient
+import com.tatsuki.data.api.Result
+import com.tatsuki.data.api.photom.PhotomApi
+import com.tatsuki.data.api.photom.photo.response.PhotoListResponse
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -17,11 +21,12 @@ import javax.inject.Inject
 // https://medium.com/firebase-tips-tricks/how-to-use-kotlin-flows-with-firestore-6c7ee9ae12f3
 
 class SlideImageRepository @Inject constructor(
-    private val storage: FirebaseStorage
+    private val storage: FirebaseStorage,
+    private val photomApi: PhotomApi
 ) {
-    companion object {
-        private val TAG = SlideImageRepository::class.java.simpleName
-    }
+
+    suspend fun fetchPhotoList(): Result<PhotoListResponse> =
+        ApiClient.safeApiCall({ photomApi.getPhotoList() })
 
     private var tempPath = ""
     private var cache: List<StorageReference>? = null
