@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.tatsuki.feature.weather.databinding.FragmentWeatherDetailBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -13,6 +14,8 @@ class WeatherDetailFragment : Fragment() {
 
     private var _binding: FragmentWeatherDetailBinding? = null
     private val binding get() = _binding!!
+
+    private val weatherDetailViewModel: WeatherDetailViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
