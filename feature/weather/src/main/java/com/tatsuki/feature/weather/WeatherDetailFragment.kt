@@ -8,6 +8,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.tatsuki.data.entity.WeatherCondition
 import com.tatsuki.feature.weather.databinding.FragmentWeatherDetailBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,6 +23,10 @@ class WeatherDetailFragment : Fragment() {
 
     private val weatherDetailViewModel: WeatherDetailViewModel by viewModels()
 
+    private var dailyWeatherAdapter: DailyWeatherAdapter? = null
+    private var dailyWeatherInfoAdapter: DailyWeatherInfoAdapter? = null
+    private var timelyWeatherAdapter: TimelyWeatherAdapter? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -32,6 +37,23 @@ class WeatherDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        dailyWeatherAdapter = DailyWeatherAdapter()
+        dailyWeatherInfoAdapter = DailyWeatherInfoAdapter()
+        timelyWeatherAdapter = TimelyWeatherAdapter()
+
+        binding.dailyWeather.apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            adapter = dailyWeatherAdapter
+        }
+        binding.dailyWeatherInfo.apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            adapter = dailyWeatherInfoAdapter
+        }
+        binding.timelyWeather.apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = timelyWeatherAdapter
+        }
 
         bind()
 
@@ -127,15 +149,15 @@ class WeatherDetailFragment : Fragment() {
             .launchIn(lifecycleScope)
 
         weatherDetailViewModel.weatherInfoListFlow
-            .onEach { }
+            .onEach { dailyWeatherInfoAdapter?.submitList(it) }
             .launchIn(lifecycleScope)
 
         weatherDetailViewModel.timelyWeatherFlow
-            .onEach { }
+            .onEach { timelyWeatherAdapter?.submitList(it) }
             .launchIn(lifecycleScope)
 
         weatherDetailViewModel.dailyWeatherFlow
-            .onEach { }
+            .onEach { dailyWeatherAdapter?.submitList(it) }
             .launchIn(lifecycleScope)
     }
 
