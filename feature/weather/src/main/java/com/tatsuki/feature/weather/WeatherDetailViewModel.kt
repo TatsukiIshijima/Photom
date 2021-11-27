@@ -3,9 +3,6 @@ package com.tatsuki.feature.weather
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tatsuki.core.usecase.FetchWeatherDetailUseCase
-import com.tatsuki.core.usecase.ui.IErrorView
-import com.tatsuki.core.usecase.ui.ILoadingView
-import com.tatsuki.core.usecase.ui.IWeatherDetailView
 import com.tatsuki.data.entity.CurrentWeatherInfoItem
 import com.tatsuki.data.entity.DailyWeatherEntity
 import com.tatsuki.data.entity.TimelyWeatherEntity
@@ -21,59 +18,11 @@ class WeatherDetailViewModel @Inject constructor(
     private val fetchWeatherDetailUseCase: FetchWeatherDetailUseCase
 ) : ViewModel() {
 
-    private val loadingView = object : ILoadingView {
-        override fun showLoading() {
-            mutableLoadingFlow.value = true
-        }
-
-        override fun hideLoading() {
-            mutableLoadingFlow.value = false
-        }
-    }
-
-    private val errorView = object : IErrorView {
-        override fun showError(e: Exception) {
-
-        }
-
-        override fun showError(code: Int?, message: String?) {
-
-        }
-
-        override fun showInternalServerError() {
-
-        }
-
-        override fun showNetworkError() {
-
-        }
-    }
-
-    private val weatherView = object : IWeatherDetailView {
-        override fun showPlace(name: String) {
-
-        }
-
-        override fun showCurrentWeather(condition: WeatherCondition, temp: Int) {
-            mutableConditionFlow.value = condition
-            mutableTemperatureFlow.value = temp
-        }
-
-        override fun showCurrentWeatherDetail(list: List<CurrentWeatherInfoItem>) {
-            mutableWeatherInfoListFlow.value = list
-        }
-
-        override fun showTimelyWeather(list: List<TimelyWeatherEntity>) {
-            mutableTimelyWeatherFlow.value = list
-        }
-
-        override fun showDailyWeather(list: List<DailyWeatherEntity>) {
-            mutableDailyWeatherFlow.value = list
-        }
-    }
-
-    private val mutableLoadingFlow = MutableStateFlow(false)
-    val loadingFlow = mutableLoadingFlow.asStateFlow()
+    val loadingFlow = fetchWeatherDetailUseCase
+        .loadingView
+        .state
+        .mutableLoadingFlow
+        .asStateFlow()
 
     private val mutablePlaceFlow = MutableStateFlow("")
     val placeFlow = mutablePlaceFlow.asStateFlow()
@@ -95,12 +44,7 @@ class WeatherDetailViewModel @Inject constructor(
 
     fun fetchWeatherDetail(locationName: String = "東京都渋谷区") {
         viewModelScope.launch {
-            fetchWeatherDetailUseCase.execute(
-                loadingView,
-                errorView,
-                weatherView,
-                locationName
-            )
+            fetchWeatherDetailUseCase.execute(locationName)
         }
     }
 }

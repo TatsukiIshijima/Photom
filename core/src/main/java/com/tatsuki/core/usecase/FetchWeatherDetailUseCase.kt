@@ -15,20 +15,26 @@ import com.tatsuki.data.entity.WeatherCondition
 import javax.inject.Inject
 
 class FetchWeatherDetailUseCase @Inject constructor(
+    val loadingView: ILoadingView,
+    val errorView: IErrorView,
+    val weatherView: IWeatherDetailView,
     private val placeRepository: PlaceRepository,
     private val weatherRepository: WeatherRepository
 ) {
+    // TODO:ResultをReturnするようにすれば綺麗になるかも
     suspend fun execute(
-        loadingView: ILoadingView,
-        errorView: IErrorView,
-        weatherView: IWeatherDetailView,
         locationName: String
     ) {
+        loadingView.showLoading()
+
         val result = placeRepository.fetchAddress(locationName)
             .flatMap {
                 val coordinates = it.first().toAddressEntity()
                 weatherRepository.fetchCurrentWeather(coordinates.lat, coordinates.lon)
             }
+
+        loadingView.hideLoading()
+
         when (result) {
             is Result.ClientError -> {}
             is Result.Error -> {}
