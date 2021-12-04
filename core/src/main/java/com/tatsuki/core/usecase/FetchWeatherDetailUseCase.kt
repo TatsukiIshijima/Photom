@@ -21,7 +21,6 @@ class FetchWeatherDetailUseCase @Inject constructor(
     private val placeRepository: PlaceRepository,
     private val weatherRepository: WeatherRepository
 ) {
-    // TODO:ResultをReturnするようにすれば綺麗になるかも
     suspend fun execute(
         locationName: String
     ) {
