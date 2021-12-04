@@ -3,6 +3,8 @@ package com.tatsuki.core.usecase
 import com.tatsuki.core.State
 import com.tatsuki.core.repository.PlaceRepository
 import com.tatsuki.core.repository.WeatherRepository
+import com.tatsuki.core.usecase.ui.IErrorView
+import com.tatsuki.core.usecase.ui.ILoadingView
 import com.tatsuki.core.usecase.ui.IWeatherDetailView
 import com.tatsuki.data.api.openweather.response.toDailyWeatherEntity
 import com.tatsuki.data.api.openweather.response.toDetailItems
@@ -12,17 +14,26 @@ import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 
 class ShowWeatherDetailUseCase @Inject constructor(
+    val loadingView: ILoadingView,
+    val errorView: IErrorView,
+    val weatherDetailView: IWeatherDetailView,
     private val weatherRepository: WeatherRepository,
     private val placeRepository: PlaceRepository
 ) {
 
-    suspend fun execute(view: IWeatherDetailView) {
+    suspend fun execute() {
+
+        loadingView.showLoading()
+
         placeRepository.fetchPlace().collect {
+
+            loadingView.hideLoading()
+
             when (it) {
                 is State.Failed -> {
                 }
                 is State.Success -> {
-                    view.showPlace(it.data?.name ?: "---")
+                    weatherDetailView.showPlace(it.data?.name ?: "---")
                 }
             }
         }
@@ -48,18 +59,18 @@ class ShowWeatherDetailUseCase @Inject constructor(
                         801, 802, 803, 804 -> WeatherCondition.Cloud(weather.id)
                         else -> WeatherCondition.Clear(weather.id)
                     }
-                view.showCurrentWeather(condition, it.current.temp.toInt())
+                weatherDetailView.showCurrentWeather(condition, it.current.temp.toInt())
             }
             val detailInfoList = it.current.toDetailItems()
-            view.showCurrentWeatherDetail(detailInfoList)
+            weatherDetailView.showCurrentWeatherDetail(detailInfoList)
             val timelyWeatherList = it.hourly.map { weather ->
                 weather.toTimelyWeatherEntity()
             }
-            view.showTimelyWeather(timelyWeatherList)
+            weatherDetailView.showTimelyWeather(timelyWeatherList)
             val dailyWeatherList = it.daily.map { weather ->
                 weather.toDailyWeatherEntity()
             }
-            view.showDailyWeather(dailyWeatherList)
+            weatherDetailView.showDailyWeather(dailyWeatherList)
         }
     }
 }

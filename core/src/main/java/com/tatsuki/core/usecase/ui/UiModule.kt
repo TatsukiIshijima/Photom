@@ -20,6 +20,16 @@ abstract class UiModule {
     ): IErrorView
 
     @Binds
+    abstract fun bindSlideShowView(
+        slideShowViewImpl: SlideShowViewImpl
+    ): ISlideShowView
+
+    @Binds
+    abstract fun bindCurrentWeatherView(
+        currentWeatherViewImpl: CurrentWeatherViewImpl
+    ): ICurrentWeatherView
+
+    @Binds
     abstract fun bindWeatherDetailView(
         weatherDetailViewImpl: WeatherDetailViewImpl
     ): IWeatherDetailView
