@@ -7,14 +7,4 @@
     <include app:graph="@navigation/slide_show_navigation_graph" />
     <include app:graph="@navigation/weather_detail_navigation_graph" />
 
-    <!-- 削除予定 -->
-    <fragment
-        android:id="@+id/legacySlideShowFragment"
-        android:name="com.tatsuki.photom.view.slideshow.LegacySlideShowFragment"
-        android:label="LegacySlideShowFragment">
-        <action
-            android:id="@+id/action_slideshow_to_weather"
-            app:destination="@+id/weatherFragment" />
-    </fragment>
-
 </navigation>
