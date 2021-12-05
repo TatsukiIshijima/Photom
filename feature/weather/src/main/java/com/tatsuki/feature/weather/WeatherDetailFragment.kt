@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -61,6 +62,10 @@ class WeatherDetailFragment : Fragment() {
     }
 
     private fun bind() {
+        weatherDetailViewModel.loadingFlow
+            .onEach { binding.progressbar.isVisible = it }
+            .launchIn(lifecycleScope)
+
         weatherDetailViewModel.placeFlow
             .onEach {
                 val locationName = if (it.isNotEmpty()) it else "---"
