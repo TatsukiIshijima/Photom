@@ -33,7 +33,7 @@ android {
         }
 
         release {
-            buildConfigField("String", "PHOTOM_API_BASE_URL", "\"http://respberrypi-zero:5000/\"")
+            buildConfigField("String", "PHOTOM_API_BASE_URL", "\"http://raspberrypi-zero.local:5000/\"")
 
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
