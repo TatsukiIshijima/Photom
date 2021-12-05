@@ -12,4 +12,4 @@ data class AddressSearchResponse(
 )
 
 fun AddressSearchResponse.toAddressEntity(): AddressEntity =
-    AddressEntity(geometry.coordinates[0], geometry.coordinates[1])
+    AddressEntity(geometry.coordinates[1], geometry.coordinates[0])
