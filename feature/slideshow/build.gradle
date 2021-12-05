@@ -47,6 +47,10 @@ dependencies {
     implementation deps.android_lifecycle.viewmodel_ktx
     implementation deps.constraint_layout
 
+    // Navigation
+    implementation deps.navigation.fragment_ktx
+    implementation deps.navigation.ui_ktx
+
     // Glide
     implementation deps.glide.runtime
 

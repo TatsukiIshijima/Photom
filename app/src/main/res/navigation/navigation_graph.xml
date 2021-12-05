@@ -2,25 +2,19 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/navigation_graph"
-    app:startDestination="@id/slideShowFragment">
+    app:startDestination="@id/slide_show_navigation_graph">
 
+    <include app:graph="@navigation/slide_show_navigation_graph" />
+    <include app:graph="@navigation/weather_detail_navigation_graph" />
+
+    <!-- 削除予定 -->
     <fragment
         android:id="@+id/legacySlideShowFragment"
         android:name="com.tatsuki.photom.view.slideshow.LegacySlideShowFragment"
         android:label="LegacySlideShowFragment">
         <action
             android:id="@+id/action_slideshow_to_weather"
-            app:destination="@+id/weatherFragment"></action>
+            app:destination="@+id/weatherFragment" />
     </fragment>
-
-    <fragment
-        android:id="@+id/slideShowFragment"
-        android:name="com.tatsuki.feature.slideshow.SlideShowFragment"
-        android:label="SlideShowFragment"></fragment>
-
-    <fragment
-        android:id="@+id/weatherFragment"
-        android:name="com.tatsuki.photom.view.weather.WeatherFragment"
-        android:label="WeatherFragment"></fragment>
 
 </navigation>

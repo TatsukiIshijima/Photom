@@ -50,6 +50,10 @@ dependencies {
     implementation deps.constraint_layout
     implementation deps.recyclerview
 
+    // Navigation
+    implementation deps.navigation.fragment_ktx
+    implementation deps.navigation.ui_ktx
+
     // Glide
     implementation deps.glide.runtime
 

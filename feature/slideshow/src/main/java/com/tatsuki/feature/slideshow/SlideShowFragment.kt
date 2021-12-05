@@ -4,10 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavDeepLinkRequest
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.tatsuki.feature.slideshow.databinding.FragmentSlideShowBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -40,6 +43,13 @@ class SlideShowFragment : Fragment() {
         adapter = SlideShowPagerAdapter(listOf())
         binding.loopingViewPager.adapter = adapter
 
+        binding.touchLayerContainer.setOnClickListener {
+            val request = NavDeepLinkRequest.Builder
+                .fromUri("android-app://com.tatsuki.feature.weather/weather_detail_fragment".toUri())
+                .build()
+            findNavController().navigate(request)
+        }
+
         bind()
 
         slideShowViewModel.showSlide()
@@ -65,6 +75,10 @@ class SlideShowFragment : Fragment() {
         slideShowViewModel.loadingFlow
             .onEach {
                 binding.progressbar.isVisible = it
+                binding.touchLayerContainer.apply {
+                    isVisible = !it
+                    isEnabled = !it
+                }
                 if (it) binding.loopingViewPager.pauseAutoScroll()
                 else binding.loopingViewPager.resumeAutoScroll()
             }
