@@ -53,6 +53,7 @@ dependencies {
     implementation project(":data:extension")
     implementation project(":feature:slideshow")
     implementation project(":feature:weather")
+    implementation project(":feature:devicecontrol")
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation deps.app_compat
