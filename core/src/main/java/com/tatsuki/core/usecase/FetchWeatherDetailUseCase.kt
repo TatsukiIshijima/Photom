@@ -1,44 +1,47 @@
 package com.tatsuki.core.usecase
 
-import com.tatsuki.core.State
 import com.tatsuki.core.repository.PlaceRepository
 import com.tatsuki.core.repository.WeatherRepository
 import com.tatsuki.core.usecase.ui.IErrorView
 import com.tatsuki.core.usecase.ui.ILoadingView
 import com.tatsuki.core.usecase.ui.IWeatherDetailView
+import com.tatsuki.data.api.Result
+import com.tatsuki.data.api.addresssearch.response.toAddressEntity
+import com.tatsuki.data.api.flatMap
 import com.tatsuki.data.api.openweather.response.toDailyWeatherEntity
 import com.tatsuki.data.api.openweather.response.toDetailItems
 import com.tatsuki.data.api.openweather.response.toTimelyWeatherEntity
 import com.tatsuki.data.entity.WeatherCondition
-import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 
-class ShowWeatherDetailUseCase @Inject constructor(
+class FetchWeatherDetailUseCase @Inject constructor(
     val loadingView: ILoadingView,
     val errorView: IErrorView,
-    val weatherDetailView: IWeatherDetailView,
-    private val weatherRepository: WeatherRepository,
-    private val placeRepository: PlaceRepository
+    val weatherView: IWeatherDetailView,
+    private val placeRepository: PlaceRepository,
+    private val weatherRepository: WeatherRepository
 ) {
-
-    suspend fun execute() {
-
+    suspend fun execute(
+        locationName: String
+    ) {
         loadingView.showLoading()
 
-        placeRepository.fetchPlace().collect {
-
-            loadingView.hideLoading()
-
-            when (it) {
-                is State.Failed -> {
-                }
-                is State.Success -> {
-                    weatherDetailView.showPlace(it.data?.name ?: "---")
-                }
+        val result = placeRepository.fetchAddress(locationName)
+            .flatMap {
+                val coordinates = it.first().toAddressEntity()
+                weatherRepository.fetchCurrentWeather(coordinates.lat, coordinates.lon)
             }
-        }
-        weatherRepository.cache?.let {
-            it.current.weather.firstOrNull()?.let { weather ->
+
+        loadingView.hideLoading()
+
+        when (result) {
+            is Result.ClientError -> {}
+            is Result.Error -> {}
+            Result.NetworkError -> {}
+            Result.ServerError -> {}
+            is Result.Success -> {
+                val data = result.data
+                val weather = data.current.weather.firstOrNull() ?: return
                 val condition =
                     when (weather.id) {
                         200, 201, 202, 210, 211, 212, 221, 230, 231, 232 -> WeatherCondition.Thunderstorm(
@@ -59,18 +62,15 @@ class ShowWeatherDetailUseCase @Inject constructor(
                         801, 802, 803, 804 -> WeatherCondition.Cloud(weather.id)
                         else -> WeatherCondition.Clear(weather.id)
                     }
-                weatherDetailView.showCurrentWeather(condition, it.current.temp.toInt())
+                val detailInfoList = data.current.toDetailItems()
+                val timelyWeatherList = data.hourly.map { it.toTimelyWeatherEntity() }
+                val dailyWeatherList = data.daily.map { it.toDailyWeatherEntity() }
+
+                weatherView.showCurrentWeather(condition, data.current.temp.toInt())
+                weatherView.showCurrentWeatherDetail(detailInfoList)
+                weatherView.showTimelyWeather(timelyWeatherList)
+                weatherView.showDailyWeather(dailyWeatherList)
             }
-            val detailInfoList = it.current.toDetailItems()
-            weatherDetailView.showCurrentWeatherDetail(detailInfoList)
-            val timelyWeatherList = it.hourly.map { weather ->
-                weather.toTimelyWeatherEntity()
-            }
-            weatherDetailView.showTimelyWeather(timelyWeatherList)
-            val dailyWeatherList = it.daily.map { weather ->
-                weather.toDailyWeatherEntity()
-            }
-            weatherDetailView.showDailyWeather(dailyWeatherList)
         }
     }
 }

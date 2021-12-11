@@ -2,6 +2,10 @@ package com.tatsuki.core.repository
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.tatsuki.core.State
+import com.tatsuki.data.api.ApiClient
+import com.tatsuki.data.api.Result
+import com.tatsuki.data.api.addresssearch.AddressSearchApi
+import com.tatsuki.data.api.addresssearch.response.AddressSearchResponse
 import com.tatsuki.data.api.openweather.response.PlaceResponse
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -12,7 +16,8 @@ import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class PlaceRepository @Inject constructor(
-    private val db: FirebaseFirestore
+    private val db: FirebaseFirestore,
+    private val addressSearchApi: AddressSearchApi
 ) {
     companion object {
         private const val COLLECTION = "photom"
@@ -40,4 +45,7 @@ class PlaceRepository @Inject constructor(
             }
         }.flowOn(dispatcher)
     }
+
+    suspend fun fetchAddress(locationName: String): Result<List<AddressSearchResponse>> =
+        ApiClient.safeApiCall({ addressSearchApi.getAddress(locationName) })
 }

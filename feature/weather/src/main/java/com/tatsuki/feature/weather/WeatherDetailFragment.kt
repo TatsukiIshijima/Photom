@@ -1,86 +1,84 @@
-package com.tatsuki.photom.view.weather
+package com.tatsuki.feature.weather
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.tatsuki.data.entity.WeatherCondition
-import com.tatsuki.data.extension.observeNotNull
-import com.tatsuki.photom.R
-import com.tatsuki.photom.databinding.FragmentWeatherBinding
-import com.tatsuki.photom.view.main.MainViewModel
+import com.tatsuki.feature.weather.databinding.FragmentWeatherDetailBinding
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 @AndroidEntryPoint
-class WeatherFragment : Fragment() {
+class WeatherDetailFragment : Fragment() {
 
-    private val weatherViewModel: WeatherViewModel by viewModels()
-    private val mainViewModel: MainViewModel by activityViewModels()
-
-    private var _binding: FragmentWeatherBinding? = null
+    private var _binding: FragmentWeatherDetailBinding? = null
     private val binding get() = _binding!!
 
-    private var currentWeatherDetailAdapter: CurrentWeatherDetailAdapter? = null
+    private val weatherDetailViewModel: WeatherDetailViewModel by viewModels()
+
     private var dailyWeatherAdapter: DailyWeatherAdapter? = null
+    private var dailyWeatherInfoAdapter: DailyWeatherInfoAdapter? = null
     private var timelyWeatherAdapter: TimelyWeatherAdapter? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentWeatherBinding.inflate(layoutInflater, container, false)
+        _binding = FragmentWeatherDetailBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        currentWeatherDetailAdapter = CurrentWeatherDetailAdapter()
         dailyWeatherAdapter = DailyWeatherAdapter()
+        dailyWeatherInfoAdapter = DailyWeatherInfoAdapter()
         timelyWeatherAdapter = TimelyWeatherAdapter()
 
-        binding.currentWeatherDetail.apply {
+        binding.dailyWeather.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-            adapter = currentWeatherDetailAdapter
+            adapter = dailyWeatherAdapter
+        }
+        binding.dailyWeatherInfo.apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            adapter = dailyWeatherInfoAdapter
         }
         binding.timelyWeather.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = timelyWeatherAdapter
         }
-        binding.dailyWeather.apply {
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-            adapter = dailyWeatherAdapter
-        }
 
         bind()
 
-        weatherViewModel.showWeatherDetail()
+        weatherDetailViewModel.fetchWeatherDetail()
     }
 
     private fun bind() {
-        weatherViewModel.autoTransitionLiveData.observe(viewLifecycleOwner, {
-            findNavController().popBackStack()
-        })
-        weatherViewModel.showPlaceLiveData.observe(viewLifecycleOwner, {
-            it?.let {
-                binding.locationName.text = it
+        weatherDetailViewModel.loadingFlow
+            .onEach { binding.progressbar.isVisible = it }
+            .launchIn(lifecycleScope)
+
+        weatherDetailViewModel.placeFlow
+            .onEach {
+                val locationName = if (it.isNotEmpty()) it else "---"
+                binding.locationName.text = locationName
             }
-        })
-        weatherViewModel.showCurrentWeatherConditionLiveData.observe(viewLifecycleOwner, {
-            it?.let {
+            .launchIn(lifecycleScope)
+
+        weatherDetailViewModel.conditionFlow
+            .onEach {
                 when (it) {
                     is WeatherCondition.Atmosphere -> {
                         binding.currentWeather.text = resources.getText(R.string.cloudy)
-                        binding.weatherCondition.background =
+                        binding.weatherDetailLayout.background =
                             ResourcesCompat.getDrawable(
                                 resources,
                                 R.drawable.bg_cloudy,
@@ -89,7 +87,7 @@ class WeatherFragment : Fragment() {
                     }
                     is WeatherCondition.Clear -> {
                         binding.currentWeather.text = resources.getText(R.string.sunny)
-                        binding.weatherCondition.background =
+                        binding.weatherDetailLayout.background =
                             ResourcesCompat.getDrawable(
                                 resources,
                                 R.drawable.bg_sunny,
@@ -98,7 +96,7 @@ class WeatherFragment : Fragment() {
                     }
                     is WeatherCondition.Cloud -> {
                         binding.currentWeather.text = resources.getText(R.string.cloudy)
-                        binding.weatherCondition.background =
+                        binding.weatherDetailLayout.background =
                             ResourcesCompat.getDrawable(
                                 resources,
                                 R.drawable.bg_cloudy,
@@ -107,7 +105,7 @@ class WeatherFragment : Fragment() {
                     }
                     is WeatherCondition.Drizzle -> {
                         binding.currentWeather.text = resources.getText(R.string.rainy)
-                        binding.weatherCondition.background =
+                        binding.weatherDetailLayout.background =
                             ResourcesCompat.getDrawable(
                                 resources,
                                 R.drawable.bg_rainy,
@@ -116,7 +114,7 @@ class WeatherFragment : Fragment() {
                     }
                     is WeatherCondition.Rain -> {
                         binding.currentWeather.text = resources.getText(R.string.rainy)
-                        binding.weatherCondition.background =
+                        binding.weatherDetailLayout.background =
                             ResourcesCompat.getDrawable(
                                 resources,
                                 R.drawable.bg_rainy,
@@ -125,7 +123,7 @@ class WeatherFragment : Fragment() {
                     }
                     is WeatherCondition.Snow -> {
                         binding.currentWeather.text = resources.getText(R.string.snow)
-                        binding.weatherCondition.background =
+                        binding.weatherDetailLayout.background =
                             ResourcesCompat.getDrawable(
                                 resources,
                                 R.drawable.bg_snow,
@@ -134,62 +132,42 @@ class WeatherFragment : Fragment() {
                     }
                     is WeatherCondition.Thunderstorm -> {
                         binding.currentWeather.text = resources.getText(R.string.rainy)
-                        binding.weatherCondition.background =
+                        binding.weatherDetailLayout.background =
                             ResourcesCompat.getDrawable(
                                 resources,
                                 R.drawable.bg_rainy,
                                 null
                             )
                     }
+                    else -> {}
                 }
             }
-        })
-        weatherViewModel.showCurrentTempLiveData.observe(viewLifecycleOwner, {
-            it?.let {
-                val tempText = "${it}${context?.resources?.getString(R.string.temperature_unit)}"
+            .launchIn(lifecycleScope)
+
+        weatherDetailViewModel.temperatureFlow
+            .onEach {
+                val value = it ?: "-"
+                val tempText =
+                    "${value}${requireContext().resources.getString(R.string.temperature_unit)}"
                 binding.currentTemp.text = tempText
             }
-        })
-        weatherViewModel.showCurrentWeatherDetailLiveData.observe(
-            viewLifecycleOwner,
-            { currentWeatherDetail ->
-                currentWeatherDetail?.let {
-                    currentWeatherDetailAdapter?.submitList(it)
-                }
-            })
-        weatherViewModel.showTimelyWeatherLiveData.observe(
-            viewLifecycleOwner,
-            { timelyWeatherList ->
-                timelyWeatherList?.let {
-                    timelyWeatherAdapter?.submitList(it)
-                }
-            })
-        weatherViewModel.showDailyWeatherLiveData.observe(viewLifecycleOwner, { dailyWeatherList ->
-            dailyWeatherList?.let {
-                dailyWeatherAdapter?.submitList(it)
-            }
-        })
-        mainViewModel.luminosityLiveData
-            .observeNotNull(viewLifecycleOwner, {
-                Timber.d("Luminosity: $it")
-                weatherViewModel.stopAutoTransitionTimer()
-                weatherViewModel.startAutoTransitionTimer()
-            })
-        mainViewModel.faceLiveData
-            .observeNotNull(viewLifecycleOwner, {
-                Timber.d("faces: $it")
-                weatherViewModel.stopAutoTransitionTimer()
-                weatherViewModel.startAutoTransitionTimer()
-            })
+            .launchIn(lifecycleScope)
+
+        weatherDetailViewModel.weatherInfoListFlow
+            .onEach { dailyWeatherInfoAdapter?.submitList(it) }
+            .launchIn(lifecycleScope)
+
+        weatherDetailViewModel.timelyWeatherFlow
+            .onEach { timelyWeatherAdapter?.submitList(it) }
+            .launchIn(lifecycleScope)
+
+        weatherDetailViewModel.dailyWeatherFlow
+            .onEach { dailyWeatherAdapter?.submitList(it) }
+            .launchIn(lifecycleScope)
     }
 
-    override fun onResume() {
-        super.onResume()
-        weatherViewModel.startAutoTransitionTimer()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        weatherViewModel.stopAutoTransitionTimer()
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

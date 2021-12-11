@@ -44,9 +44,15 @@ dependencies {
     implementation project(":data:entity")
     implementation project(":data:extension")
 
-    implementation deps.app_compat
+    implementation deps.android_fragment.fragment_ktx
+    implementation deps.android_lifecycle.livedata_ktx
+    implementation deps.android_lifecycle.viewmodel_ktx
     implementation deps.constraint_layout
     implementation deps.recyclerview
+
+    // Navigation
+    implementation deps.navigation.fragment_ktx
+    implementation deps.navigation.ui_ktx
 
     // Glide
     implementation deps.glide.runtime

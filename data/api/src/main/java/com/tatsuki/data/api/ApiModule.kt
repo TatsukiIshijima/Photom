@@ -2,6 +2,7 @@ package com.tatsuki.data.api
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import com.tatsuki.data.api.addresssearch.AddressSearchApi
 import com.tatsuki.data.api.openweather.OpenWeatherApi
 import com.tatsuki.data.api.photom.PhotomApi
 import com.tatsuki.data.api.switchbot.SwitchBotApi
@@ -48,6 +49,13 @@ object ApiModule {
     ): SwitchBotApi =
         retrofit.create(SwitchBotApi::class.java)
 
+    @Singleton
+    @Provides
+    fun provideAddressSearchApi(
+        @AddressSearch retrofit: Retrofit
+    ): AddressSearchApi =
+        retrofit.create(AddressSearchApi::class.java)
+
     // https://developer.android.com/training/dependency-injection/hilt-android#multiple-bindings
     // baseUrl が異なる Retrofit のインスタンスを注入するため同じ Retrofit 型でも
     // 別のインスタンスを注入できるようにする
@@ -67,6 +75,10 @@ object ApiModule {
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
     annotation class SwitchBot
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class AddressSearch
 
     @Singleton
     @OpenWeather
@@ -103,6 +115,19 @@ object ApiModule {
     ): Retrofit =
         Retrofit.Builder()
             .baseUrl(BuildConfig.SWITCH_BOT_API_BASE_URL)
+            .client(okHttpClient)
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .build()
+
+    @Singleton
+    @AddressSearch
+    @Provides
+    fun provideAddressSearchRetrofit(
+        moshi: Moshi,
+        okHttpClient: OkHttpClient
+    ): Retrofit =
+        Retrofit.Builder()
+            .baseUrl(BuildConfig.ADDRESS_SEARCH_API_BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()

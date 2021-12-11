@@ -1,4 +1,4 @@
-package com.tatsuki.photom.view.weather
+package com.tatsuki.feature.weather
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -8,10 +8,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.tatsuki.data.entity.DailyWeatherEntity
-import com.tatsuki.photom.GlideApp
-import com.tatsuki.photom.R
-import com.tatsuki.photom.databinding.DailyWeatherItemBinding
+import com.tatsuki.feature.weather.databinding.ItemDailyWeatherBinding
 
 class DailyWeatherAdapter(
 
@@ -19,7 +18,7 @@ class DailyWeatherAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DailyWeatherViewHolder {
         val binding =
-            DailyWeatherItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ItemDailyWeatherBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return DailyWeatherViewHolder(binding, parent.context)
     }
 
@@ -30,7 +29,7 @@ class DailyWeatherAdapter(
 }
 
 class DailyWeatherViewHolder(
-    binding: DailyWeatherItemBinding,
+    binding: ItemDailyWeatherBinding,
     private val context: Context
 ) : RecyclerView.ViewHolder(binding.root) {
     private val date: TextView = binding.date
@@ -50,7 +49,7 @@ class DailyWeatherViewHolder(
         maxTemp.text = maxTempText
         if (!dailyWeather.iconUrl.isNullOrEmpty()) {
             val iconUrl = "http://openweathermap.org/img/wn/${dailyWeather.iconUrl}@2x.png"
-            GlideApp.with(context).load(iconUrl).into(weatherIcon)
+            Glide.with(context).load(iconUrl).into(weatherIcon)
         }
     }
 }

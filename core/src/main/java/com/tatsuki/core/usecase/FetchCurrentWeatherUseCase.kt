@@ -7,10 +7,10 @@ import com.tatsuki.data.api.openweather.response.toCurrentWeatherEntity
 import javax.inject.Inject
 
 class FetchCurrentWeatherUseCase @Inject constructor(
+    val currentWeatherView: ICurrentWeatherView,
     private val weatherRepository: WeatherRepository
 ) {
     suspend fun execute(
-        weatherView: ICurrentWeatherView,
         lat: Double,
         lon: Double
     ) {
@@ -24,7 +24,7 @@ class FetchCurrentWeatherUseCase @Inject constructor(
             Result.ServerError -> {
             }
             is Result.Success ->
-                weatherView.showCurrentWeather(currentWeatherResult.data.current.toCurrentWeatherEntity())
+                currentWeatherView.showCurrentWeather(currentWeatherResult.data.current.toCurrentWeatherEntity())
         }
     }
 }

@@ -14,13 +14,12 @@ import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 
 class FetchSlideImageUseCase @Inject constructor(
+    val loadingView: ILoadingView,
+    val errorView: IErrorView,
+    val slideShowView: ISlideShowView,
     private val slideImageRepository: SlideImageRepository,
 ) {
-    suspend fun execute(
-        errorView: IErrorView,
-        loadingView: ILoadingView,
-        slideShowView: ISlideShowView
-    ) {
+    suspend fun execute() {
 
         loadingView.showLoading()
 

@@ -1,4 +1,4 @@
-package com.tatsuki.photom.view.weather
+package com.tatsuki.feature.weather
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -8,17 +8,16 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.tatsuki.data.entity.TimelyWeatherEntity
-import com.tatsuki.photom.GlideApp
-import com.tatsuki.photom.R
-import com.tatsuki.photom.databinding.TimelyWeatherItemBinding
+import com.tatsuki.feature.weather.databinding.ItemTimelyWeatherBinding
 
 class TimelyWeatherAdapter(
 
 ) : ListAdapter<TimelyWeatherEntity, TimelyWeatherViewHolder>(TimelyWeatherDiffCallback) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TimelyWeatherViewHolder {
         val binding =
-            TimelyWeatherItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ItemTimelyWeatherBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return TimelyWeatherViewHolder(binding, parent.context)
     }
 
@@ -29,7 +28,7 @@ class TimelyWeatherAdapter(
 }
 
 class TimelyWeatherViewHolder(
-    binding: TimelyWeatherItemBinding,
+    binding: ItemTimelyWeatherBinding,
     private val context: Context
 ) : RecyclerView.ViewHolder(binding.root) {
     private val time: TextView = binding.time
@@ -43,7 +42,7 @@ class TimelyWeatherViewHolder(
         temperature.text = tempText
         if (!timelyWeather.iconUrl.isNullOrEmpty()) {
             val iconUrl = "http://openweathermap.org/img/wn/${timelyWeather.iconUrl}@2x.png"
-            GlideApp.with(context).load(iconUrl).into(weatherIcon)
+            Glide.with(context).load(iconUrl).into(weatherIcon)
         }
     }
 }

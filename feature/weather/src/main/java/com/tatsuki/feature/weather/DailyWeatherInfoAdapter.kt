@@ -1,4 +1,4 @@
-package com.tatsuki.photom.view.weather
+package com.tatsuki.feature.weather
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -8,37 +8,36 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.tatsuki.data.entity.CurrentWeatherInfoItem
-import com.tatsuki.photom.R
-import com.tatsuki.photom.databinding.CurrentWeatherDetailItemBinding
+import com.tatsuki.feature.weather.databinding.ItemDailyWeatherInfoBinding
 
-class CurrentWeatherDetailAdapter(
+class DailyWeatherInfoAdapter(
 
-) : ListAdapter<CurrentWeatherInfoItem, CurrentWeatherInfoViewHolder>(CurrentWeatherInfoDiffCallback) {
+) : ListAdapter<CurrentWeatherInfoItem, DailyWeatherInfoViewHolder>(DailyWeatherInfoDiffCallback) {
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): CurrentWeatherInfoViewHolder {
-        val binding = CurrentWeatherDetailItemBinding.inflate(
+    ): DailyWeatherInfoViewHolder {
+        val binding = ItemDailyWeatherInfoBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
         )
-        return CurrentWeatherInfoViewHolder(binding, parent.context)
+        return DailyWeatherInfoViewHolder(binding, parent.context)
     }
 
-    override fun onBindViewHolder(holder: CurrentWeatherInfoViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: DailyWeatherInfoViewHolder, position: Int) {
         val currentWeatherInfo = getItem(position)
         holder.bind(currentWeatherInfo)
     }
 }
 
-class CurrentWeatherInfoViewHolder(
-    binding: CurrentWeatherDetailItemBinding,
+class DailyWeatherInfoViewHolder(
+    binding: ItemDailyWeatherInfoBinding,
     private val context: Context
 ) : RecyclerView.ViewHolder(binding.root) {
-    private val title: TextView = binding.detailTitle
-    private val value: TextView = binding.detailValue
-    private val unit: TextView = binding.detailUnit
+    private val title: TextView = binding.humidityTitle
+    private val value: TextView = binding.humidityValue
+    private val unit: TextView = binding.humidityUnit
 
     fun bind(currentWeatherInfoItem: CurrentWeatherInfoItem) {
         when (currentWeatherInfoItem) {
@@ -61,7 +60,7 @@ class CurrentWeatherInfoViewHolder(
     }
 }
 
-object CurrentWeatherInfoDiffCallback : DiffUtil.ItemCallback<CurrentWeatherInfoItem>() {
+object DailyWeatherInfoDiffCallback : DiffUtil.ItemCallback<CurrentWeatherInfoItem>() {
     override fun areItemsTheSame(
         oldItem: CurrentWeatherInfoItem,
         newItem: CurrentWeatherInfoItem
