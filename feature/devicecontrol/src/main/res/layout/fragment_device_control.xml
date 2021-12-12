@@ -5,9 +5,17 @@
     android:layout_height="match_parent"
     tools:context=".DeviceControlFragment">
 
-    <TextView
+    <GridView
+        android:id="@+id/device_control_grid_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Hello" />
+        android:numColumns="3"
+        android:verticalSpacing="16dp"
+        android:horizontalSpacing="16dp"
+        android:layout_margin="16dp"
+        android:gravity="center"
+        android:stretchMode="columnWidth"
+        tools:listitem="@layout/item_device"
+        tools:ignore="UselessLeaf" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
