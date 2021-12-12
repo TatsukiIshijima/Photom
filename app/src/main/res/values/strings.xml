@@ -15,4 +15,7 @@
     <string name="cloudy">曇り</string>
     <string name="rainy">雨</string>
     <string name="snow">雪</string>
+    <string name="menu_slide_show_title">スライドショー</string>
+    <string name="menu_weather_title">天気</string>
+    <string name="menu_device_control_title">デバイスコントロール</string>
 </resources>
