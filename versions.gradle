@@ -18,6 +18,7 @@ versions.firebase_bom = '28.4.1'
 versions.firebase_ui_storage = '8.0.0'
 versions.glide = '4.11.0'
 versions.google_services = '4.3.10'
+versions.grid_view_with_header_footer = '1.0.12'
 versions.hilt = '2.38.1'
 versions.hilt_work = '1.0.0'
 versions.junit = '4.13.2'
@@ -88,6 +89,8 @@ glide.compiler = "com.github.bumptech.glide:compiler:$versions.glide"
 deps.glide = glide
 
 deps.google_services = "com.google.gms:google-services:$versions.google_services"
+
+deps.grid_view_with_header_footer = "in.srain.cube:grid-view-with-header-footer:$versions.grid_view_with_header_footer"
 
 deps.firebase_bom = "com.google.firebase:firebase-bom:$versions.firebase_bom"
 
