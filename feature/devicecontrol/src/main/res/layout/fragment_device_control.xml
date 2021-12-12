@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     tools:context=".DeviceControlFragment">
 
-    <GridView
+    <in.srain.cube.views.GridViewWithHeaderAndFooter
         android:id="@+id/device_control_grid_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
