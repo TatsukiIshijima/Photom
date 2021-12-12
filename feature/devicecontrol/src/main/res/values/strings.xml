@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="device_item_control_button_title">操作</string>
+    <string name="device_item_header_temperature_label">温度</string>
+    <string name="device_item_header_temperature_unit">℃</string>
+    <string name="device_item_header_pressure_label">気圧</string>
+    <string name="device_item_header_pressure_unit">hPa</string>
+    <string name="device_item_header_humidity_label">湿度</string>
+    <string name="device_item_header_humidity_unit">%</string>
+    <string name="device_item_header_lux_label">照度</string>
+    <string name="device_item_header_lux_unit">lux</string>
 </resources>
