@@ -2,6 +2,8 @@ package com.tatsuki.data.api.switchbot.devicelist.response
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import com.tatsuki.data.entity.DeviceEntity
+import com.tatsuki.data.entity.DeviceType
 
 @JsonClass(generateAdapter = true)
 data class DeviceResponse(
@@ -18,3 +20,13 @@ data class DeviceResponse(
     @Json(name = "hubDeviceId")
     val hubDeviceId: String
 )
+
+fun DeviceResponse.toEntity(): DeviceEntity {
+    val type = when (deviceType) {
+        "Fan" -> DeviceType.Fan
+        "Air Conditioner" -> DeviceType.AirConditioner
+        "Light" -> DeviceType.Light
+        else -> null
+    }
+    return DeviceEntity(deviceId, deviceName, type)
+}
