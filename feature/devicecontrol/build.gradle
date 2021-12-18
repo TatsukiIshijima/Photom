@@ -47,11 +47,13 @@ dependencies {
     implementation deps.android_lifecycle.viewmodel_ktx
     implementation deps.constraint_layout
 
-    implementation deps.grid_view_with_header_footer
-
     // Navigation
     implementation deps.navigation.fragment_ktx
     implementation deps.navigation.ui_ktx
+
+    // Groupie
+    implementation deps.groupie.runtime
+    implementation deps.groupie.viewbinding
 
     // Hilt
     implementation deps.hilt.android
