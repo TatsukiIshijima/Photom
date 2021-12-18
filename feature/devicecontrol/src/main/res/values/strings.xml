@@ -9,4 +9,6 @@
     <string name="device_item_header_humidity_unit">%</string>
     <string name="device_item_header_lux_label">照度</string>
     <string name="device_item_header_lux_unit">lux</string>
+    <string name="device_item_section_local_device_title">ローカルデバイス</string>
+    <string name="device_item_section_remote_device_section_title">リモートデバイス</string>
 </resources>
