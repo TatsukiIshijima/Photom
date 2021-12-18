@@ -2,6 +2,7 @@ package com.tatsuki.data.api.photom.sensor.response
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import com.tatsuki.data.entity.SensorEntity
 
 @JsonClass(generateAdapter = true)
 data class SensorResponse(
@@ -18,3 +19,6 @@ data class SensorResponse(
     @Json(name = "lux")
     val lux: Float
 )
+
+fun SensorResponse.toEntity() =
+    SensorEntity(temp, pressure, humidity, lux)
