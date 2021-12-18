@@ -7,174 +7,174 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/device_item_temperature_container"
+        android:id="@+id/sensor_data_item_temperature_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/device_item_pressure_container">
+        app:layout_constraintEnd_toStartOf="@+id/sensor_data_item_pressure_container">
 
         <TextView
-            android:id="@+id/device_item_header_temperature_label"
+            android:id="@+id/sensor_data_item_header_temperature_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/device_item_header_temperature_label"
             android:textSize="24sp"
             android:textStyle="bold"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/device_item_header_temperature_value"
-            app:layout_constraintEnd_toEndOf="@+id/device_item_header_temperature_unit" />
+            app:layout_constraintStart_toStartOf="@+id/sensor_data_item_header_temperature_value"
+            app:layout_constraintEnd_toEndOf="@+id/sensor_data_item_header_temperature_unit" />
 
         <TextView
-            android:id="@+id/device_item_header_temperature_value"
+            android:id="@+id/sensor_data_item_header_temperature_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:textSize="32sp"
             android:textStyle="bold"
-            app:layout_constraintTop_toBottomOf="@+id/device_item_header_temperature_label"
+            app:layout_constraintTop_toBottomOf="@+id/sensor_data_item_header_temperature_label"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/device_item_header_temperature_unit"
+            app:layout_constraintEnd_toStartOf="@+id/sensor_data_item_header_temperature_unit"
             tools:text="36.0" />
 
         <TextView
-            android:id="@+id/device_item_header_temperature_unit"
+            android:id="@+id/sensor_data_item_header_temperature_unit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="@string/device_item_header_temperature_unit"
             android:textSize="20sp"
-            app:layout_constraintStart_toEndOf="@+id/device_item_header_temperature_value"
-            app:layout_constraintBaseline_toBaselineOf="@+id/device_item_header_temperature_value" />
+            app:layout_constraintStart_toEndOf="@+id/sensor_data_item_header_temperature_value"
+            app:layout_constraintBaseline_toBaselineOf="@+id/sensor_data_item_header_temperature_value" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/device_item_pressure_container"
+        android:id="@+id/sensor_data_item_pressure_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/device_item_temperature_container"
-        app:layout_constraintEnd_toStartOf="@+id/device_item_humidity_container">
+        app:layout_constraintStart_toEndOf="@+id/sensor_data_item_temperature_container"
+        app:layout_constraintEnd_toStartOf="@+id/sensor_data_item_humidity_container">
 
         <TextView
-            android:id="@+id/device_item_header_pressure_label"
+            android:id="@+id/sensor_data_item_header_pressure_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/device_item_header_pressure_label"
             android:textSize="24sp"
             android:textStyle="bold"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/device_item_header_pressure_value"
-            app:layout_constraintEnd_toEndOf="@+id/device_item_header_pressure_unit" />
+            app:layout_constraintStart_toStartOf="@+id/sensor_data_item_header_pressure_value"
+            app:layout_constraintEnd_toEndOf="@+id/sensor_data_item_header_pressure_unit" />
 
         <TextView
-            android:id="@+id/device_item_header_pressure_value"
+            android:id="@+id/sensor_data_item_header_pressure_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:textSize="32sp"
             android:textStyle="bold"
-            app:layout_constraintTop_toBottomOf="@+id/device_item_header_pressure_label"
+            app:layout_constraintTop_toBottomOf="@+id/sensor_data_item_header_pressure_label"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/device_item_header_pressure_unit"
+            app:layout_constraintEnd_toStartOf="@+id/sensor_data_item_header_pressure_unit"
             tools:text="1024.0" />
 
         <TextView
-            android:id="@+id/device_item_header_pressure_unit"
+            android:id="@+id/sensor_data_item_header_pressure_unit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="@string/device_item_header_pressure_unit"
             android:textSize="20sp"
-            app:layout_constraintStart_toEndOf="@+id/device_item_header_pressure_value"
-            app:layout_constraintBaseline_toBaselineOf="@+id/device_item_header_pressure_value" />
+            app:layout_constraintStart_toEndOf="@+id/sensor_data_item_header_pressure_value"
+            app:layout_constraintBaseline_toBaselineOf="@+id/sensor_data_item_header_pressure_value" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/device_item_humidity_container"
+        android:id="@+id/sensor_data_item_humidity_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/device_item_pressure_container"
-        app:layout_constraintEnd_toStartOf="@+id/device_item_lux_container">
+        app:layout_constraintStart_toEndOf="@+id/sensor_data_item_pressure_container"
+        app:layout_constraintEnd_toStartOf="@+id/sensor_data_item_lux_container">
 
         <TextView
-            android:id="@+id/device_item_header_humidity_label"
+            android:id="@+id/sensor_data_item_header_humidity_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/device_item_header_humidity_label"
             android:textSize="24sp"
             android:textStyle="bold"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/device_item_header_humidity_value"
-            app:layout_constraintEnd_toEndOf="@+id/device_item_header_humidity_unit" />
+            app:layout_constraintStart_toStartOf="@+id/sensor_data_item_header_humidity_value"
+            app:layout_constraintEnd_toEndOf="@+id/sensor_data_item_header_humidity_unit" />
 
         <TextView
-            android:id="@+id/device_item_header_humidity_value"
+            android:id="@+id/sensor_data_item_header_humidity_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:textSize="32sp"
             android:textStyle="bold"
-            app:layout_constraintTop_toBottomOf="@+id/device_item_header_humidity_label"
+            app:layout_constraintTop_toBottomOf="@+id/sensor_data_item_header_humidity_label"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/device_item_header_humidity_unit"
+            app:layout_constraintEnd_toStartOf="@+id/sensor_data_item_header_humidity_unit"
             tools:text="50.0" />
 
         <TextView
-            android:id="@+id/device_item_header_humidity_unit"
+            android:id="@+id/sensor_data_item_header_humidity_unit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="@string/device_item_header_humidity_unit"
             android:textSize="20sp"
-            app:layout_constraintStart_toEndOf="@+id/device_item_header_humidity_value"
-            app:layout_constraintBaseline_toBaselineOf="@+id/device_item_header_humidity_value" />
+            app:layout_constraintStart_toEndOf="@+id/sensor_data_item_header_humidity_value"
+            app:layout_constraintBaseline_toBaselineOf="@+id/sensor_data_item_header_humidity_value" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/device_item_lux_container"
+        android:id="@+id/sensor_data_item_lux_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/device_item_humidity_container"
+        app:layout_constraintStart_toEndOf="@+id/sensor_data_item_humidity_container"
         app:layout_constraintEnd_toEndOf="parent">
 
         <TextView
-            android:id="@+id/device_item_header_lux_label"
+            android:id="@+id/sensor_data_item_header_lux_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/device_item_header_lux_label"
             android:textSize="24sp"
             android:textStyle="bold"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/device_item_header_lux_value"
-            app:layout_constraintEnd_toEndOf="@+id/device_item_header_lux_unit" />
+            app:layout_constraintStart_toStartOf="@+id/sensor_data_item_header_lux_value"
+            app:layout_constraintEnd_toEndOf="@+id/sensor_data_item_header_lux_unit" />
 
         <TextView
-            android:id="@+id/device_item_header_lux_value"
+            android:id="@+id/sensor_data_item_header_lux_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:textSize="32sp"
             android:textStyle="bold"
-            app:layout_constraintTop_toBottomOf="@+id/device_item_header_lux_label"
+            app:layout_constraintTop_toBottomOf="@+id/sensor_data_item_header_lux_label"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/device_item_header_lux_unit"
+            app:layout_constraintEnd_toStartOf="@+id/sensor_data_item_header_lux_unit"
             tools:text="14.5" />
 
         <TextView
-            android:id="@+id/device_item_header_lux_unit"
+            android:id="@+id/sensor_data_item_header_lux_unit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="@string/device_item_header_lux_unit"
             android:textSize="20sp"
-            app:layout_constraintStart_toEndOf="@+id/device_item_header_lux_value"
-            app:layout_constraintBaseline_toBaselineOf="@+id/device_item_header_lux_value" />
+            app:layout_constraintStart_toEndOf="@+id/sensor_data_item_header_lux_value"
+            app:layout_constraintBaseline_toBaselineOf="@+id/sensor_data_item_header_lux_value" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

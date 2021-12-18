@@ -3,19 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".DeviceControlFragment">
 
-    <in.srain.cube.views.GridViewWithHeaderAndFooter
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/device_control_grid_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:numColumns="3"
-        android:verticalSpacing="16dp"
-        android:horizontalSpacing="16dp"
         android:layout_margin="16dp"
-        android:gravity="center"
-        android:stretchMode="columnWidth"
-        tools:listitem="@layout/item_device"
-        tools:ignore="UselessLeaf" />
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:spanCount="3"
+        tools:listitem="@layout/item_device" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
