@@ -7,11 +7,19 @@ import com.tatsuki.feature.devicecontrol.databinding.ItemDeviceBinding
 import com.xwray.groupie.viewbinding.BindableItem
 
 class DeviceItem(
-    private val deviceEntity: DeviceEntity
+    private val deviceEntity: DeviceEntity,
+    private val onDeviceItemClickedListener: OnDeviceItemClickedListener
 ) : BindableItem<ItemDeviceBinding>() {
+
+    interface OnDeviceItemClickedListener {
+        fun onItemClicked(item: DeviceEntity)
+    }
 
     override fun bind(binding: ItemDeviceBinding, position: Int) {
         binding.apply {
+            deviceItemContainer.setOnClickListener {
+                onDeviceItemClickedListener.onItemClicked(deviceEntity)
+            }
             deviceItemTitle.text = deviceEntity.name
             deviceEntity.type?.let {
                 deviceItemImage.setImageResource(

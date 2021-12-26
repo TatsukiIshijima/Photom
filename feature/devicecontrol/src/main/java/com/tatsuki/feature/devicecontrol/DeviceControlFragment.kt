@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.tatsuki.data.entity.DeviceEntity
 import com.tatsuki.feature.devicecontrol.databinding.FragmentDeviceControlBinding
 import com.xwray.groupie.GroupieAdapter
 import com.xwray.groupie.Section
@@ -59,7 +60,13 @@ class DeviceControlFragment : Fragment() {
                 val title = resources.getString(R.string.device_item_section_local_device_title)
                 val section = Section()
                 section.setHeader(DeviceSectionItem(title))
-                val items = it.map { entity -> DeviceItem(entity) }
+                val items = it.map { entity ->
+                    DeviceItem(entity, object : DeviceItem.OnDeviceItemClickedListener {
+                        override fun onItemClicked(item: DeviceEntity) {
+                            // TODO: show custom dialog
+                        }
+                    })
+                }
                 section.addAll(items)
                 groupieAdapter.add(section)
             }
@@ -72,7 +79,13 @@ class DeviceControlFragment : Fragment() {
                     resources.getString(R.string.device_item_section_remote_device_section_title)
                 val section = Section()
                 section.setHeader(DeviceSectionItem(title))
-                val items = it.map { entity -> DeviceItem(entity) }
+                val items = it.map { entity ->
+                    DeviceItem(entity, object : DeviceItem.OnDeviceItemClickedListener {
+                        override fun onItemClicked(item: DeviceEntity) {
+                            // TODO: show custom dialog
+                        }
+                    })
+                }
                 section.addAll(items)
                 groupieAdapter.add(section)
             }
