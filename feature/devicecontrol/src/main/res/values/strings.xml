@@ -13,4 +13,6 @@
     <string name="device_item_section_remote_device_section_title">リモートデバイス</string>
     <string name="power_control_on_button">On</string>
     <string name="power_control_off_button">Off</string>
+    <string name="air_conditioner_cool">冷房</string>
+    <string name="air_conditioner_heat">暖房</string>
 </resources>
