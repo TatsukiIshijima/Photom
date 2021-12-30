@@ -17,4 +17,8 @@ class DeviceSectionItem(
 
     override fun initializeViewBinding(view: View): ItemDeviceSectionBinding =
         ItemDeviceSectionBinding.bind(view)
+
+    override fun getSpanSize(spanCount: Int, position: Int): Int {
+        return DeviceControlFragment.SPAN_COUNT
+    }
 }

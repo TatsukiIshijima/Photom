@@ -27,4 +27,8 @@ class SensorDataHeaderItem(
 
     override fun initializeViewBinding(view: View): ItemSensorDataHeaderBinding =
         ItemSensorDataHeaderBinding.bind(view)
+
+    override fun getSpanSize(spanCount: Int, position: Int): Int {
+        return DeviceControlFragment.SPAN_COUNT
+    }
 }
