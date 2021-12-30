@@ -35,11 +35,27 @@ class AirConditionerControlDialogFragment : DialogFragment() {
         binding.powerControlButtons.powerOffButton.setOnClickListener {
             dismiss()
         }
+        binding.airConditionerControlTemperatureUpButton.setOnClickListener {
+            updateTemperatureValueText(true)
+        }
+        binding.airConditionerControlTemperatureDownButton.setOnClickListener {
+            updateTemperatureValueText(false)
+        }
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun updateTemperatureValueText(isUp: Boolean) {
+        val currentValue = binding.airConditionerControlTemperatureValueText.text
+            .toString()
+            .toInt()
+        val newValue = if (isUp) currentValue + 1 else currentValue - 1
+        if (newValue in 10..30) {
+            binding.airConditionerControlTemperatureValueText.text = newValue.toString()
+        }
     }
 }
