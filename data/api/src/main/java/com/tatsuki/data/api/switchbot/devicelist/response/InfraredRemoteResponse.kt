@@ -23,8 +23,9 @@ data class InfraredRemoteResponse(
 
 fun InfraredRemoteResponse.toEntity(): DeviceEntity {
     val type = when (remoteType) {
-        "Fan" -> DeviceType.Fan
         "Air Conditioner" -> DeviceType.AirConditioner
+        "DIY Fan" -> DeviceType.Fan
+        "Hub Mini" -> DeviceType.HubMini
         "Light" -> DeviceType.Light
         else -> null
     }

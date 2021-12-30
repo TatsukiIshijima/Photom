@@ -26,6 +26,7 @@ class DeviceItem(
                     when (it) {
                         DeviceType.AirConditioner -> R.drawable.ic_aircon
                         DeviceType.Fan -> R.drawable.ic_fan
+                        DeviceType.HubMini -> R.drawable.ic_hub
                         DeviceType.Light -> R.drawable.ic_light
                     }
                 )

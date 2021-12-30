@@ -23,8 +23,9 @@ data class DeviceResponse(
 
 fun DeviceResponse.toEntity(): DeviceEntity {
     val type = when (deviceType) {
-        "Fan" -> DeviceType.Fan
         "Air Conditioner" -> DeviceType.AirConditioner
+        "DIY Fan" -> DeviceType.Fan
+        "Hub Mini" -> DeviceType.HubMini
         "Light" -> DeviceType.Light
         else -> null
     }
