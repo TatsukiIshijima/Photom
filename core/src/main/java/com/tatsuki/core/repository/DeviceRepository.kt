@@ -15,7 +15,7 @@ class DeviceRepository @Inject constructor(
         val result = ApiClient.safeApiCall({ switchBotApi.getDeviceList() })
         return result
             .flatMap {
-                if (it.statusCode == 200) Result.Success(it.body)
+                if (it.statusCode == 100) Result.Success(it.body)
                 else Result.Error(it.statusCode, it.message)
             }
     }
