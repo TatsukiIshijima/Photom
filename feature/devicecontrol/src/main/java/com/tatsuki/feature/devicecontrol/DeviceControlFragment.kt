@@ -100,8 +100,8 @@ class DeviceControlFragment : Fragment() {
                 val items = it.map { entity ->
                     DeviceItem(entity, object : DeviceItem.OnDeviceItemClickedListener {
                         override fun onItemClicked(item: DeviceEntity) {
-                            item.type?.let {
-                                showControlDialog(it)
+                            item.type?.let { type ->
+                                showControlDialog(type)
                             }
                         }
                     })

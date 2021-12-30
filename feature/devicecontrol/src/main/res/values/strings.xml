@@ -15,4 +15,6 @@
     <string name="power_control_off_button">Off</string>
     <string name="air_conditioner_cool">冷房</string>
     <string name="air_conditioner_heat">暖房</string>
+    <string name="air_conditioner_plus_button">+</string>
+    <string name="air_conditioner_minus_button">−</string>
 </resources>
