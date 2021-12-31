@@ -52,10 +52,17 @@ class AirConditionerControlDialogFragment : DialogFragment() {
         binding.airConditionerControlHeader.headerTitle.text = entity.name
 
         binding.powerControlButtons.powerOnButton.setOnClickListener {
-            airConditionerControlViewModel.execute()
+            val temperature =
+                binding.airConditionerControlTemperatureValueText.text.toString().toInt()
+            val isCoolMode = binding.airConditionerControlCoolButton.isChecked
+            airConditionerControlViewModel.sendAirConditionerCommand(temperature, isCoolMode, true)
             dismiss()
         }
         binding.powerControlButtons.powerOffButton.setOnClickListener {
+            val temperature =
+                binding.airConditionerControlTemperatureValueText.text.toString().toInt()
+            val isCoolMode = binding.airConditionerControlCoolButton.isChecked
+            airConditionerControlViewModel.sendAirConditionerCommand(temperature, isCoolMode, false)
             dismiss()
         }
         binding.airConditionerControlTemperatureUpButton.setOnClickListener {

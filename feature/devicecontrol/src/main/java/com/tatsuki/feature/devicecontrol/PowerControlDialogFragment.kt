@@ -51,10 +51,11 @@ class PowerControlDialogFragment : DialogFragment() {
         binding.powerControlHeader.headerTitle.text = entity.name
 
         binding.powerControlButtons.powerOnButton.setOnClickListener {
-            powerControlViewModel.execute()
+            powerControlViewModel.sendPowerCommend(true)
             dismiss()
         }
         binding.powerControlButtons.powerOffButton.setOnClickListener {
+            powerControlViewModel.sendPowerCommend(false)
             dismiss()
         }
         return super.onCreateView(inflater, container, savedInstanceState)

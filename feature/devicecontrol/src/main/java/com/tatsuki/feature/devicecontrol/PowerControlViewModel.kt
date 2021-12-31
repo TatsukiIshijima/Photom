@@ -2,14 +2,17 @@ package com.tatsuki.feature.devicecontrol
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import com.tatsuki.core.usecase.SendPowerCommandUseCase
 import com.tatsuki.data.entity.DeviceEntity
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import timber.log.Timber
+import kotlinx.coroutines.launch
 
 class PowerControlViewModel @AssistedInject constructor(
-    @Assisted private val deviceEntity: DeviceEntity
+    @Assisted private val deviceEntity: DeviceEntity,
+    private val sendPowerCommandUseCase: SendPowerCommandUseCase,
 ) : ViewModel() {
 
     @AssistedFactory
@@ -17,8 +20,10 @@ class PowerControlViewModel @AssistedInject constructor(
         fun create(deviceEntity: DeviceEntity): PowerControlViewModel
     }
 
-    fun execute() {
-        Timber.d("name: ${deviceEntity.name}")
+    fun sendPowerCommend(isOn: Boolean) {
+        viewModelScope.launch {
+            sendPowerCommandUseCase.execute(deviceEntity.id, isOn)
+        }
     }
 
     companion object {
