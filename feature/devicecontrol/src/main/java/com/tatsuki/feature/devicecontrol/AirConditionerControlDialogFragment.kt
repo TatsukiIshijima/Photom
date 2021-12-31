@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import com.tatsuki.data.entity.DeviceEntity
 import com.tatsuki.feature.devicecontrol.databinding.DialogFragmentAirConditionerControlBinding
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class AirConditionerControlDialogFragment : DialogFragment() {
@@ -18,7 +19,17 @@ class AirConditionerControlDialogFragment : DialogFragment() {
     private var _binding: DialogFragmentAirConditionerControlBinding? = null
     private val binding get() = _binding!!
 
-    private val airConditionerControlViewModel: AirConditionerControlViewModel by viewModels()
+    @Inject
+    lateinit var airConditionerViewModelAssistedFactory: AirConditionerControlViewModel.Factory
+
+    private val airConditionerControlViewModel: AirConditionerControlViewModel by viewModels {
+        val deviceEntity =
+            arguments?.getSerializable(AIR_CONDITIONER_CONTROL_DEVICE_ENTITY_KEY) as DeviceEntity
+        AirConditionerControlViewModel.provideFactory(
+            airConditionerViewModelAssistedFactory,
+            deviceEntity
+        )
+    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
@@ -35,11 +46,13 @@ class AirConditionerControlDialogFragment : DialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val entity = arguments?.getSerializable(AIR_CONDITIONER_CONTROL_DEVICE_ENTITY_KEY)
-        if (entity is DeviceEntity) {
-            binding.airConditionerControlHeader.headerTitle.text = entity.name
-        }
+        val entity =
+            arguments?.getSerializable(AIR_CONDITIONER_CONTROL_DEVICE_ENTITY_KEY) as DeviceEntity
+
+        binding.airConditionerControlHeader.headerTitle.text = entity.name
+
         binding.powerControlButtons.powerOnButton.setOnClickListener {
+            airConditionerControlViewModel.execute()
             dismiss()
         }
         binding.powerControlButtons.powerOffButton.setOnClickListener {
