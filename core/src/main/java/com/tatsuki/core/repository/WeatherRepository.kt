@@ -18,9 +18,6 @@ class WeatherRepository @Inject constructor(
 
     private var _cache: OneCallResponse? = null
 
-    val cache: OneCallResponse?
-        get() = _cache
-
     suspend fun fetchCurrentWeather(lat: Double, lon: Double): Result<OneCallResponse> {
         if (_cache != null) {
             return Result.Success(_cache!!)
@@ -39,6 +36,7 @@ class WeatherRepository @Inject constructor(
     suspend fun forcedUpdateCurrentWeather(lat: Double, lon: Double): Result<OneCallResponse> =
         ApiClient.safeApiCall({ openWeatherApi.getOneCall(lat, lon) })
 
+    @Deprecated("instead of fetchCurrentWeather")
     fun getWeather(
         dispatcher: CoroutineDispatcher = Dispatchers.IO,
         lat: Double,
