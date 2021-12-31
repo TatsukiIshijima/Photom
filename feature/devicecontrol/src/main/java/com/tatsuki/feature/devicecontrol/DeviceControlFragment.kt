@@ -100,9 +100,7 @@ class DeviceControlFragment : Fragment() {
                 val items = it.map { entity ->
                     DeviceItem(entity, object : DeviceItem.OnDeviceItemClickedListener {
                         override fun onItemClicked(item: DeviceEntity) {
-                            item.type?.let { type ->
-                                showControlDialog(type)
-                            }
+                            showControlDialog(item)
                         }
                     })
                 }
@@ -125,17 +123,19 @@ class DeviceControlFragment : Fragment() {
         _binding = null
     }
 
-    private fun showControlDialog(type: DeviceType) {
-        when (type) {
+    private fun showControlDialog(deviceEntity: DeviceEntity) {
+        when (deviceEntity.type) {
             DeviceType.AirConditioner -> {
-                AirConditionerControlDialogFragment()
+                AirConditionerControlDialogFragment
+                    .create(deviceEntity)
                     .show(
                         childFragmentManager,
                         AirConditionerControlDialogFragment::class.simpleName
                     )
             }
             DeviceType.Fan, DeviceType.Light -> {
-                PowerControlDialogFragment()
+                PowerControlDialogFragment
+                    .create(deviceEntity)
                     .show(childFragmentManager, PowerControlDialogFragment::class.simpleName)
             }
             else -> {

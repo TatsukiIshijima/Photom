@@ -7,12 +7,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.viewModels
+import com.tatsuki.data.entity.DeviceEntity
 import com.tatsuki.feature.devicecontrol.databinding.DialogFragmentPowerControlBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class PowerControlDialogFragment : DialogFragment() {
 
     private var _binding: DialogFragmentPowerControlBinding? = null
     private val binding get() = _binding!!
+
+    private val powerControlViewModel: PowerControlViewModel by viewModels()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
@@ -29,6 +35,10 @@ class PowerControlDialogFragment : DialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val entity = arguments?.getSerializable(POWER_CONTROL_DEVICE_ENTITY_KEY)
+        if (entity is DeviceEntity) {
+            binding.powerControlHeader.headerTitle.text = entity.name
+        }
         binding.powerControlButtons.powerOnButton.setOnClickListener {
             dismiss()
         }
@@ -41,5 +51,17 @@ class PowerControlDialogFragment : DialogFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        private const val POWER_CONTROL_DEVICE_ENTITY_KEY = "PowerControlDeviceEntityKey"
+
+        fun create(deviceEntity: DeviceEntity): PowerControlDialogFragment {
+            val powerControlDialogFragment = PowerControlDialogFragment()
+            val args = Bundle()
+            args.putSerializable(POWER_CONTROL_DEVICE_ENTITY_KEY, deviceEntity)
+            powerControlDialogFragment.arguments = args
+            return powerControlDialogFragment
+        }
     }
 }
