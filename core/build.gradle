@@ -42,14 +42,6 @@ dependencies {
     implementation project(":data:entity")
     implementation project(":data:extension")
 
-    // Firebase
-    implementation platform(deps.firebase_bom)
-    // Firebase Storage
-    implementation deps.firebase_storage
-    // Cloud FireStore
-    // Hilt で Firestore が見つからないエラーが発生するので api を指定しコンパイル時にも追加されるよう定義
-    api deps.firebase_firestore
-
     // Hilt
     implementation deps.hilt.android
     kapt deps.hilt.compiler

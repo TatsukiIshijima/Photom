@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <include
+        layout="@layout/layout_dialog_header"
+        android:id="@+id/air_conditioner_control_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/air_conditioner_control_temperature_value_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
+        android:text="27"
+        android:textSize="48sp"
+        android:textStyle="bold"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/air_conditioner_control_temperature_unit_text"
+        app:layout_constraintTop_toBottomOf="@+id/air_conditioner_control_header"
+        app:layout_constraintBottom_toTopOf="@+id/air_conditioner_control_radio_group"
+        tools:text="27" />
+
+    <TextView
+        android:id="@+id/air_conditioner_control_temperature_unit_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/device_item_header_temperature_unit"
+        android:textSize="32sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/air_conditioner_control_temperature_value_text"
+        app:layout_constraintBottom_toBottomOf="@+id/air_conditioner_control_temperature_value_text" />
+
+    <Button
+        android:id="@+id/air_conditioner_control_temperature_down_button"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginEnd="48dp"
+        android:text="@string/air_conditioner_minus_button"
+        android:textSize="48sp"
+        android:textColor="@drawable/btn_stroke_text_color"
+        android:background="@drawable/btn_round_border_48"
+        app:layout_constraintTop_toTopOf="@+id/air_conditioner_control_temperature_value_text"
+        app:layout_constraintBottom_toBottomOf="@+id/air_conditioner_control_temperature_value_text"
+        app:layout_constraintEnd_toStartOf="@+id/air_conditioner_control_temperature_value_text" />
+
+    <Button
+        android:id="@+id/air_conditioner_control_temperature_up_button"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginStart="48dp"
+        android:text="@string/air_conditioner_plus_button"
+        android:textSize="48sp"
+        android:textColor="@drawable/btn_stroke_text_color"
+        android:background="@drawable/btn_round_border_48"
+        app:layout_constraintTop_toTopOf="@+id/air_conditioner_control_temperature_value_text"
+        app:layout_constraintBottom_toBottomOf="@+id/air_conditioner_control_temperature_value_text"
+        app:layout_constraintStart_toEndOf="@+id/air_conditioner_control_temperature_unit_text" />
+
+    <RadioGroup
+        android:id="@+id/air_conditioner_control_radio_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginBottom="24dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/air_conditioner_control_temperature_value_text"
+        app:layout_constraintBottom_toTopOf="@+id/power_control_buttons">
+
+        <RadioButton
+            android:id="@+id/air_conditioner_control_cool_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:layout_marginEnd="12dp"
+            android:text="@string/air_conditioner_cool"
+            android:textSize="20sp"
+            android:checked="true"
+            android:buttonTint="@color/device_item_control_button_color" />
+
+        <RadioButton
+            android:id="@+id/air_conditioner_control_heat_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:layout_marginStart="12dp"
+            android:text="@string/air_conditioner_heat"
+            android:textSize="20sp"
+            android:buttonTint="@color/device_item_control_button_color" />
+    </RadioGroup>
+
+    <include
+        layout="@layout/layout_power_on_off_button"
+        android:id="@+id/power_control_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginBottom="24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/air_conditioner_control_radio_group"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

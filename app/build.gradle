@@ -53,6 +53,7 @@ dependencies {
     implementation project(":data:extension")
     implementation project(":feature:slideshow")
     implementation project(":feature:weather")
+    implementation project(":feature:devicecontrol")
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation deps.app_compat
@@ -73,9 +74,6 @@ dependencies {
     // LoopingViewPager
     implementation deps.looping_view_pager
 
-    // Firebase-UI
-    implementation deps.firebase_ui_storage
-
     // Glide
     implementation deps.glide.runtime
     annotationProcessor deps.glide.compiler
@@ -89,15 +87,6 @@ dependencies {
     implementation deps.hilt_work.runtime
     kapt deps.hilt.compiler
     kapt deps.hilt_work.compiler
-
-    // CameraX core library using camera2 implementation
-    implementation deps.camera.camera2
-    // CameraX Lifecycle Library
-    implementation deps.camera.lifecycle
-    // CameraX View class
-    implementation deps.camera_view
-    // ML Kit
-    implementation deps.ml_kit
 
     testImplementation deps.junit
     androidTestImplementation deps.ext_junit

@@ -33,4 +33,14 @@ abstract class UiModule {
     abstract fun bindWeatherDetailView(
         weatherDetailViewImpl: WeatherDetailViewImpl
     ): IWeatherDetailView
+
+    @Binds
+    abstract fun bindDeviceListView(
+        deviceListViewImpl: DeviceListViewImpl
+    ): IDeviceListView
+
+    @Binds
+    abstract fun bindSensorDataView(
+        sensorDataViewImpl: SensorDataViewImpl
+    ): ISensorDataView
 }
