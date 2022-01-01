@@ -28,10 +28,12 @@ data class CurrentResponse(
 )
 
 fun CurrentResponse.toCurrentWeatherEntity(): CurrentWeatherEntity {
+    val icon = weather.firstOrNull()?.icon
     return CurrentWeatherEntity(
         temp.toInt(),
         weather.firstOrNull()?.main,
-        weather.firstOrNull()?.icon
+        if (icon.isNullOrEmpty()) ""
+        else "http://openweathermap.org/img/wn/${icon}@2x.png"
     )
 }
 

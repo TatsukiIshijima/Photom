@@ -40,10 +40,10 @@ class TimelyWeatherViewHolder(
         val tempText =
             "${timelyWeather.temperature}${context.resources.getString(R.string.temperature_unit)}"
         temperature.text = tempText
-        if (!timelyWeather.iconUrl.isNullOrEmpty()) {
-            val iconUrl = "http://openweathermap.org/img/wn/${timelyWeather.iconUrl}@2x.png"
-            Glide.with(context).load(iconUrl).into(weatherIcon)
+        if (timelyWeather.iconUrl.isNullOrEmpty()) {
+            return
         }
+        Glide.with(context).load(timelyWeather.iconUrl).into(weatherIcon)
     }
 }
 

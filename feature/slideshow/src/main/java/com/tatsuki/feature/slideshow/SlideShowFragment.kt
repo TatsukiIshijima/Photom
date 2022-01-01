@@ -67,6 +67,9 @@ class SlideShowFragment : Fragment() {
             .onEach {
                 binding.temperature.text = it.temp.toString()
                 it.icon?.let { url ->
+                    if (url.isEmpty()) {
+                        return@onEach
+                    }
                     Glide.with(this).load(url).into(binding.weatherIcon)
                 }
             }

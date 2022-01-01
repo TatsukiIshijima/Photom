@@ -28,11 +28,14 @@ data class DailyResponse(
     val pop: Double
 )
 
-fun DailyResponse.toDailyWeatherEntity(): DailyWeatherEntity =
-    DailyWeatherEntity(
+fun DailyResponse.toDailyWeatherEntity(): DailyWeatherEntity {
+    val icon = weather.firstOrNull()?.icon
+    return DailyWeatherEntity(
         time.toDate().format("M/dd"),
         time.toDate().format("E曜日"),
-        weather.firstOrNull()?.icon,
+        if (icon.isNullOrEmpty()) ""
+        else "http://openweathermap.org/img/wn/${icon}@2x.png",
         temp.max.toInt(),
         temp.min.toInt()
     )
+}

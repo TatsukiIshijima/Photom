@@ -28,9 +28,12 @@ data class HourlyResponse(
     val pop: Double
 )
 
-fun HourlyResponse.toTimelyWeatherEntity(): TimelyWeatherEntity =
-    TimelyWeatherEntity(
+fun HourlyResponse.toTimelyWeatherEntity(): TimelyWeatherEntity {
+    val icon = weather.firstOrNull()?.icon
+    return TimelyWeatherEntity(
         time.toDate().format("kk:mm"),
-        weather.firstOrNull()?.icon,
+        if (icon.isNullOrEmpty()) ""
+        else "http://openweathermap.org/img/wn/${icon}@2x.png",
         temp.toInt()
     )
+}

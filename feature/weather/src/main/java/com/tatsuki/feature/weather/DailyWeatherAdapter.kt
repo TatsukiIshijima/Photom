@@ -47,10 +47,10 @@ class DailyWeatherViewHolder(
             "${dailyWeather.maxTemperature}${context.resources.getString(R.string.temperature_unit)}"
         minTemp.text = minTempText
         maxTemp.text = maxTempText
-        if (!dailyWeather.iconUrl.isNullOrEmpty()) {
-            val iconUrl = "http://openweathermap.org/img/wn/${dailyWeather.iconUrl}@2x.png"
-            Glide.with(context).load(iconUrl).into(weatherIcon)
+        if (dailyWeather.iconUrl.isNullOrEmpty()) {
+            return
         }
+        Glide.with(context).load(dailyWeather.iconUrl).into(weatherIcon)
     }
 }
 
