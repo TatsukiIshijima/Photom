@@ -56,14 +56,12 @@ class AirConditionerControlDialogFragment : DialogFragment() {
                 binding.airConditionerControlTemperatureValueText.text.toString().toInt()
             val isCoolMode = binding.airConditionerControlCoolButton.isChecked
             airConditionerControlViewModel.sendAirConditionerCommand(temperature, isCoolMode, true)
-            dismiss()
         }
         binding.powerControlButtons.powerOffButton.setOnClickListener {
             val temperature =
                 binding.airConditionerControlTemperatureValueText.text.toString().toInt()
             val isCoolMode = binding.airConditionerControlCoolButton.isChecked
             airConditionerControlViewModel.sendAirConditionerCommand(temperature, isCoolMode, false)
-            dismiss()
         }
         binding.airConditionerControlTemperatureUpButton.setOnClickListener {
             updateTemperatureValueText(true)
