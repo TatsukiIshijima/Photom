@@ -8,7 +8,6 @@ buildscript {
     dependencies {
         classpath deps.android_gradle_plugin
         classpath deps.kotlin.plugin
-        classpath deps.google_services
         classpath deps.hilt.android_gradle_plugin
     }
 }
