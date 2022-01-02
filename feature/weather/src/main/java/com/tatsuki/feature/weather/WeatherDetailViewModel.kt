@@ -55,9 +55,9 @@ class WeatherDetailViewModel @Inject constructor(
         .mutableDailyWeatherFlow
         .asStateFlow()
 
-    fun fetchWeatherDetail(locationName: String = "東京都渋谷区") {
+    fun fetchWeatherDetail() {
         viewModelScope.launch {
-            fetchWeatherDetailUseCase.execute(locationName)
+            fetchWeatherDetailUseCase.execute()
         }
     }
 }

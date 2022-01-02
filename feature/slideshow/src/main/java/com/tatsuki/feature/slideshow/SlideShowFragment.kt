@@ -53,7 +53,7 @@ class SlideShowFragment : Fragment() {
         bind()
 
         slideShowViewModel.showSlide()
-        slideShowViewModel.showCurrentWeather(35.682146, 139.769653)
+        slideShowViewModel.showCurrentWeather()
     }
 
     private fun bind() {

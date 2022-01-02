@@ -39,9 +39,9 @@ class SlideShowViewModel @Inject constructor(
         }
     }
 
-    fun showCurrentWeather(lat: Double, lon: Double) {
+    fun showCurrentWeather() {
         viewModelScope.launch {
-            fetchCurrentWeatherUseCase.execute(lat, lon)
+            fetchCurrentWeatherUseCase.execute()
         }
     }
 }

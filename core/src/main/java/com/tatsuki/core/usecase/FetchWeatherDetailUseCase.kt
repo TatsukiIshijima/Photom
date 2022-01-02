@@ -1,5 +1,6 @@
 package com.tatsuki.core.usecase
 
+import com.tatsuki.core.Const
 import com.tatsuki.core.repository.PlaceRepository
 import com.tatsuki.core.repository.WeatherRepository
 import com.tatsuki.core.usecase.ui.IErrorView
@@ -21,12 +22,10 @@ class FetchWeatherDetailUseCase @Inject constructor(
     private val placeRepository: PlaceRepository,
     private val weatherRepository: WeatherRepository
 ) {
-    suspend fun execute(
-        locationName: String
-    ) {
+    suspend fun execute() {
         loadingView.showLoading()
 
-        val result = placeRepository.fetchAddress(locationName)
+        val result = placeRepository.fetchAddress("${Const.PREFECTURE}${Const.CITY}")
             .flatMap {
                 val coordinates = it.first().toAddressEntity()
                 weatherRepository.fetchCurrentWeather(coordinates.lat, coordinates.lon)
@@ -66,6 +65,7 @@ class FetchWeatherDetailUseCase @Inject constructor(
                 val timelyWeatherList = data.hourly.map { it.toTimelyWeatherEntity() }
                 val dailyWeatherList = data.daily.map { it.toDailyWeatherEntity() }
 
+                weatherView.showPlace(Const.CITY)
                 weatherView.showCurrentWeather(condition, data.current.temp.toInt())
                 weatherView.showCurrentWeatherDetail(detailInfoList)
                 weatherView.showTimelyWeather(timelyWeatherList)

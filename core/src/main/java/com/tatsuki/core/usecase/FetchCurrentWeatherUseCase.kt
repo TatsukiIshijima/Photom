@@ -1,20 +1,27 @@
 package com.tatsuki.core.usecase
 
+import com.tatsuki.core.Const
+import com.tatsuki.core.repository.PlaceRepository
 import com.tatsuki.core.repository.WeatherRepository
 import com.tatsuki.core.usecase.ui.ICurrentWeatherView
 import com.tatsuki.data.api.Result
+import com.tatsuki.data.api.addresssearch.response.toAddressEntity
+import com.tatsuki.data.api.flatMap
 import com.tatsuki.data.api.openweather.response.toCurrentWeatherEntity
 import javax.inject.Inject
 
 class FetchCurrentWeatherUseCase @Inject constructor(
     val currentWeatherView: ICurrentWeatherView,
-    private val weatherRepository: WeatherRepository
+    private val placeRepository: PlaceRepository,
+    private val weatherRepository: WeatherRepository,
 ) {
-    suspend fun execute(
-        lat: Double,
-        lon: Double
-    ) {
-        when (val currentWeatherResult = weatherRepository.forcedUpdateCurrentWeather(lat, lon)) {
+    suspend fun execute() {
+        val result = placeRepository.fetchAddress("${Const.PREFECTURE}${Const.CITY}")
+            .flatMap {
+                val coordinates = it.first().toAddressEntity()
+                weatherRepository.forcedUpdateCurrentWeather(coordinates.lat, coordinates.lon)
+            }
+        when (result) {
             is Result.ClientError -> {
             }
             is Result.Error -> {
@@ -24,7 +31,7 @@ class FetchCurrentWeatherUseCase @Inject constructor(
             Result.ServerError -> {
             }
             is Result.Success ->
-                currentWeatherView.showCurrentWeather(currentWeatherResult.data.current.toCurrentWeatherEntity())
+                currentWeatherView.showCurrentWeather(result.data.current.toCurrentWeatherEntity())
         }
     }
 }
