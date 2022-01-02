@@ -64,9 +64,6 @@ dependencies {
     // Coroutine
     implementation deps.coroutines.android
 
-    // WorkManager
-    implementation deps.work.runtime
-
     // Navigation
     implementation deps.navigation.fragment_ktx
     implementation deps.navigation.ui_ktx
@@ -94,4 +91,3 @@ dependencies {
     compileOnly deps.android_things
 
 }
-apply plugin: 'com.google.gms.google-services'

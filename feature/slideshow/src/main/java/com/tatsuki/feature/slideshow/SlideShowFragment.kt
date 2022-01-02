@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDeepLinkRequest
 import androidx.navigation.fragment.findNavController
+import androidx.work.WorkInfo
 import com.bumptech.glide.Glide
 import com.tatsuki.feature.slideshow.databinding.FragmentSlideShowBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -18,6 +19,7 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import timber.log.Timber
 
 @AndroidEntryPoint
 class SlideShowFragment : Fragment() {
@@ -53,7 +55,6 @@ class SlideShowFragment : Fragment() {
         bind()
 
         slideShowViewModel.showSlide()
-        slideShowViewModel.showCurrentWeather()
     }
 
     private fun bind() {
@@ -86,6 +87,16 @@ class SlideShowFragment : Fragment() {
                 else binding.loopingViewPager.resumeAutoScroll()
             }
             .launchIn(lifecycleScope)
+
+        slideShowViewModel.startUpdateCurrentWeatherWork()
+            .observe(viewLifecycleOwner, {
+                it?.let {
+                    Timber.d("Work(${it.tags.first()}) state ${it.state}")
+                    if (it.state == WorkInfo.State.ENQUEUED) {
+                        slideShowViewModel.showCurrentWeather()
+                    }
+                }
+            })
     }
 
     override fun onResume() {
@@ -99,6 +110,7 @@ class SlideShowFragment : Fragment() {
     }
 
     override fun onDestroyView() {
+        slideShowViewModel.stopUpdateCurrentWeatherWork()
         super.onDestroyView()
         _binding = null
     }

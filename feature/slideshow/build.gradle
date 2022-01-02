@@ -59,7 +59,9 @@ dependencies {
 
     // Hilt
     implementation deps.hilt.android
+    implementation deps.hilt_work.runtime
     kapt deps.hilt.compiler
+    kapt deps.hilt_work.compiler
 
     // Hilt Test
     testImplementation deps.hilt.android_testing
@@ -67,6 +69,9 @@ dependencies {
 
     // Timber
     implementation deps.timber
+
+    // WorkManager
+    implementation deps.work.runtime
 
     implementation deps.kotlin.stdlib
     implementation deps.coroutines.core
