@@ -16,7 +16,11 @@ android {
         consumerProguardFiles "consumer-rules.pro"
 
         def properties = new Properties()
-        properties.load(project.rootProject.file('local.properties').newDataInputStream())
+        def localPropertiesFile = project.rootProject.file('local.properties')
+        if (!localPropertiesFile.exists()) {
+            localPropertiesFile.createNewFile()
+        }
+        properties.load(localPropertiesFile.newDataInputStream())
         def openWeatherApiKey = properties.getProperty("open_weather_api_key")
         def switchBotApiToken = properties.getProperty("switch_bot_api_token")
 
@@ -33,7 +37,7 @@ android {
         }
 
         release {
-            buildConfigField("String", "PHOTOM_API_BASE_URL", "\"http://raspberrypi-zero.local:5000/\"")
+            buildConfigField("String", "PHOTOM_API_BASE_URL", "\"http://192.168.11.60:5000/\"")
 
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -59,7 +63,7 @@ dependencies {
     implementation deps.retrofit.runtime
     implementation deps.retrofit.converter_moshi
 
-    debugImplementation deps.okhttp.logging
+    implementation deps.okhttp.logging
 
     kapt deps.hilt.compiler
 

@@ -1,7 +1,7 @@
-name: Android Release Build Demo
+name: Android Release Build
 on: [ workflow_dispatch ]
 jobs:
-  Explore-GitHub-Actions:
+  Android-Release-Build-Actions:
     runs-on: ubuntu-latest
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
@@ -9,9 +9,33 @@ jobs:
       - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
       - name: Check out repository code
         uses: actions/checkout@v2
-      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
-      - name: List files in the repository
+      - name: Write in local properties
+        env:
+          OPEN_WEATHER_API_KEY: ${{ secrets.OPEN_WEATHER_API_KEY }}
+          SWITCH_BOT_API_TOKEN: ${{ secrets.SWITCH_BOT_API_TOKEN }}
         run: |
-          ls ${{ github.workspace }}
+          echo "open_weather_api_key=${OPEN_WEATHER_API_KEY}" >> ./local.properties
+          echo "switch_bot_api_token=${SWITCH_BOT_API_TOKEN}" >> ./local.properties
+      - name: Write in keystore properties
+        env:
+          PHOTOM_STORE_PASSWORD: ${{ secrets.PHOTOM_STORE_PASSWORD }}
+          PHOTOM_KEY_PASSWORD: ${{ secrets.PHOTOM_KEY_PASSWORD }}
+          PHOTOM_KEY_ALIAS: ${{ secrets.PHOTOM_KEY_ALIAS }}
+          PHOTOM_BASE64_UPLOAD_KEYSTORE: ${{ secrets.PHOTOM_BASE64_UPLOAD_KEYSTORE}}
+        run: |
+          echo "storePassword=${PHOTOM_STORE_PASSWORD}" >> ./keystore.properties
+          echo "keyPassword=${PHOTOM_KEY_PASSWORD}" >> ./keystore.properties
+          echo "keyAlias=${PHOTOM_KEY_ALIAS}" >> ./keystore.properties
+          echo ${PHOTOM_BASE64_UPLOAD_KEYSTORE} | base64 -d > ./release-application-key
+          echo "storeFile=`pwd`/release-application-key" >> ./keystore.properties
+      - name: Clean
+        run: ./gradlew clean
+      - name: Build
+        run: ./gradlew app:assembleRelease
+      - name: Archive
+        uses: actions/upload-artifact@v2
+        if: success()
+        with:
+          name: outputs
+          path: app/build/outputs/apk/release/app-release.apk
       - run: echo "🍏 This job's status is ${{ job.status }}."
