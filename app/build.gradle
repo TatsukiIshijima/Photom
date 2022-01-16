@@ -5,6 +5,8 @@ plugins {
     id 'dagger.hilt.android.plugin'
 }
 
+def keystoreProperties = loadKeyStoreProperties()
+
 android {
     compileSdkVersion build_versions.target_sdk
     buildToolsVersion build_versions.build_tools
@@ -29,9 +31,20 @@ android {
     buildFeatures {
         viewBinding true
     }
+    signingConfigs {
+        release {
+            if(!keystoreProperties.getProperty("storeFile", "").empty){
+                storeFile file(keystoreProperties.getProperty("storeFile", ""))
+            }
+            storePassword keystoreProperties.getProperty("storePassword", "")
+            keyAlias keystoreProperties.getProperty("keyAlias", "")
+            keyPassword keystoreProperties.getProperty("keyPassword", "")
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -41,6 +54,16 @@ android {
     lintOptions {
         disable('AllowBackup', 'GoogleAppIndexingWarning', 'MissingApplicationIcon')
     }
+}
+
+private def loadKeyStoreProperties() {
+    def keystorePropertiesFile = project.rootProject.file('keystore.properties')
+    if (!keystorePropertiesFile.exists()) {
+        keystorePropertiesFile.createNewFile()
+    }
+    def keystoreProperties = new Properties()
+    keystoreProperties.load(keystorePropertiesFile.newDataInputStream())
+    return keystoreProperties
 }
 
 hilt {
