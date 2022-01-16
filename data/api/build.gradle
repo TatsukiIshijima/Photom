@@ -63,7 +63,7 @@ dependencies {
     implementation deps.retrofit.runtime
     implementation deps.retrofit.converter_moshi
 
-    debugImplementation deps.okhttp.logging
+    implementation deps.okhttp.logging
 
     kapt deps.hilt.compiler
 
