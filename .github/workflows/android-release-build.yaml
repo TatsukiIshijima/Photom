@@ -1,7 +1,7 @@
-name: Android Debug Build
+name: Android Release Build
 on: [ workflow_dispatch ]
 jobs:
-  Android-Debug-Build-Actions:
+  Android-Release-Build-Actions:
     runs-on: ubuntu-latest
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
