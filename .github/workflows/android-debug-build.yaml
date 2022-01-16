@@ -16,6 +16,14 @@ jobs:
         run: |
           echo "open_weather_api_key=${OPEN_WEATHER_API_KEY}" >> ./local.properties
           echo "switch_bot_api_token=${SWITCH_BOT_API_TOKEN}" >> ./local.properties
+      - name: Clean
+        run: ./gradlew clean
       - name: Build
         run: ./gradlew app:assembleDebug
+      - name: Archive
+        uses: actions/upload-artifact@v2
+        if: success()
+        with:
+          name: outputs
+          path: app/build/outputs/apk/debug/app-debug.apk
       - run: echo "🍏 This job's status is ${{ job.status }}."
