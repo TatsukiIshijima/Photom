@@ -19,6 +19,7 @@
             <option value="$PROJECT_DIR$/data/extension" />
             <option value="$PROJECT_DIR$/feature" />
             <option value="$PROJECT_DIR$/feature/devicecontrol" />
+            <option value="$PROJECT_DIR$/feature/setting" />
             <option value="$PROJECT_DIR$/feature/slideshow" />
             <option value="$PROJECT_DIR$/feature/weather" />
           </set>
