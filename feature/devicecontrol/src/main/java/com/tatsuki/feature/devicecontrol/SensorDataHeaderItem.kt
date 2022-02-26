@@ -6,19 +6,15 @@ import com.tatsuki.feature.devicecontrol.databinding.ItemSensorDataHeaderBinding
 import com.xwray.groupie.viewbinding.BindableItem
 
 class SensorDataHeaderItem(
-    private val sensorEntity: SensorEntity?
+    private val sensorEntity: SensorEntity
 ) : BindableItem<ItemSensorDataHeaderBinding>() {
 
     override fun bind(binding: ItemSensorDataHeaderBinding, position: Int) {
         binding.apply {
-            sensorDataItemHeaderTemperatureValue.text =
-                if (sensorEntity?.temp != null) "%.1f".format(sensorEntity.temp) else "-"
-            sensorDataItemHeaderPressureValue.text =
-                if (sensorEntity?.pressure != null) "%.1f".format(sensorEntity.pressure) else "-"
-            sensorDataItemHeaderHumidityValue.text =
-                if (sensorEntity?.humidity != null) "%.1f".format(sensorEntity.humidity) else "-"
-            sensorDataItemHeaderLuxValue.text =
-                if (sensorEntity?.lux != null) "%.1f".format(sensorEntity.lux) else "-"
+            sensorDataItemHeaderTemperatureValue.text = "%.1f".format(sensorEntity.temp)
+            sensorDataItemHeaderPressureValue.text = "%.1f".format(sensorEntity.pressure)
+            sensorDataItemHeaderHumidityValue.text = "%.1f".format(sensorEntity.humidity)
+            sensorDataItemHeaderLuxValue.text = "%.1f".format(sensorEntity.lux)
         }
     }
 
