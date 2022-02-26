@@ -31,6 +31,10 @@ android {
     }
     buildFeatures {
         viewBinding true
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.0.5'
     }
 }
 
@@ -47,6 +51,17 @@ dependencies {
     implementation deps.android_lifecycle.livedata_ktx
     implementation deps.android_lifecycle.viewmodel_ktx
     implementation deps.constraint_layout
+
+    // Compose
+    implementation deps.activity_compose
+    implementation deps.android_compose.material
+    implementation deps.android_compose.anotation
+    implementation deps.android_compose.ui_tooling
+    implementation deps.viewmodel_compose
+    androidTestImplementation deps.android_compose.ui_testing
+
+    implementation deps.appcompat_theme
+    implementation deps.compose_theme_adapter
 
     // Navigation
     implementation deps.navigation.fragment_ktx
