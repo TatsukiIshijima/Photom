@@ -16,6 +16,7 @@ import com.xwray.groupie.GroupieAdapter
 import com.xwray.groupie.Section
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -110,6 +111,7 @@ class DeviceControlFragment : Fragment() {
             .launchIn(lifecycleScope)
 
         deviceControlViewModel.sensorDataFlow
+            .filterNotNull()
             .onEach {
                 val section = Section()
                 section.setHeader(SensorDataHeaderItem(it))
