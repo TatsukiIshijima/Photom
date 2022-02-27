@@ -43,4 +43,9 @@ abstract class UiModule {
     abstract fun bindSensorDataView(
         sensorDataViewImpl: SensorDataViewImpl
     ): ISensorDataView
+
+    @Binds
+    abstract fun bindsCityListView(
+        cityListViewImpl: CityListViewImpl
+    ): ICityListView
 }
