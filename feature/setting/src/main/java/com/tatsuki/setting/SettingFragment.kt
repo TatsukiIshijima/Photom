@@ -13,8 +13,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import com.tatsuki.data.entity.PrefectureEntity
 import com.tatsuki.setting.databinding.FragmentSettingBinding
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import timber.log.Timber
 
+@AndroidEntryPoint
 class SettingFragment : Fragment() {
 
     private var _binding: FragmentSettingBinding? = null
@@ -34,6 +41,25 @@ class SettingFragment : Fragment() {
             }
         return binding.root
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        bind()
+
+        settingViewModel.fetchCityNameList(PrefectureEntity.Tokyo)
+    }
+
+    private fun bind() {
+        settingViewModel.cityNameListFlow
+            .onEach {
+                it.forEach { name ->
+                    Timber.d("city: $name")
+                }
+            }
+            .launchIn(lifecycleScope)
+    }
+
 }
 
 @Preview
