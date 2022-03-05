@@ -3,7 +3,7 @@ package com.tatsuki.setting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tatsuki.core.usecase.FetchCityUseCase
-import com.tatsuki.data.entity.PrefectureEntity
+import com.tatsuki.data.entity.LocationEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -14,15 +14,21 @@ class SettingViewModel @Inject constructor(
     private val fetchCityUseCase: FetchCityUseCase
 ) : ViewModel() {
 
+    val loadingFlow = fetchCityUseCase
+        .loadingView
+        .state
+        .mutableLoadingFlow
+        .asStateFlow()
+
     val cityNameListFlow = fetchCityUseCase
         .cityListView
         .state
         .mutableCityNameListFlow
         .asStateFlow()
 
-    fun fetchCityNameList(prefectureEntity: PrefectureEntity) {
+    fun fetchCityNameList(prefecture: LocationEntity.Prefecture) {
         viewModelScope.launch {
-            fetchCityUseCase.execute(prefectureEntity)
+            fetchCityUseCase.execute(prefecture)
         }
     }
 }
