@@ -4,6 +4,8 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../layout/compose-model-1645860170417.xml" value="0.33" />
+        <entry key="../../../../layout/compose-model-1645928676942.xml" value="0.22962962962962963" />
+        <entry key="../../../../layout/compose-model-1645938593604.xml" value="0.33" />
         <entry key="../../Library/Android/sdk/platforms/android-30/data/res/layout/activity_list_item.xml" value="0.3203125" />
         <entry key="app/src/main/res/drawable/ic_camera.xml" value="0.1796875" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.24875" />
@@ -25,7 +27,7 @@
         <entry key="feature/devicecontrol/src/main/res/drawable/ic_light.xml" value="0.275" />
         <entry key="feature/devicecontrol/src/main/res/layout/device_control_fragment.xml" value="0.15546875" />
         <entry key="feature/devicecontrol/src/main/res/layout/dialog_fragment_air_conditioner_control.xml" value="0.5" />
-        <entry key="feature/devicecontrol/src/main/res/layout/dialog_fragment_power_control.xml" value="0.39552238805970147" />
+        <entry key="feature/devicecontrol/src/main/res/layout/dialog_fragment_power_control.xml" value="0.1" />
         <entry key="feature/devicecontrol/src/main/res/layout/fragment_device_control.xml" value="0.36187399030694667" />
         <entry key="feature/devicecontrol/src/main/res/layout/item_device.xml" value="0.75" />
         <entry key="feature/devicecontrol/src/main/res/layout/item_device_header.xml" value="0.4625" />
@@ -33,8 +35,10 @@
         <entry key="feature/devicecontrol/src/main/res/layout/item_sensor_data_header.xml" value="0.67" />
         <entry key="feature/devicecontrol/src/main/res/layout/layout_dialog_header.xml" value="0.5096153846153846" />
         <entry key="feature/devicecontrol/src/main/res/layout/layout_horizontal_on_off_button.xml" value="0.33" />
-        <entry key="feature/devicecontrol/src/main/res/layout/layout_power_on_off_button.xml" value="0.5" />
-        <entry key="feature/setting/src/main/res/layout/fragment_setting.xml" value="0.38823529411764707" />
+        <entry key="feature/devicecontrol/src/main/res/layout/layout_power_on_off_button.xml" value="0.1" />
+        <entry key="feature/setting/src/main/res/drawable/ic_baseline_check_24.xml" value="0.30125" />
+        <entry key="feature/setting/src/main/res/layout/fragment_setting.xml" value="0.2638888888888889" />
+        <entry key="feature/setting/src/main/res/layout/item_location.xml" value="0.5" />
         <entry key="feature/setting/src/main/res/layout/setting_fragment.xml" value="0.1" />
         <entry key="feature/slideshow/src/main/res/layout/fragment_slide_show.xml" value="0.25" />
         <entry key="feature/slideshow/src/main/res/layout/item_photo.xml" value="0.1" />

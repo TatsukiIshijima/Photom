@@ -2,6 +2,7 @@ include ':core'
 include ':app'
 rootProject.name = "Photom"
 include ':data:api'
+include ':data:datasource'
 include ':data:entity'
 include ':data:extension'
 include ':feature:slideshow'
