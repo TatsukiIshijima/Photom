@@ -10,7 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.tatsuki.data.entity.LocationEntity
+import com.tatsuki.data.entity.AddressEntity
 import com.tatsuki.setting.databinding.FragmentSettingBinding
 import com.xwray.groupie.GroupieAdapter
 import com.xwray.groupie.Section
@@ -70,14 +70,14 @@ class SettingFragment : Fragment() {
     }
 
     private fun showPrefectures() {
-        val prefecturesItem = LocationEntity.Prefecture::class
+        val prefecturesItem = AddressEntity.Prefecture::class
             .sealedSubclasses
             .mapNotNull {
                 it.objectInstance
             }.map {
-                LocationItem(it, object : LocationItem.OnLocationItemClickedListener {
-                    override fun onItemClicked(item: LocationEntity) {
-                        if (item is LocationEntity.Prefecture) {
+                AddressItem(it, object : AddressItem.OnAddressItemClickedListener {
+                    override fun onItemClicked(item: AddressEntity) {
+                        if (item is AddressEntity.Prefecture) {
                             settingViewModel.fetchCityNameList(item)
                         }
                     }
@@ -88,10 +88,10 @@ class SettingFragment : Fragment() {
         prefectureGroupieAdapter.add(section)
     }
 
-    private fun showCities(cityList: List<LocationEntity.City>) {
+    private fun showCities(cityList: List<AddressEntity.City>) {
         val citiesItem = cityList.map {
-            LocationItem(it, object : LocationItem.OnLocationItemClickedListener {
-                override fun onItemClicked(item: LocationEntity) {
+            AddressItem(it, object : AddressItem.OnAddressItemClickedListener {
+                override fun onItemClicked(item: AddressEntity) {
                     // TODO("Not yet implemented")
                 }
             })

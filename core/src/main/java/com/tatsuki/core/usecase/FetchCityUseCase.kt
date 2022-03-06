@@ -4,7 +4,7 @@ import com.tatsuki.core.repository.PlaceRepository
 import com.tatsuki.core.usecase.ui.ICityListView
 import com.tatsuki.core.usecase.ui.ILoadingView
 import com.tatsuki.data.api.Result
-import com.tatsuki.data.entity.LocationEntity
+import com.tatsuki.data.entity.AddressEntity
 import javax.inject.Inject
 
 class FetchCityUseCase @Inject constructor(
@@ -12,7 +12,7 @@ class FetchCityUseCase @Inject constructor(
     val cityListView: ICityListView,
     private val placeRepository: PlaceRepository
 ) {
-    suspend fun execute(prefecture: LocationEntity.Prefecture) {
+    suspend fun execute(prefecture: AddressEntity.Prefecture) {
         loadingView.showLoading()
         val result = placeRepository.fetchCity(prefecture)
         loadingView.hideLoading()
@@ -22,7 +22,7 @@ class FetchCityUseCase @Inject constructor(
                     return
                 }
                 val cityNameList = result.data.data.map {
-                    LocationEntity.City(it.id, it.name)
+                    AddressEntity.City(it.id, it.name)
                 }
                 cityListView.showCityName(cityNameList)
             }

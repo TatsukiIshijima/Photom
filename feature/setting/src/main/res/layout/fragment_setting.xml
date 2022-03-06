@@ -40,7 +40,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/city_list"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/item_location" />
+            tools:listitem="@layout/item_address" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/city_list"
@@ -52,7 +52,7 @@
             app:layout_constraintStart_toEndOf="@id/prefecture_list"
             app:layout_constraintEnd_toEndOf="parent"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/item_location" />
+            tools:listitem="@layout/item_address" />
 
         <Button
             android:id="@+id/save_button"

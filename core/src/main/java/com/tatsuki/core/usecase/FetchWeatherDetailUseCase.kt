@@ -7,7 +7,7 @@ import com.tatsuki.core.usecase.ui.IErrorView
 import com.tatsuki.core.usecase.ui.ILoadingView
 import com.tatsuki.core.usecase.ui.IWeatherDetailView
 import com.tatsuki.data.api.Result
-import com.tatsuki.data.api.addresssearch.response.toAddressEntity
+import com.tatsuki.data.api.addresssearch.response.toGeoLocationEntity
 import com.tatsuki.data.api.flatMap
 import com.tatsuki.data.api.openweather.response.toDailyWeatherEntity
 import com.tatsuki.data.api.openweather.response.toDetailItems
@@ -27,7 +27,7 @@ class FetchWeatherDetailUseCase @Inject constructor(
 
         val result = placeRepository.fetchAddress("${Const.PREFECTURE}${Const.CITY}")
             .flatMap {
-                val coordinates = it.first().toAddressEntity()
+                val coordinates = it.first().toGeoLocationEntity()
                 weatherRepository.fetchCurrentWeather(coordinates.lat, coordinates.lon)
             }
 
