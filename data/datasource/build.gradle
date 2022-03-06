@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
+    id 'kotlinx-serialization'
 }
 
 android {
@@ -34,6 +35,8 @@ dependencies {
 
     implementation deps.android_datastore.datastore
     implementation deps.android_datastore.preferences
+
+    implementation deps.kotlin_serialization_json
 
     testImplementation deps.assertj_core
     testImplementation deps.junit

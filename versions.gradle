@@ -26,6 +26,7 @@ versions.hilt = '2.38.1'
 versions.hilt_work = '1.0.0'
 versions.junit = '4.13.2'
 versions.kotlin = '1.5.31'
+versions.kotlin_serialization_json = '1.3.2'
 versions.looping_view_pager = '1.4.1'
 versions.ml_kit = '16.1.2'
 versions.mockito = '3.2.0'
@@ -136,7 +137,10 @@ deps.junit = "junit:junit:$versions.junit"
 def kotlin = [:]
 kotlin.stdlib = "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin"
 kotlin.plugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
+kotlin.serialization = "org.jetbrains.kotlin:kotlin-serialization:$versions.kotlin"
 deps.kotlin = kotlin
+
+deps.kotlin_serialization_json = "org.jetbrains.kotlinx:kotlinx-serialization-json:$versions.kotlin_serialization_json"
 
 deps.looping_view_pager = "com.asksira.android:loopingviewpager:$versions.looping_view_pager"
 
