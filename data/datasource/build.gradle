@@ -30,6 +30,10 @@ android {
 }
 
 dependencies {
+    implementation project(":data:entity")
+
+    implementation deps.android_datastore.datastore
+    implementation deps.android_datastore.preferences
 
     testImplementation deps.assertj_core
     testImplementation deps.junit

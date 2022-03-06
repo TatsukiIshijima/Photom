@@ -4,6 +4,7 @@ versions.appcompat = '1.3.1'
 versions.appcompat_theme = '0.16.0'
 versions.activity_compose = '1.3.1'
 versions.android_compose = '1.0.5'
+versions.android_datastore = '1.0.0'
 versions.android_fragment = '1.3.6'
 versions.android_gradle_plugin = '7.0.1'
 versions.android_lifecycle = '2.3.1'
@@ -64,6 +65,11 @@ android_compose.anotation = "androidx.compose.animation:animation:$versions.andr
 android_compose.ui_tooling = "androidx.compose.ui:ui-tooling:$versions.android_compose"
 android_compose.ui_testing = "androidx.compose.ui:ui-test-junit4:$versions.android_compose"
 deps.android_compose = android_compose
+
+def android_datastore = [:]
+android_datastore.datastore = "androidx.datastore:datastore:$versions.android_datastore"
+android_datastore.preferences = "androidx.datastore:datastore-preferences:$versions.android_datastore"
+deps.android_datastore = android_datastore
 
 def android_fragment = [:]
 android_fragment.fragment_ktx = "androidx.fragment:fragment-ktx:$versions.android_fragment"
