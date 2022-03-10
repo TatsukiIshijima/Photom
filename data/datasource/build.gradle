@@ -1,11 +1,14 @@
 plugins {
     id 'com.android.library'
+    id 'dagger.hilt.android.plugin'
     id 'kotlin-android'
+    id 'kotlin-kapt'
     id 'kotlinx-serialization'
 }
 
 android {
     compileSdkVersion build_versions.target_sdk
+    buildToolsVersion build_versions.build_tools
 
     defaultConfig {
         minSdkVersion build_versions.min_sdk
@@ -30,12 +33,22 @@ android {
     }
 }
 
+hilt {
+    enableAggregatingTask = true
+}
+
 dependencies {
     implementation project(":data:entity")
 
+    // DataStore
     implementation deps.android_datastore.datastore
     implementation deps.android_datastore.preferences
 
+    // Hilt
+    implementation deps.hilt.android
+    kapt deps.hilt.compiler
+
+    // Kotlin Serialization Json
     implementation deps.kotlin_serialization_json
 
     testImplementation deps.assertj_core
