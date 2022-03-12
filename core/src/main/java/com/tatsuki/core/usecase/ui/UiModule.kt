@@ -48,4 +48,9 @@ abstract class UiModule {
     abstract fun bindsCityListView(
         cityListViewImpl: CityListViewImpl
     ): ICityListView
+
+    @Binds
+    abstract fun bindsPlaceNameView(
+        placeNameViewImpl: PlaceNameViewImpl
+    ): IPlaceNameView
 }
