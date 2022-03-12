@@ -8,16 +8,16 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.tatsuki.data.entity.AddressEntity
 import com.tatsuki.setting.databinding.FragmentSettingBinding
 import com.xwray.groupie.GroupieAdapter
 import com.xwray.groupie.Section
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
+@ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class SettingFragment : Fragment() {
 
@@ -45,13 +45,15 @@ class SettingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.prefectureList.apply {
-            addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
             adapter = prefectureGroupieAdapter
         }
 
         binding.cityList.apply {
-            addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
             adapter = cityGroupieAdapter
+        }
+
+        binding.saveButton.setOnClickListener {
+            settingViewModel.saveLocation()
         }
 
         bind()
@@ -62,6 +64,12 @@ class SettingFragment : Fragment() {
     private fun bind() {
         settingViewModel.loadingFlow
             .onEach { binding.progressbar.isVisible = it }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
+
+        settingViewModel.placeNameFlow
+            .onEach {
+                binding.locationText.text = it
+            }
             .launchIn(viewLifecycleOwner.lifecycleScope)
 
         settingViewModel.cityNameListFlow
@@ -92,7 +100,9 @@ class SettingFragment : Fragment() {
         val citiesItem = cityList.map {
             AddressItem(it, object : AddressItem.OnAddressItemClickedListener {
                 override fun onItemClicked(item: AddressEntity) {
-                    // TODO("Not yet implemented")
+                    if (item is AddressEntity.City) {
+                        settingViewModel.cashSelectedCity(item)
+                    }
                 }
             })
         }
