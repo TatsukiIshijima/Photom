@@ -10,7 +10,9 @@ import com.tatsuki.data.entity.AddressEntity
 import com.tatsuki.data.entity.GeoLocationEntity
 import com.tatsuki.datasource.LocationDataSource
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class PlaceRepository @Inject constructor(
     private val addressSearchApi: AddressSearchApi,
     private val citySearchApi: CitySearchApi,
