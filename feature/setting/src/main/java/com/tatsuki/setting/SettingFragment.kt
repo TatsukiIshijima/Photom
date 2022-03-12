@@ -8,12 +8,14 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.tatsuki.data.entity.AddressEntity
 import com.tatsuki.setting.databinding.FragmentSettingBinding
 import com.xwray.groupie.GroupieAdapter
 import com.xwray.groupie.Section
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -58,12 +60,20 @@ class SettingFragment : Fragment() {
 
         bind()
 
+        settingViewModel.loadLocation()
         showPrefectures()
     }
 
     private fun bind() {
         settingViewModel.loadingFlow
             .onEach { binding.progressbar.isVisible = it }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
+
+        settingViewModel.completeFlow
+            .filterNotNull()
+            .onEach {
+                findNavController().popBackStack()
+            }
             .launchIn(viewLifecycleOwner.lifecycleScope)
 
         settingViewModel.placeNameFlow

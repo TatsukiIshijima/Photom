@@ -20,6 +20,11 @@ abstract class UiModule {
     ): IErrorView
 
     @Binds
+    abstract fun bindCompleteView(
+        completeViewImpl: CompleteViewImpl
+    ): ICompleteView
+
+    @Binds
     abstract fun bindSlideShowView(
         slideShowViewImpl: SlideShowViewImpl
     ): ISlideShowView

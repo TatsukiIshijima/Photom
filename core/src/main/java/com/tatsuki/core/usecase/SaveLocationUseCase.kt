@@ -1,6 +1,7 @@
 package com.tatsuki.core.usecase
 
 import com.tatsuki.core.repository.PlaceRepository
+import com.tatsuki.core.usecase.ui.ICompleteView
 import com.tatsuki.core.usecase.ui.IErrorView
 import com.tatsuki.core.usecase.ui.ILoadingView
 import com.tatsuki.data.api.Result
@@ -10,6 +11,7 @@ import javax.inject.Inject
 class SaveLocationUseCase @Inject constructor(
     val loadingView: ILoadingView,
     val errorView: IErrorView,
+    val completeView: ICompleteView,
     private val placeRepository: PlaceRepository
 ) {
     suspend fun execute() {
@@ -39,5 +41,7 @@ class SaveLocationUseCase @Inject constructor(
         }
 
         loadingView.hideLoading()
+
+        completeView.onComplete()
     }
 }
