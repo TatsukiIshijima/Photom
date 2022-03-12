@@ -58,6 +58,8 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     "android-app://com.tatsuki.feature.weather/weather_detail_fragment"
                 R.id.menu_device_control_item ->
                     "android-app://com.tatsuki.feature.devicecontrol/device_control_fragment"
+                R.id.menu_location_setting_item ->
+                    "android-app://com.tatsuki.feature.setting/setting_fragment"
                 else -> ""
             }
             if (deepLinkUrl.isNotEmpty()) {

@@ -1,0 +1,95 @@
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
+}
+
+android {
+    compileSdkVersion build_versions.target_sdk
+
+    defaultConfig {
+        minSdkVersion build_versions.min_sdk
+        targetSdkVersion build_versions.target_sdk
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    buildFeatures {
+        viewBinding true
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.0.5'
+    }
+}
+
+hilt {
+    enableAggregatingTask = true
+}
+
+dependencies {
+
+    implementation project(":core")
+    implementation project(":data:entity")
+
+    implementation deps.android_fragment.fragment_ktx
+    implementation deps.android_lifecycle.livedata_ktx
+    implementation deps.android_lifecycle.viewmodel_ktx
+    implementation deps.constraint_layout
+
+    // Compose
+    implementation deps.activity_compose
+    implementation deps.android_compose.material
+    implementation deps.android_compose.anotation
+    implementation deps.android_compose.ui_tooling
+    implementation deps.viewmodel_compose
+    androidTestImplementation deps.android_compose.ui_testing
+
+    implementation deps.appcompat_theme
+    implementation deps.compose_theme_adapter
+
+    // Navigation
+    implementation deps.navigation.fragment_ktx
+    implementation deps.navigation.ui_ktx
+
+    // Groupie
+    implementation deps.groupie.runtime
+    implementation deps.groupie.viewbinding
+
+    // Hilt
+    implementation deps.hilt.android
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    kapt deps.hilt.compiler
+
+    // Hilt Test
+    testImplementation deps.hilt.android_testing
+    kaptTest deps.hilt.compiler
+
+    // Timber
+    implementation deps.timber
+
+    implementation deps.kotlin.stdlib
+    implementation deps.coroutines.core
+    implementation deps.coroutines.android
+    implementation deps.coroutines.play_services
+    testImplementation deps.junit
+    testImplementation deps.mockito
+    testImplementation deps.assertj_core
+    androidTestImplementation deps.ext_junit
+    androidTestImplementation deps.espresso
+}

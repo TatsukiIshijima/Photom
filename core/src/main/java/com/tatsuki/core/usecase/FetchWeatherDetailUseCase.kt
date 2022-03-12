@@ -1,14 +1,11 @@
 package com.tatsuki.core.usecase
 
-import com.tatsuki.core.Const
 import com.tatsuki.core.repository.PlaceRepository
 import com.tatsuki.core.repository.WeatherRepository
 import com.tatsuki.core.usecase.ui.IErrorView
 import com.tatsuki.core.usecase.ui.ILoadingView
 import com.tatsuki.core.usecase.ui.IWeatherDetailView
 import com.tatsuki.data.api.Result
-import com.tatsuki.data.api.addresssearch.response.toAddressEntity
-import com.tatsuki.data.api.flatMap
 import com.tatsuki.data.api.openweather.response.toDailyWeatherEntity
 import com.tatsuki.data.api.openweather.response.toDetailItems
 import com.tatsuki.data.api.openweather.response.toTimelyWeatherEntity
@@ -25,19 +22,18 @@ class FetchWeatherDetailUseCase @Inject constructor(
     suspend fun execute() {
         loadingView.showLoading()
 
-        val result = placeRepository.fetchAddress("${Const.PREFECTURE}${Const.CITY}")
-            .flatMap {
-                val coordinates = it.first().toAddressEntity()
-                weatherRepository.fetchCurrentWeather(coordinates.lat, coordinates.lon)
-            }
+        val geoLocation = placeRepository.getGeoLocation()
+        val city = placeRepository.getCity()
+
+        val result = weatherRepository.fetchCurrentWeather(geoLocation.lat, geoLocation.lon)
 
         loadingView.hideLoading()
 
         when (result) {
             is Result.ClientError -> {}
             is Result.Error -> {}
-            Result.NetworkError -> {}
-            Result.ServerError -> {}
+            Result.NetworkError -> errorView.showNetworkError()
+            Result.ServerError -> errorView.showInternalServerError()
             is Result.Success -> {
                 val data = result.data
                 val weather = data.current.weather.firstOrNull() ?: return
@@ -65,7 +61,7 @@ class FetchWeatherDetailUseCase @Inject constructor(
                 val timelyWeatherList = data.hourly.map { it.toTimelyWeatherEntity() }
                 val dailyWeatherList = data.daily.map { it.toDailyWeatherEntity() }
 
-                weatherView.showPlace(Const.CITY)
+                weatherView.showPlace(city.name)
                 weatherView.showCurrentWeather(condition, data.current.temp.toInt())
                 weatherView.showCurrentWeatherDetail(detailInfoList)
                 weatherView.showTimelyWeather(timelyWeatherList)

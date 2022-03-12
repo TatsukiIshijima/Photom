@@ -20,6 +20,11 @@ abstract class UiModule {
     ): IErrorView
 
     @Binds
+    abstract fun bindCompleteView(
+        completeViewImpl: CompleteViewImpl
+    ): ICompleteView
+
+    @Binds
     abstract fun bindSlideShowView(
         slideShowViewImpl: SlideShowViewImpl
     ): ISlideShowView
@@ -43,4 +48,14 @@ abstract class UiModule {
     abstract fun bindSensorDataView(
         sensorDataViewImpl: SensorDataViewImpl
     ): ISensorDataView
+
+    @Binds
+    abstract fun bindsCityListView(
+        cityListViewImpl: CityListViewImpl
+    ): ICityListView
+
+    @Binds
+    abstract fun bindsPlaceNameView(
+        placeNameViewImpl: PlaceNameViewImpl
+    ): IPlaceNameView
 }

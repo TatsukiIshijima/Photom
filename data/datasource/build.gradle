@@ -1,0 +1,59 @@
+plugins {
+    id 'com.android.library'
+    id 'dagger.hilt.android.plugin'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'kotlinx-serialization'
+}
+
+android {
+    compileSdkVersion build_versions.target_sdk
+    buildToolsVersion build_versions.build_tools
+
+    defaultConfig {
+        minSdkVersion build_versions.min_sdk
+        targetSdkVersion build_versions.target_sdk
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+hilt {
+    enableAggregatingTask = true
+}
+
+dependencies {
+    implementation project(":data:entity")
+
+    // DataStore
+    implementation deps.android_datastore.datastore
+    implementation deps.android_datastore.preferences
+
+    // Hilt
+    implementation deps.hilt.android
+    kapt deps.hilt.compiler
+
+    // Kotlin Serialization Json
+    implementation deps.kotlin_serialization_json
+
+    testImplementation deps.assertj_core
+    testImplementation deps.junit
+
+    androidTestImplementation deps.ext_junit
+    androidTestImplementation deps.espresso
+}
