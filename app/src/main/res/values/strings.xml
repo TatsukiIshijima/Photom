@@ -3,5 +3,5 @@
     <string name="menu_slide_show_title">スライドショー</string>
     <string name="menu_weather_title">天気</string>
     <string name="menu_device_control_title">デバイスコントロール</string>
-    <string name="menu_setting">設定</string>
+    <string name="menu_location_setting">位置設定</string>
 </resources>
