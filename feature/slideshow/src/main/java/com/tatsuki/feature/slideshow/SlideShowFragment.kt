@@ -66,7 +66,8 @@ class SlideShowFragment : Fragment() {
         slideShowViewModel.currentWeatherFlow
             .filterNotNull()
             .onEach {
-                binding.temperature.text = it.temp.toString()
+                val tempValue = "${it.temp}${resources.getString(R.string.temperature_unit)}"
+                binding.temperature.text = tempValue
                 it.icon?.let { url ->
                     if (url.isEmpty()) {
                         return@onEach

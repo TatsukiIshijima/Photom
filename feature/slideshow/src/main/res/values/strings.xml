@@ -2,4 +2,5 @@
 <resources>
     <string name="weather_icon_content_description">天気アイコン</string>
     <string name="photo_image_content_description">写真</string>
+    <string name="temperature_unit">℃</string>
 </resources>
