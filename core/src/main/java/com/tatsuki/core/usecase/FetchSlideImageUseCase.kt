@@ -1,40 +1,36 @@
 package com.tatsuki.core.usecase
 
-import com.google.firebase.storage.StorageReference
-import com.tatsuki.core.State
 import com.tatsuki.core.repository.SlideImageRepository
+import com.tatsuki.core.usecase.ui.IErrorView
+import com.tatsuki.core.usecase.ui.ILoadingView
 import com.tatsuki.core.usecase.ui.ISlideShowView
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
+import com.tatsuki.data.api.Result
+import com.tatsuki.data.api.photom.photo.response.toPhotoListEntity
+import javax.inject.Inject
 
-class FetchSlideImageUseCase(
-    private val slideShowView: ISlideShowView,
+class FetchSlideImageUseCase @Inject constructor(
+    val loadingView: ILoadingView,
+    val errorView: IErrorView,
+    val slideShowView: ISlideShowView,
     private val slideImageRepository: SlideImageRepository,
 ) {
+    suspend fun execute() {
 
-    companion object {
-        private val TAG = FetchSlideImageUseCase::class.java.simpleName
-    }
+        loadingView.showLoading()
 
-    suspend fun execute(hour: Int) {
-        val fetchImageRefFlow: Flow<State<out List<StorageReference>>> = when (hour) {
-            in 1..8 -> slideImageRepository.fetchMorningImageReferences()
-            in 9..16 -> slideImageRepository.fetchNoonImageReferences()
-            else -> slideImageRepository.fetchEveningImageReferences()
-        }
+        val photoListResult = slideImageRepository.fetchPhotoList()
 
-        slideShowView.showLoading()
+        loadingView.hideLoading()
 
-        fetchImageRefFlow.collect { state ->
-            when (state) {
-                is State.Success -> {
-                    slideShowView.showSlide(state.data)
-                }
-                is State.Failed -> {
-                    slideShowView.showError(state.exception)
-                }
-            }
-            slideShowView.hideLoading()
+        when (photoListResult) {
+            is Result.ClientError -> errorView.showError(
+                photoListResult.code,
+                photoListResult.message
+            )
+            is Result.Error -> errorView.showError(photoListResult.code, photoListResult.message)
+            is Result.NetworkError -> errorView.showNetworkError()
+            is Result.ServerError -> errorView.showInternalServerError()
+            is Result.Success -> slideShowView.showSlide(photoListResult.data.toPhotoListEntity())
         }
     }
 }

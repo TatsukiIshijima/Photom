@@ -1,43 +1,65 @@
 package com.tatsuki.core.repository
 
-import com.google.firebase.firestore.FirebaseFirestore
-import com.tatsuki.core.State
-import com.tatsuki.core.api.response.PlaceResponse
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.tasks.await
+import com.tatsuki.data.api.ApiClient
+import com.tatsuki.data.api.Result
+import com.tatsuki.data.api.addresssearch.AddressSearchApi
+import com.tatsuki.data.api.addresssearch.response.AddressSearchResponse
+import com.tatsuki.data.api.citysearch.CitySearchApi
+import com.tatsuki.data.api.citysearch.response.CitySearchResponse
+import com.tatsuki.data.entity.AddressEntity
+import com.tatsuki.data.entity.GeoLocationEntity
+import com.tatsuki.datasource.LocationDataSource
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class PlaceRepository @Inject constructor(
-    private val db: FirebaseFirestore
+    private val addressSearchApi: AddressSearchApi,
+    private val citySearchApi: CitySearchApi,
+    private val locationDataSource: LocationDataSource,
 ) {
-    companion object {
-        private const val COLLECTION = "photom"
-        private const val DOCUMENT = "place"
+
+    var prefectureCash: AddressEntity.Prefecture? = null
+        private set
+    var cityCash: AddressEntity.City? = null
+        private set
+
+    suspend fun fetchAddress(locationName: String): Result<List<AddressSearchResponse>> =
+        ApiClient.safeApiCall({ addressSearchApi.getAddress(locationName) })
+
+    suspend fun fetchCity(prefecture: AddressEntity.Prefecture): Result<CitySearchResponse> {
+        return ApiClient.safeApiCall({ citySearchApi.getCity(prefecture.code) })
     }
 
-    private var _cache: PlaceResponse? = null
+    suspend fun getGeoLocation(): GeoLocationEntity {
+        return locationDataSource.getGeoLocation()
+    }
 
-    fun fetchPlace(
-        dispatcher: CoroutineDispatcher = Dispatchers.IO
-    ): Flow<State<PlaceResponse?>> {
-        return flow {
-            try {
-                if (_cache != null) {
-                    emit(State.success(_cache))
-                    return@flow
-                }
-                val docRef = db.collection(COLLECTION).document(DOCUMENT)
-                val result = docRef.get().await()
-                val place = result?.toObject(PlaceResponse::class.java)
-                _cache = place
-                emit(State.success(place))
-            } catch (e: Exception) {
-                emit(State.failed<PlaceResponse?>(e))
-            }
-        }.flowOn(dispatcher)
+    suspend fun saveGeoLocation(geoLocationEntity: GeoLocationEntity) {
+        locationDataSource.setGeoLocation(geoLocationEntity)
+    }
+
+    fun cashPrefecture(prefecture: AddressEntity.Prefecture) {
+        prefectureCash = prefecture
+    }
+
+    suspend fun getPrefecture(): AddressEntity.Prefecture {
+        return locationDataSource.getPrefecture()
+    }
+
+    suspend fun savePrefecture(prefecture: AddressEntity.Prefecture) {
+        locationDataSource.setPrefecture(prefecture)
+    }
+
+    fun cashCity(city: AddressEntity.City) {
+        cityCash = city
+    }
+
+    suspend fun getCity(): AddressEntity.City {
+        return locationDataSource.getCity()
+    }
+
+    suspend fun saveCity(city: AddressEntity.City) {
+        locationDataSource.setCity(city)
     }
 }

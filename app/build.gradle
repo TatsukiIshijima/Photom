@@ -1,19 +1,22 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-kapt'
-apply plugin: 'dagger.hilt.android.plugin'
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
+}
+
+def keystoreProperties = loadKeyStoreProperties()
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.3"
+    compileSdkVersion build_versions.target_sdk
+    buildToolsVersion build_versions.build_tools
 
     defaultConfig {
         applicationId "com.tatsuki.photom"
-        minSdkVersion 26
-        targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion build_versions.min_sdk
+        targetSdkVersion build_versions.target_sdk
+        versionCode 2
+        versionName "2.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -22,10 +25,29 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+    buildFeatures {
+        viewBinding true
+    }
+    signingConfigs {
+        release {
+            if(!keystoreProperties.getProperty("storeFile", "").empty){
+                storeFile file(keystoreProperties.getProperty("storeFile", ""))
+            }
+            storePassword keystoreProperties.getProperty("storePassword", "")
+            keyAlias keystoreProperties.getProperty("keyAlias", "")
+            keyPassword keystoreProperties.getProperty("keyPassword", "")
+        }
+    }
     buildTypes {
+        debug {
+            applicationIdSuffix ".debug"
+        }
         release {
             minifyEnabled false
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -37,59 +59,62 @@ android {
     }
 }
 
+private def loadKeyStoreProperties() {
+    def keystorePropertiesFile = project.rootProject.file('keystore.properties')
+    if (!keystorePropertiesFile.exists()) {
+        keystorePropertiesFile.createNewFile()
+    }
+    def keystoreProperties = new Properties()
+    keystoreProperties.load(keystorePropertiesFile.newDataInputStream())
+    return keystoreProperties
+}
+
+hilt {
+    enableAggregatingTask = true
+}
+
 dependencies {
     implementation project(":core")
+    implementation project(":data:entity")
+    implementation project(":data:extension")
+    implementation project(":feature:devicecontrol")
+    implementation project(":feature:setting")
+    implementation project(":feature:slideshow")
+    implementation project(":feature:weather")
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'androidx.core:core-ktx:1.3.2'
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation deps.app_compat
+    implementation deps.constraint_layout
+    implementation deps.core_ktx
+    implementation deps.kotlin.stdlib
 
     // Coroutine
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1'
-
-    // WorkManager
-    implementation "androidx.work:work-runtime-ktx:2.5.0"
+    implementation deps.coroutines.android
 
     // Navigation
-    implementation "androidx.navigation:navigation-fragment-ktx:2.3.5"
-    implementation "androidx.navigation:navigation-ui-ktx:2.3.5"
+    implementation deps.navigation.fragment_ktx
+    implementation deps.navigation.ui_ktx
 
     // LoopingViewPager
-    implementation 'com.asksira.android:loopingviewpager:1.3.1'
-
-    // Firebase-UI
-    implementation 'com.firebaseui:firebase-ui-storage:4.3.2'
+    implementation deps.looping_view_pager
 
     // Glide
-    implementation 'com.github.bumptech.glide:glide:4.11.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
-    kapt 'com.github.bumptech.glide:compiler:4.11.0'
+    implementation deps.glide.runtime
+    annotationProcessor deps.glide.compiler
+    kapt deps.glide.compiler
 
     // Timber
-    implementation 'com.jakewharton.timber:timber:4.7.1'
+    implementation deps.timber
 
     // Hilt
-    implementation 'com.google.dagger:hilt-android:2.33-beta'
-    implementation 'androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03'
-    implementation 'androidx.hilt:hilt-work:1.0.0-beta01'
-    kapt "com.google.dagger:hilt-android-compiler:2.33-beta"
-    kapt 'androidx.hilt:hilt-compiler:1.0.0-beta01'
+    implementation deps.hilt.android
+    implementation deps.hilt_work.runtime
+    kapt deps.hilt.compiler
+    kapt deps.hilt_work.compiler
 
-    // CameraX core library using camera2 implementation
-    implementation "androidx.camera:camera-camera2:1.1.0-alpha04"
-    // CameraX Lifecycle Library
-    implementation "androidx.camera:camera-lifecycle:1.1.0-alpha04"
-    // CameraX View class
-    implementation "androidx.camera:camera-view:1.0.0-alpha24"
-    // ML Kit
-    implementation 'com.google.mlkit:face-detection:16.0.7'
-
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    compileOnly 'com.google.android.things:androidthings:1.0'
+    testImplementation deps.junit
+    androidTestImplementation deps.ext_junit
+    androidTestImplementation deps.espresso
+    compileOnly deps.android_things
 
 }
-apply plugin: 'com.google.gms.google-services'

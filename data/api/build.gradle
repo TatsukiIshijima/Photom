@@ -1,0 +1,76 @@
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
+}
+
+android {
+    compileSdkVersion build_versions.target_sdk
+
+    defaultConfig {
+        minSdkVersion build_versions.min_sdk
+        targetSdkVersion build_versions.target_sdk
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+
+        def properties = new Properties()
+        def localPropertiesFile = project.rootProject.file('local.properties')
+        if (!localPropertiesFile.exists()) {
+            localPropertiesFile.createNewFile()
+        }
+        properties.load(localPropertiesFile.newDataInputStream())
+        def openWeatherApiKey = properties.getProperty("open_weather_api_key")
+        def switchBotApiToken = properties.getProperty("switch_bot_api_token")
+
+        buildConfigField("String", "OPEN_WEATHER_API_KEY", "\"${openWeatherApiKey}\"")
+        buildConfigField("String", "SWITCH_BOT_API_TOKEN", "\"${switchBotApiToken}\"")
+        buildConfigField("String", "OPEN_WEATHER_API_BASE_URL", "\"https://api.openweathermap.org/data/2.5/\"")
+        buildConfigField("String", "SWITCH_BOT_API_BASE_URL", "\"https://api.switch-bot.com/v1.0/\"")
+        buildConfigField("String", "ADDRESS_SEARCH_API_BASE_URL", "\"https://msearch.gsi.go.jp/address-search/\"")
+        buildConfigField("String", "CITY_SEARCH_API_BASE_URL", "\"https://www.land.mlit.go.jp/webland/api/\"")
+    }
+
+    buildTypes {
+        debug {
+            buildConfigField("String", "PHOTOM_API_BASE_URL", "\"http://localhost:5000/\"")
+        }
+
+        release {
+            buildConfigField("String", "PHOTOM_API_BASE_URL", "\"http://192.168.11.60:5000/\"")
+
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+dependencies {
+    implementation project(":data:entity")
+    implementation project(":data:extension")
+    implementation deps.coroutines.core
+    implementation deps.hilt.android
+    implementation deps.moshi.runtime
+    implementation deps.moshi.kotlin
+    implementation deps.okhttp.runtime
+    implementation deps.retrofit.runtime
+    implementation deps.retrofit.converter_moshi
+
+    implementation deps.okhttp.logging
+
+    kapt deps.hilt.compiler
+
+    testImplementation deps.assertj_core
+    testImplementation deps.junit
+
+    androidTestImplementation deps.ext_junit
+    androidTestImplementation deps.espresso
+}

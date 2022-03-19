@@ -1,0 +1,21 @@
+@startuml
+cloud OpenWeatherAPI
+cloud SwitchBotAPI
+node "AndroidThings" as at
+node "RaspberryPi-Zero" as rp {
+    interface "192.168.11.60" as ip
+    frame "flask" {
+        component "Photo"
+        component "Sensor"
+    }
+}
+
+at --> OpenWeatherAPI
+at --> SwitchBotAPI
+at --> ip
+ip --> Sensor
+ip --> Photo
+rp --> OpenWeatherAPI
+rp --> SwitchBotAPI
+
+@enduml

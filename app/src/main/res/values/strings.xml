@@ -1,18 +1,7 @@
 <resources>
     <string name="app_name">Photom</string>
-    <string name="camera_permission_denied">カメラの利用が許可されていません</string>
-    <string name="slide_show_image_is_empty">スライド写真がありません</string>
-    <string name="photo_image_content_description">写真</string>
-    <string name="weather_icon_content_description">天気アイコン</string>
-    <string name="temperature_unit">℃</string>
-    <string name="pressure">気圧</string>
-    <string name="pressure_unit">hPa</string>
-    <string name="humidity">湿度</string>
-    <string name="humidity_unit">%</string>
-    <string name="wind_speed">風速</string>
-    <string name="wind_speed_unit">m/s</string>
-    <string name="sunny">晴れ</string>
-    <string name="cloudy">曇り</string>
-    <string name="rainy">雨</string>
-    <string name="snow">雪</string>
+    <string name="menu_slide_show_title">スライドショー</string>
+    <string name="menu_weather_title">天気</string>
+    <string name="menu_device_control_title">デバイスコントロール</string>
+    <string name="menu_location_setting">位置設定</string>
 </resources>

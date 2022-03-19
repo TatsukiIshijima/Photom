@@ -2,12 +2,12 @@ package com.tatsuki.core.usecase
 
 import com.google.firebase.firestore.GeoPoint
 import com.tatsuki.core.State
-import com.tatsuki.core.api.response.CurrentResponse
-import com.tatsuki.core.api.response.OneCallResponse
-import com.tatsuki.core.api.response.PlaceResponse
 import com.tatsuki.core.repository.PlaceRepository
 import com.tatsuki.core.repository.WeatherRepository
 import com.tatsuki.core.usecase.ui.ICurrentWeatherView
+import com.tatsuki.data.api.openweather.response.CurrentResponse
+import com.tatsuki.data.api.openweather.response.OneCallResponse
+import com.tatsuki.data.api.openweather.response.PlaceResponse
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
@@ -45,9 +45,9 @@ class FetchCurrentWeatherUseCaseTest {
             on { showCurrentWeather(any()) } doAnswer { }
         }
 
-        val usecase = FetchCurrentWeatherUseCase(view, weatherRepository, placeRepository)
+        val usecase = FetchCurrentWeatherUseCase(weatherRepository, placeRepository)
         runBlocking {
-            usecase.execute()
+            usecase.execute(view)
         }
 
         verify(view, times(1)).showLoading()

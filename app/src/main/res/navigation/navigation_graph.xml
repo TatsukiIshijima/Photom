@@ -1,26 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/navigation_graph"
-    app:startDestination="@id/slideShowFragment">
+    app:startDestination="@id/slide_show_navigation_graph">
 
-    <fragment
-        android:id="@+id/slideShowFragment"
-        android:name="com.tatsuki.photom.view.slideshow.SlideShowFragment"
-        android:label="SlideShowFragment"
-        tools:layout="@layout/fragment_slide_show">
-        <action
-            android:id="@+id/action_slideshow_to_weather"
-            app:destination="@+id/weatherFragment">
-        </action>
-    </fragment>
-
-    <fragment
-        android:id="@+id/weatherFragment"
-        android:name="com.tatsuki.photom.view.weather.WeatherFragment"
-        android:label="WeatherFragment"
-        tools:layout="@layout/weather_fragment">
-    </fragment>
+    <include app:graph="@navigation/slide_show_navigation_graph" />
+    <include app:graph="@navigation/weather_detail_navigation_graph" />
+    <include app:graph="@navigation/device_control_navigation_graph" />
+    <include app:graph="@navigation/setting_navigation_graph" />
 
 </navigation>
